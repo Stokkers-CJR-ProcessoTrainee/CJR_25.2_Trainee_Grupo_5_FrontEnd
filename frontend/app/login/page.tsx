@@ -1,6 +1,24 @@
+'use client';
 import Image from "next/image";
+import {login} from "../../api/auth";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handle = async (e: null) => {
+    e.preventDefault();
+
+    //console.log({ email, password }); Teste pra ver se os valores batem
+
+    const data = await login(email, password);
+    localStorage.setItem('token', data.token);
+    router.push('/');
+  };
+
   return (
     <main
       className="bg-background min-h-screen flex items-center justify-center"
@@ -28,13 +46,18 @@ export default function LoginPage() {
             BEM VINDO DE VOLTA!
           </h1>
 
-          <form className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
+          <form 
+            className="flex flex-col gap-3 my-2 text-gray-800 mb-3"
+            onSubmit={handle}
+          >
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
               type="text"
               name="Email"
               id="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
@@ -42,12 +65,15 @@ export default function LoginPage() {
               name="Senha"
               id="pass"
               placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-          <button
-            className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
-          >
-            Entrar
-          </button>
+            <button
+              type="submit"
+              className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
+            >
+              Entrar
+            </button>
           </form>
 
           <p
