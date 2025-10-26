@@ -28,7 +28,7 @@ export default function LoginPage() {
             BEM VINDO DE VOLTA!
           </h1>
 
-          <div className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
+          <form className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
               type="text"
@@ -43,7 +43,12 @@ export default function LoginPage() {
               id="pass"
               placeholder="Senha"
             />
-          </div>
+          <button
+            className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
+          >
+            Entrar
+          </button>
+          </form>
 
           <p
             className="mb-5"
@@ -53,12 +58,6 @@ export default function LoginPage() {
           >
             Esqueceu a senha?
           </a></p>
-
-          <button
-            className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
-          >
-            Entrar
-          </button>
 
           <p className="mt-3 text-gray-700">
             Não possui conta? <a href="/cadastro" className="text-orange-500 hover:underline">Crie Aqui!</a>
