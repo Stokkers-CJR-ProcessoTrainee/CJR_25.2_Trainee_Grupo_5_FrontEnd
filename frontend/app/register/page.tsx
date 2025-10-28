@@ -25,8 +25,10 @@ export default function RegisterPage() {
     }
     try {
       const data = await register(name, username, email, password);
-      toast.success("Cadastro realizado com sucesso!");
+      toast.success("Cadastro realizado com sucesso! Redirecionando para o login...");
+      setTimeout(() => {
       router.push('/login');
+      }, 2000);
     } catch (error:any) {
       toast.error(error?.response?.data?.message || "Erro ao cadastrar usuário!")
     }

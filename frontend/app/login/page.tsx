@@ -86,7 +86,7 @@ export default function LoginPage() {
           </a></p>
 
           <p className="mt-3 text-gray-700">
-            Não possui conta? <a href="/cadastro" className="text-orange-500 hover:underline">Crie Aqui!</a>
+            Não possui conta? <a href="/register" className="text-orange-500 hover:underline">Crie Aqui!</a>
           </p>
         </div>
 
