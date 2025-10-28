@@ -63,6 +63,7 @@ export default function RegisterPage() {
               name="nome"
               placeholder="Nome Completo"
               value={name}
+              autoComplete="name"
               onChange={(e) => setName(e.target.value)}
             />
             <input
@@ -79,6 +80,7 @@ export default function RegisterPage() {
               name="email"
               placeholder="Email"
               value={email}
+              autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
