@@ -3,6 +3,7 @@ import Image from "next/image";
 import {login} from "../../api/api";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,12 +12,22 @@ export default function LoginPage() {
 
   const handle = async (e:FormEvent) => {
     e.preventDefault();
+      if (!email || !password) {
+      toast.error("Por favor preencha todos os campos!");
+      return;
+    }
+    try {
+      const data = await login(email, password);
+      localStorage.setItem('token', data.token);
+      toast.success("Login bem-sucedido! Redirecionando...");
+      setTimeout(() => {
+      router.push('/home');
+      }, 2500);
+    } catch (error:any) {
+      toast.error(error?.response?.data?.message || "Erro ao fazer login!")
+    }finally {
 
-    //console.log({ email, password }); Teste pra ver se os valores batem
-
-    const data = await login(email, password);
-    localStorage.setItem('token', data.token);
-    router.push('/');
+    }
   };
 
   return (
@@ -74,6 +85,7 @@ export default function LoginPage() {
             >
               Entrar
             </button>
+            <ToastContainer/>
           </form>
 
           <p
