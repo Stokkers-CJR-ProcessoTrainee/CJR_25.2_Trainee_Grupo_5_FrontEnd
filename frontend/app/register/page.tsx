@@ -3,6 +3,7 @@ import {register} from "../../api/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -10,12 +11,25 @@ export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password_confirm, setPasswordConfirm] = useState("");
 
   const handle = async (e:FormEvent) => {
     e.preventDefault();
-    const data = await register(name, username, email, password);
-    console.log(data);
-    router.push('/login');
+    if (!name || !username || !email || !password || !password_confirm) {
+      toast.error("Por favor preencha todos os campos!");
+      return;
+    }
+    if (password !== password_confirm) {
+      toast.error("As senhas não são iguais");
+      return
+    }
+    try {
+      const data = await register(name, username, email, password);
+      toast.success("Cadastro realizado com sucesso!");
+      router.push('/login');
+    } catch (error:any) {
+      toast.error(error?.response?.data?.message || "Erro ao cadastrar usuário!")
+    }
   }
 
   return (
@@ -74,6 +88,8 @@ export default function RegisterPage() {
               type="password"
               name="pass_confirm"
               placeholder="Confirme a senha"
+              value={password_confirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
             />
             <button
               type="submit"
@@ -81,6 +97,7 @@ export default function RegisterPage() {
             >
               Cadastrar
             </button>
+            <ToastContainer/>
           </form>
 
           <p className="mt-2 text-gray-700">
