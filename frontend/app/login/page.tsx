@@ -9,6 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handle = async (e:FormEvent) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ export default function LoginPage() {
       return;
     }
     try {
+      setLoading(true);
       const data = await login(email, password);
       localStorage.setItem('token', data.token);
       toast.success("Login bem-sucedido! Redirecionando...");
@@ -29,7 +31,7 @@ export default function LoginPage() {
         Array.isArray(message) ? message.join(", ") : message || "Erro ao fazer login!"
       );
     }finally {
-
+      setLoading(false);
     }
   };
 
@@ -71,6 +73,7 @@ export default function LoginPage() {
               id="email"
               placeholder="Email"
               value={email}
+              autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
@@ -83,10 +86,13 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button
+              disabled={loading}
               type="submit"
-              className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
+              className={`bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-90"
+              }`}
             >
-              Entrar
+              {loading ? "Entrando.." : "Entrar"}
             </button>
             <ToastContainer/>
           </form>
