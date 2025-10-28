@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirm, setPasswordConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handle = async (e:FormEvent) => {
     e.preventDefault();
@@ -24,13 +25,16 @@ export default function RegisterPage() {
       return
     }
     try {
+      setLoading(true);
       const data = await register(name, username, email, password);
       toast.success("Cadastro realizado com sucesso! Redirecionando para o login...");
       setTimeout(() => {
       router.push('/login');
-      }, 2000);
+      }, 2500);
     } catch (error:any) {
       toast.error(error?.response?.data?.message || "Erro ao cadastrar usuário!")
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -95,9 +99,12 @@ export default function RegisterPage() {
             />
             <button
               type="submit"
-              className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 hover:scale-102 transition cursor-pointer"
+              disabled={loading}
+              className={`bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 transition cursor-pointer ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-90 hover:scale-102"
+              }`}
             >
-              Cadastrar
+              {loading ? "Cadastrando..." : "Cadastrar"}
             </button>
             <ToastContainer/>
           </form>
