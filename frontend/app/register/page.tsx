@@ -1,6 +1,11 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 
-export default function CadastroPage() {
+export default function RegisterPage() {
+  const router = useRouter
+  const 
+
+
   return (
     <main
       className="bg-background min-h-screen flex items-center justify-center"
