@@ -6,16 +6,16 @@ import { FormEvent, useState } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [password_confirm, setPasswordC] = useState("");
 
   const handle = async (e:FormEvent) => {
     e.preventDefault();
-    const data = await register(nome, username, email, password, password_confirm);
-    router.push('/login')
+    const data = await register(name, username, email, password);
+    console.log(data);
+    router.push('/login');
   }
 
   return (
@@ -42,8 +42,8 @@ export default function RegisterPage() {
               type="text"
               name="nome"
               placeholder="Nome Completo"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
@@ -74,8 +74,6 @@ export default function RegisterPage() {
               type="password"
               name="pass_confirm"
               placeholder="Confirme a senha"
-              value={password_confirm}
-              onChange={(e) => setPasswordC(e.target.value)}
             />
             <button
               type="submit"

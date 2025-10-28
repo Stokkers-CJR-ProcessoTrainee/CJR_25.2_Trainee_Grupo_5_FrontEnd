@@ -12,7 +12,7 @@ export async function login(email, password) {
   return res.data;
 }
 
-export async function register(nome, username, email, password, password_confirm) {
-  const res = await api.post('/register', {nome, username, email, password, password_confirm});
+export async function register(name, username, email, password_hash) {
+  const res = await api.post('/register', {name, username, email, password_hash});
   return res.data;
 }
