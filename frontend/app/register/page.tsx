@@ -1,10 +1,21 @@
+import {register} from "../../api/api";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { FormEvent, useState } from "react";
 
 export default function RegisterPage() {
-  const router = useRouter
-  const 
+  const router = useRouter();
+  const [nome, setNome] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_confirm, setPasswordC] = useState("");
 
+  const handle = async (e:FormEvent) => {
+    e.preventDefault();
+    const data = await register(nome, username, email, password, password_confirm);
+    router.push('/login')
+  }
 
   return (
     <main
