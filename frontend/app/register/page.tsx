@@ -32,7 +32,10 @@ export default function RegisterPage() {
       router.push('/login');
       }, 2500);
     } catch (error:any) {
-      toast.error(error?.response?.data?.message || "Erro ao cadastrar usuário!")
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message.join(", ") : message || "Erro ao fazer login!"
+      );
     } finally {
       setLoading(false);
     }
