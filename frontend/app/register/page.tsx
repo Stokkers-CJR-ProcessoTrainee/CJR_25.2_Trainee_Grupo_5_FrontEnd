@@ -106,7 +106,7 @@ export default function RegisterPage() {
               type="submit"
               disabled={loading}
               className={`bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 transition cursor-pointer ${
-                loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-90 hover:scale-102"
+                loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-90"
               }`}
             >
               {loading ? "Cadastrando..." : "Cadastrar"}
