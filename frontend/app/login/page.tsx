@@ -1,6 +1,40 @@
+'use client';
 import Image from "next/image";
+import {login} from "../../api/api";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handle = async (e:FormEvent) => {
+    e.preventDefault();
+      if (!email || !password) {
+      toast.error("Por favor preencha todos os campos!");
+      return;
+    }
+    try {
+      setLoading(true);
+      const data = await login(email, password);
+      localStorage.setItem('token', data.token);
+      toast.success("Login bem-sucedido! Redirecionando...");
+      setTimeout(() => {
+      router.push('/home');
+      }, 2500);
+    } catch (error:any) {
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message.join(", ") : message || "Erro ao fazer login!"
+      );
+    }finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main
       className="bg-background min-h-screen flex items-center justify-center"
@@ -28,13 +62,19 @@ export default function LoginPage() {
             BEM VINDO DE VOLTA!
           </h1>
 
-          <div className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
+          <form 
+            className="flex flex-col gap-3 my-2 text-gray-800 mb-3"
+            onSubmit={handle}
+          >
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
               type="text"
               name="Email"
               id="email"
               placeholder="Email"
+              value={email}
+              autoComplete="email"
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
@@ -42,8 +82,20 @@ export default function LoginPage() {
               name="Senha"
               id="pass"
               placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
+            <button
+              disabled={loading}
+              type="submit"
+              className={`bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-90"
+              }`}
+            >
+              {loading ? "Entrando.." : "Entrar"}
+            </button>
+            <ToastContainer/>
+          </form>
 
           <p
             className="mb-5"
@@ -54,14 +106,8 @@ export default function LoginPage() {
             Esqueceu a senha?
           </a></p>
 
-          <button
-            className="bg-laranja text-white font-sans tracking-wider text-xl rounded-full mt-6 p-3 hover:brightness-90 transition cursor-pointer"
-          >
-            Entrar
-          </button>
-
           <p className="mt-3 text-gray-700">
-            Não possui conta? <a href="/cadastro" className="text-orange-500 hover:underline">Crie Aqui!</a>
+            Não possui conta? <a href="/register" className="text-orange-500 hover:underline">Crie Aqui!</a>
           </p>
         </div>
 
