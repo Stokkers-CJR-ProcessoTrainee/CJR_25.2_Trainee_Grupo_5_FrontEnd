@@ -24,7 +24,10 @@ export default function LoginPage() {
       router.push('/home');
       }, 2500);
     } catch (error:any) {
-      toast.error(error?.response?.data?.message || "Erro ao fazer login!")
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message.join(", ") : message || "Erro ao fazer login!"
+      );
     }finally {
 
     }
