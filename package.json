@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "tailwindcss": "^4.1.16"
+  }
+}
