@@ -1,10 +1,17 @@
 import { useState } from "react";
 
-export default function ResetPasswordModal() {
+interface ResetPasswordModalProps {
+  mostrar: boolean;
+  fechar: () => void;
+}
+
+export default function ResetPasswordModal({mostrar, fechar}: ResetPasswordModalProps) {
   const [code, setCode] = useState("");
   const [codeVerified, setCodeVerified] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  if (!mostrar) return null;
 
   return (    
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -39,7 +46,8 @@ export default function ResetPasswordModal() {
             </button>
 
         <button
-          className="mt-6 text-gray-500 hover:underline"
+            onClick={fechar}
+            className="mt-6 text-gray-500 hover:underline"
         >
           Fechar
         </button>

@@ -135,7 +135,10 @@ export default function LoginPage() {
 
       </div>
 
-      <ResetPasswordModal/>
+      <ResetPasswordModal
+        mostrar={resetPassModal}
+        fechar={() => setResetPassModal(false)}
+      />
 
     </main>
   );
