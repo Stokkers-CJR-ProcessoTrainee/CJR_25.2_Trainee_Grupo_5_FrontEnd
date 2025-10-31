@@ -4,6 +4,7 @@ import {forgotPassword, login} from "../../api/api";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
+import ResetPasswordModal from "@/components/modals/ResetPasswordModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -133,6 +134,9 @@ export default function LoginPage() {
         </div>
 
       </div>
+
+      <ResetPasswordModal/>
+
     </main>
   );
 }
