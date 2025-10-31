@@ -35,6 +35,10 @@ export default function LoginPage() {
     }
   };
 
+  const handleForgot = async (e:FormEvent) => {
+    e.preventDefault();
+  }
+
   return (
     <main
       className="bg-background min-h-screen flex items-center justify-center"
@@ -101,7 +105,8 @@ export default function LoginPage() {
             className="mb-5"
           ><a
             className="text-laranja hover:underline"
-            href=""
+            href="#"
+            onClick={(handleForgot)}
           >
             Esqueceu a senha?
           </a></p>
