@@ -39,14 +39,31 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
 
   const handleReset = async (e: FormEvent) => {
     e.preventDefault();
+    
+    if (!newPassword || !confirmPassword) {
+      toast.error("Por favor, preencha todos os campos!");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres!");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       toast.error("As senhas não coincidem!");
       return;
     }
+
+    if (!userId) {
+      toast.error("ID do usuário não encontrado. Por favor, verifique o código primeiro.");
+      return;
+    }
+
     try {
-        console.log("UserID:", userId, "NewPassword:", newPassword);
-        const res = await resetPassword(userId,newPassword);
+        const res = await resetPassword(userId, newPassword);
         toast.success(res.message);
+        fechar(); 
     } catch (error: any) {
         const message = error?.response?.data?.message || "Erro ao redefinir senha!";
         toast.error(message);
