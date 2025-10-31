@@ -45,7 +45,8 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
                 onChange={(e) => setCode(e.target.value)}
                 />
                 <button
-                className="bg-laranja font-sans tracking-wider text-white rounded-full w-full p-3 mb-4 hover:brightness-90 transition hover:brightness-90 transition cursor-pointer"
+                className="bg-laranja font-sans tracking-wider text-white rounded-full w-full p-3 
+                mb-4 hover:brightness-90 transition hover:brightness-90 transition cursor-pointer"
                 >
                     Verificar Código
                 </button>
@@ -54,15 +55,34 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
                 <input
                 type="password"
                 placeholder="Nova senha"
-                className="bg-background rounded-full p-2 pl-4 border border-gray-300 mb-4 w-full"
+                className={`bg-background rounded-full p-2 pl-4 border mb-4 w-full ${
+                    codeVerified 
+                    ? "border-gray-300 focus:border-laranja focus:outline-none" 
+                    : "border-gray-400 bg-gray-200 cursor-not-allowed"
+                }`}
+                value={new_password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={!codeVerified}
                 />
                 <input
                 type="password"
                 placeholder="Confirme a senha"
-                className="bg-background rounded-full p-2 pl-4 border border-gray-300 mb-4 w-full"
+                className={`bg-background rounded-full p-2 pl-4 border mb-4 w-full ${
+                    codeVerified 
+                    ? "border-gray-300 focus:border-laranja focus:outline-none" 
+                    : "border-gray-400 bg-gray-200 cursor-not-allowed"
+                }`}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={!codeVerified}
                 />
                 <button
-                className="bg-laranja font-sans tracking-wider text-white rounded-full w-full p-3 hover:brightness-90 transition hover:brightness-90 transition cursor-pointer"
+                className={`w-full p-3 rounded-full font-sans tracking-wider text-white transition ${
+                    codeVerified 
+                    ? "bg-laranja hover:brightness-90 cursor-pointer" 
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+                disabled={!codeVerified}
                 >
                     Redefinir Senha
                 </button>
