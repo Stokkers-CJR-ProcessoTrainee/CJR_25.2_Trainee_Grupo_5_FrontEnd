@@ -1,4 +1,4 @@
-import { verifyCode } from "@/api/api";
+import { resetPassword, verifyCode } from "@/api/api";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
@@ -34,6 +34,21 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
     }
   }
 
+  const handleReset = async (e: FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+    try {
+        const res = await resetPassword(null,newPassword);
+        toast.success(res.message);
+    } catch (error: any) {
+        const message = error?.response?.data?.message || "Erro ao redefinir senha!";
+        toast.error(message);
+    }
+  }
+
   if (!mostrar) return null;
 
   return (
@@ -58,57 +73,56 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
           </button>
         </form>
 
-        {/* Nova Senha */}
-        <div className="relative mb-4">
-          <input
-            type={showNewPassword ? "text" : "password"}
-            placeholder="Nova senha"
-            className={`bg-background rounded-full p-2 pl-4 border w-full ${
-              codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+        <form onSubmit={handleReset}>
+            <div className="relative mb-4">
+            <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="Nova senha"
+                className={`bg-background rounded-full p-2 pl-4 border w-full ${
+                codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+                }`}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                disabled={!codeVerified}
+            />
+            <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                onClick={() => codeVerified && setShowNewPassword(!showNewPassword)}
+            >
+                {codeVerified ? (showNewPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
+            </span>
+            </div>
+
+            <div className="relative mb-4">
+            <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirme a senha"
+                className={`bg-background rounded-full p-2 pl-4 border w-full ${
+                codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+                }`}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={!codeVerified}
+            />
+            <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+                onClick={() => codeVerified && setShowConfirmPassword(!showConfirmPassword)}
+            >
+                {codeVerified ? (showConfirmPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
+            </span>
+            </div>
+
+            <button
+            className={`w-full p-3 rounded-full font-sans tracking-wider text-white transition ${
+                codeVerified ? "bg-laranja hover:brightness-90 cursor-pointer" : "bg-gray-400 cursor-not-allowed"
             }`}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            type="submit"
             disabled={!codeVerified}
-          />
-          <span
-            className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-            onClick={() => codeVerified && setShowNewPassword(!showNewPassword)}
-          >
-            {codeVerified ? (showNewPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
-          </span>
-        </div>
+            >
+            Redefinir Senha
+            </button>
+        </form>
 
-        {/* Confirmar Senha */}
-        <div className="relative mb-4">
-          <input
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirme a senha"
-            className={`bg-background rounded-full p-2 pl-4 border w-full ${
-              codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
-            }`}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            disabled={!codeVerified}
-          />
-          <span
-            className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-            onClick={() => codeVerified && setShowConfirmPassword(!showConfirmPassword)}
-          >
-            {codeVerified ? (showConfirmPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
-          </span>
-        </div>
-
-        {/* Redefinir Senha */}
-        <button
-          className={`w-full p-3 rounded-full font-sans tracking-wider text-white transition ${
-            codeVerified ? "bg-laranja hover:brightness-90 cursor-pointer" : "bg-gray-400 cursor-not-allowed"
-          }`}
-          disabled={!codeVerified}
-        >
-          Redefinir Senha
-        </button>
-
-        {/* Fechar */}
         <button
           onClick={fechar}
           className="mt-6 text-gray-500 hover:underline"

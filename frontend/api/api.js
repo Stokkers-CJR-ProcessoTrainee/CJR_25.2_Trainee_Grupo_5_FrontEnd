@@ -27,3 +27,8 @@ export async function verifyCode(email, code) {
   return res.data;
 }
 
+export async function resetPassword(email, newPassword) {
+  const res = await api.post('/login/reset', { userId, newPassword });
+  return res.data;
+}
+
