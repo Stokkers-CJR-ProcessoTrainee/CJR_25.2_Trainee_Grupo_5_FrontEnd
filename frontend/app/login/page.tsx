@@ -48,7 +48,10 @@ export default function LoginPage() {
       toast.success(data.message);
       setResetPassModal(true);
     } catch (error:any) {
-      toast.error("Erro ao recuperar a senha!");
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message.join(", ") : message || "Erro ao recuperar a senha!"
+      );
     }
   }
 
