@@ -1,6 +1,15 @@
 import Image from "next/image";
+import Caixa from "./caixa";
 
-export default function Home() {
+export default async function Home() {
+  
+  const res = await fetch("http://localhost:3001/categories", {
+    cache: "no-store",
+  });
+  const categories = await res.json();
+
+  console.log(categories);
+  console.log("TYPE:", typeof categories);
   return (
     <main>
       <div className="flex justify-center items-center bg-background min-h-screen p-10 gap-10"> 
@@ -22,86 +31,27 @@ export default function Home() {
             <button type="submit">Enviar</button>
           </form>
           <h2 className="text-laranja font-sans text-4xl ml">Categorias</h2>
-          <div className="flex flex-wrap gap-4 m-10">
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 1
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 2
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 3
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 4
-            </div>
-          </div>
+         <Caixa></Caixa>
           <h2 className="text-laranja font-sans text-4xl ml">Produtos <span className="text-sm"> em Mercado</span></h2>
           <div className="flex flex-wrap gap-4 m-10">
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
+            {categories.map((cat: any) => (
+              <div
+                key={cat.id}
+                className="p-4 bg-gray-200 rounded-lg hover:shadow-lg transition flex flex-col items-center justify-center"
+              >
+                <Image
                 src="/images/placeholder.png"
                 alt="Categoria 1"
                 width={100}
                 height={100}
-              />
-              Categoria 1
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 2
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 3
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-              Categoria 4
-            </div>
+                />
+                {cat.name} 
+              </div>
+            ))}
           </div>
           <h2 className="text-laranja font-sans text-4xl ml">Produtos <span className="text-sm"> em Beleza</span></h2>
           <div className="flex flex-wrap gap-4 m-10">
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
+            <div className="bg-card p-4 rounded-lg hover:shadow-lg w-48 h-48 flex items-center justify-center flex-col">
               <Image
                 src="/images/placeholder.png"
                 alt="Categoria 1"
@@ -110,7 +60,7 @@ export default function Home() {
               />
               Categoria 1
             </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
+            <div className="bg-card p-4 rounded-lg hover:shadow-lg w-48 h-48 flex items-center justify-center flex-col">
               <Image
                 src="/images/placeholder.png"
                 alt="Categoria 1"
@@ -119,7 +69,7 @@ export default function Home() {
               />
               Categoria 2
             </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
+            <div className="bg-card p-4 rounded-lg hover:shadow-lg w-48 h-48 flex items-center justify-center flex-col">
               <Image
                 src="/images/placeholder.png"
                 alt="Categoria 1"
@@ -128,7 +78,7 @@ export default function Home() {
               />
               Categoria 3
             </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
+            <div className="bg-card p-4 rounded-lg hover:shadow-lg w-48 h-48 flex items-center justify-center flex-col">
               <Image
                 src="/images/placeholder.png"
                 alt="Categoria 1"
@@ -140,38 +90,14 @@ export default function Home() {
           </div>
           <h2 className="text-laranja font-sans text-4xl ml">Lojas</h2>
           <div className="flex flex-wrap gap-4 m-10">
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-            </div>
-            <div className="bg-card p-4 rounded-lg shadow-lg w-48 h-48 flex items-center justify-center flex-col">
-              <Image
-                src="/images/placeholder.png"
-                alt="Categoria 1"
-                width={100}
-                height={100}
-              />
-            </div>
+            {categories.map((cat: any) => (
+              <div
+                key={cat.id}
+                className="p-4 bg-gray-200 rounded-lg hover:shadow-lg transition"
+              >
+                {cat.name}
+              </div>
+            ))}
           </div>
       </div>
     </main>
