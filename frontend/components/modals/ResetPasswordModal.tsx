@@ -18,6 +18,8 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [userId, setUserId] = useState<number>(0);
+
   const handleVerify = async (e: FormEvent) => {
     e.preventDefault();
     if (!code) {
@@ -28,6 +30,7 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
       const res = await verifyCode(email, code);
       toast.success(res.message);
       setCodeVerified(true);
+      setUserId(res.userId);
     } catch (error: any) {
       const message = error?.response?.data?.message || "Erro ao validar código!";
       toast.error(message);
@@ -41,7 +44,8 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
       return;
     }
     try {
-        const res = await resetPassword(null,newPassword);
+        console.log("UserID:", userId, "NewPassword:", newPassword);
+        const res = await resetPassword(userId,newPassword);
         toast.success(res.message);
     } catch (error: any) {
         const message = error?.response?.data?.message || "Erro ao redefinir senha!";
