@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
-import {login} from "../../api/auth";
-import { useState } from "react";
+import {login} from "../../api/api";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handle = async (e: null) => {
+  const handle = async (e:FormEvent) => {
     e.preventDefault();
 
     //console.log({ email, password }); Teste pra ver se os valores batem
