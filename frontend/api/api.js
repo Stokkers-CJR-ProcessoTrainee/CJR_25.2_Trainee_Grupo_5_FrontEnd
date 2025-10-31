@@ -22,3 +22,8 @@ export async function forgotPassword(email) {
   return res.data;
 }
 
+export async function verifyCode(email, code) {
+  const res = await api.post('/login/verify', { email, code });
+  return res.data;
+}
+

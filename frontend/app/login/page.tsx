@@ -138,6 +138,7 @@ export default function LoginPage() {
       <ResetPasswordModal
         mostrar={resetPassModal}
         fechar={() => setResetPassModal(false)}
+        email = {email}
       />
 
     </main>
