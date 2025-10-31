@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handle = async (e:FormEvent) => {
+  const handleLogin = async (e:FormEvent) => {
     e.preventDefault();
       if (!email || !password) {
       toast.error("Por favor preencha todos os campos!");
@@ -64,7 +64,7 @@ export default function LoginPage() {
 
           <form 
             className="flex flex-col gap-3 my-2 text-gray-800 mb-3"
-            onSubmit={handle}
+            onSubmit={handleLogin}
           >
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
