@@ -17,3 +17,8 @@ export async function register(name, username, email, password_hash) {
   return res.data;
 }
 
+export async function forgotPassword(email) {
+  const res = await api.post('login/forgot', { email });
+  return res.data;
+}
+

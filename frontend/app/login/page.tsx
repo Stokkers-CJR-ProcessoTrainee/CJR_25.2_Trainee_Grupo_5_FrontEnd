@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import {login} from "../../api/api";
+import {forgotPassword, login} from "../../api/api";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,6 +10,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [resetPassModal, setResetPassModal] = useState(false);
 
   const handleLogin = async (e:FormEvent) => {
     e.preventDefault();
@@ -37,6 +39,17 @@ export default function LoginPage() {
 
   const handleForgot = async (e:FormEvent) => {
     e.preventDefault();
+    if (!email) {
+      toast.error("Por favor insira seu email para recuperar a senha!");
+      return;
+    }
+    try {
+      const data = await forgotPassword(email);
+      toast.success(data.message);
+      setResetPassModal(true);
+    } catch (error:any) {
+      toast.error("Erro ao recuperar a senha!");
+    }
   }
 
   return (
