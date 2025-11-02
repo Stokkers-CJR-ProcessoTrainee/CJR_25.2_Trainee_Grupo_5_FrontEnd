@@ -23,3 +23,8 @@ export async function getUserById(id) {
   const res = await api.get(`/user/${id}`);
   return res.data;
 }
+
+export async function getProductsByUser(id) {
+  const res = await api.get(`/user/${id}/products`);
+  return res.data;
+}

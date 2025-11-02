@@ -121,7 +121,7 @@ export default function RegisterPage() {
 
         {/* Imagem */}
         <div className="flex-1 flex justify-center">
-          <Image
+          <img
             src="/images/cadastro-image.svg"
             alt="Cadastro Image"
             width={700} 

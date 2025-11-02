@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getUserById } from "@/api/api";
+import { getProductsByUser, getUserById } from "@/api/api";
 
 type Usuario = {
   id: number;
@@ -11,7 +11,15 @@ type Usuario = {
   profile_picture_url?: string | null;
 };
 
-type Produto = { id: number; nome: string; image_url?: string };
+type Produto = {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+  product_images?: { id: number; image_url: string; order: number }[];
+  store: { id: number; name: string; sticker_url: string };
+};
+
 type Loja = { id: number; nome: string; image_url?: string };
 type Avaliacao = { id: number; titulo: string; image_url?: string };
 
@@ -20,14 +28,8 @@ export default function UserPage() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const produtos: Produto[] = [
-    { id: 1, nome: "Produto 1" },
-    { id: 2, nome: "Produto 2" },
-    { id: 3, nome: "Produto 3" },
-    { id: 4, nome: "Produto 4" },
-    { id: 5, nome: "Produto 5" },
-    { id: 6, nome: "Produto 6" },
-  ];
+  const [produtos, setProdutos] = useState<Produto[]>([]); 
+
   const lojas: Loja[] = [
     { id: 1, nome: "Loja 1" },
     { id: 2, nome: "Loja 2" },
@@ -40,22 +42,27 @@ export default function UserPage() {
 
   // Puxando usuário do backend
   useEffect(() => {
-    async function fetchUser() {
-      if (!id) return;
+    if (!id) return;
 
-      try {
-        const data = await getUserById(Number(id));
-        setUsuario(data);
-      } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
-        setUsuario(null);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchUserAndProducts() {
+    setLoading(true);
+    try {
+      const userData = await getUserById(Number(id));
+      setUsuario(userData);
+
+      const produtosData = await getProductsByUser(Number(id));
+      setProdutos(produtosData);
+    } catch (err) {
+      console.error("Erro ao buscar dados:", err);
+      setUsuario(null);
+      setProdutos([]);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchUser();
-  }, [id]);
+  fetchUserAndProducts();
+}, [id]);
 
   if (loading) return <p className="text-center mt-20 text-gray-500">Carregando usuário...</p>;
   if (!usuario) return <p className="text-center mt-20 text-gray-500">Usuário não encontrado.</p>;
@@ -97,15 +104,42 @@ export default function UserPage() {
       </div>
 
       {/* Produtos */}
-      <div className="w-full max-w-5xl mx-auto mt-[200px] px-4">
+      <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
         <h3 className="text-xl font-sans font-bold mb-4">Produtos</h3>
-        <div className="flex font-sans gap-6 pb-4 overflow-x-auto scrollbar-hide">
+        <div className="flex relative font-sans gap-6 pb-4 overflow-x-auto scrollbar-hide">
           {produtos.map((produto) => (
             <div
               key={produto.id}
-              className="min-w-[175px] bg-white shadow rounded-4xl p-4 h-50 flex flex-col items-center justify-center text-gray-500"
+              className="min-w-[175px] bg-white shadow rounded-4xl p-4 h-50 flex flex-col items-center justify-center text-gray-500 transition-transform cursor-pointer"
             >
-              {produto.nome}
+              <img
+                src={produto.product_images?.[0]?.image_url}
+                alt={produto.name}
+                className=" h-24"
+              />
+
+              <h4 className="text-lg font-semibold text-gray-800 text-center">
+                {produto.name}
+              </h4>
+
+              <p className="text-gray-800 font-semibold">
+                R$ {produto.price}
+              </p>
+
+              {produto.stock > 0 ? (
+                <p className="text-green-600 font-semibold text-sm">Disponível</p>
+              ) : (
+                <p className="text-red-600 font-semibold text-sm">Indisponível</p>
+              )}
+
+              <div className="absolute h-12 w-12 mb-32 ml-25 rounded-full bg-blue-500">
+                <img
+                  src={produto.store.sticker_url}
+                  alt={`${produto.store.name} sticker`}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+              </div>
+
             </div>
           ))}
         </div>
