@@ -16,3 +16,10 @@ export async function register(name, username, email, password_hash) {
   const res = await api.post('/register', {name, username, email, password_hash});
   return res.data;
 }
+
+
+// rotas de usuários
+export async function getUserById(id) {
+  const res = await api.get(`/user/${id}`);
+  return res.data;
+}
