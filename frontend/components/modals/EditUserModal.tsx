@@ -32,16 +32,15 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
             return;
         }
 
-        const data = {
-            name,
-            username: user,
-            email
-        }
+        const data: any = {};
+        if (name.trim()) data.name = name;
+        if (user.trim()) data.username = user;
+        if (email.trim()) data.email = email;
 
         try {
             const res = await updateData(data)
             toast.success('Dados atualizados com sucesso!')
-            fechar();
+            handleClose();
         } catch (err:any) {
             const message = err?.response?.data?.message || "Erro ao atualizar dados!";
             toast.error(message);
