@@ -16,7 +16,6 @@ export default function HomePage() {
     return (
         <main>
             <Navbar/>
-            <h1>Bem-vindo a home page de usuário autenticado</h1>
         </main>
     );
 }
