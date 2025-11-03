@@ -6,13 +6,17 @@ import { toast } from "react-toastify";
 interface EditUserModalProps {
     mostrar: boolean;
     fechar: () => void;
-    id: number;
 }
 
-export default function EditUserModal({mostrar, fechar, id}: EditUserModalProps) {
+export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const [name, setName] = useState('');
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
+
+    function getUserId() {
+        const id = localStorage.getItem('userId');
+        return id;
+    }
 
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
@@ -21,10 +25,16 @@ export default function EditUserModal({mostrar, fechar, id}: EditUserModalProps)
             return;
         }
 
+        const id = getUserId();
+        if (!id) {
+            toast.error('Usuário não identificado!');
+            return;
+        }
+
         const data = {
             name,
             username: user,
-            email,
+            email
         }
 
         try {

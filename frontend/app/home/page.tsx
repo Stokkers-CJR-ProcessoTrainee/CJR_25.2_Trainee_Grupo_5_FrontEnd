@@ -14,7 +14,6 @@ export default function HomePage() {
         if (!token) {
             router.push('/login'); 
         }
-        if (token)
     }, []);
 
 
@@ -30,7 +29,6 @@ export default function HomePage() {
             <EditUserModal
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
-            id={}
             />
             <ToastContainer/>
         </div>
