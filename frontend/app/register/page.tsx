@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [password_confirm, setPasswordConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handle = async (e:FormEvent) => {
+  const handleRegister = async (e:FormEvent) => {
     e.preventDefault();
     if (!name || !username || !email || !password || !password_confirm) {
       toast.error("Por favor preencha todos os campos!");
@@ -58,7 +58,7 @@ export default function RegisterPage() {
           </h1>
 
           <form 
-            onSubmit={handle}
+            onSubmit={handleRegister}
             className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
