@@ -127,7 +127,7 @@ export default function UserPage() {
               className="min-w-[175px] bg-white shadow rounded-4xl p-4 h-50 flex flex-col items-center justify-center text-gray-500 transition-transform cursor-pointer"
             >
               <img
-                src={produto.product_images?.[0]?.image_url || "/images/default-product.png"}
+                src={produto.product_images?.[0]?.image_url}
                 alt={produto.name}
                 className=" h-24"
               />
