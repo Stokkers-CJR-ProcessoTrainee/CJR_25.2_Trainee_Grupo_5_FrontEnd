@@ -1,4 +1,6 @@
+import { FormEvent, useState } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface EditUserModalProps {
     mostrar: boolean;
@@ -6,6 +8,16 @@ interface EditUserModalProps {
 }
 
 export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
+    const [name, setName] = useState('');
+    const [user, setUser] = useState('');
+    const [email, SetEmail] = useState('');
+
+    const handleUpdate = async (e:FormEvent) => {
+        e.preventDefault();
+        if (!name || !user || !email) {
+            toast.error('Por favor')
+        }
+    }
 
     if (!mostrar) return null;
 
@@ -33,6 +45,8 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                     <form>
                         <div className="relative mb-4">
                             <input
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             type="text"
                             placeholder="Nome"
                             className="bg-background rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
@@ -42,6 +56,8 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
 
                         <div className="relative mb-4">
                             <input
+                            value={user}
+                            onChange = {(e) => setUser(e.target.value)}
                             type="text"
                             placeholder="Username"
                             className="bg-background rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
@@ -51,6 +67,8 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
 
                         <div className="relative mb-4">
                             <input
+                            value={email}
+                            onChange={(e) => SetEmail(e.target.value)}
                             type="email"
                             placeholder="Email"
                             className="bg-background rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
