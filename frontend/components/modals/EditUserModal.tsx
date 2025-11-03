@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
+import EditUserPass from "./UpdatePassModal";
 
 interface EditUserModalProps {
     mostrar: boolean;
@@ -13,6 +14,8 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const [name, setName] = useState('');
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
+
+    const [mostrarModalPass, setMostrarPass] = useState(false)
 
     const handleClose = () => {
         setName('');
@@ -47,7 +50,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     }
 
     const handleDelete = async (e:FormEvent) => {
-        
+
         const confirm = window.confirm("Tem certeza que deseja deletar a conta? Isso é permanente e vai apagar todos os dados do usuário!")
         if (!confirm) return;
 
@@ -135,8 +138,9 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                             </button>
 
                             <button
-                                type="button"
-                                className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-blue-500 hover:text-white hover:border-transparent transition cursor-pointer flex items-center justify-center gap-2"
+                            onClick={() => setMostrarPass(true)}
+                            type="button"
+                            className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-blue-500 hover:text-white hover:border-transparent transition cursor-pointer flex items-center justify-center gap-2"
                             >
                                 <FaLock /> Alterar Senha
                             </button>
@@ -144,6 +148,10 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                     </form>    
 
                 </div>
+                <EditUserPass
+                mostrar={mostrarModalPass}
+                voltar={() => setMostrarPass(false)}
+                />
             </div>
     );
 }
