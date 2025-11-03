@@ -56,13 +56,14 @@ export default function UserPage() {
     store_ratings: Avaliacao[];
     product_ratings: Avaliacao[];
   } | null>(null);
+  const [Dono, setDono] = useState(false);
 
 
   // Puxando usuário do backend
   useEffect(() => {
     if (!id) return;
 
-  async function fetchUserAndProducts() {
+  async function fetchUserData() {
     setLoading(true);
     try {
       const userData = await getUserById(Number(id));
@@ -80,6 +81,18 @@ export default function UserPage() {
         product_ratings: avaliacoesData.product_ratings || [],
       });
 
+
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setDono(payload.sub == userData.id)
+        } catch (err) {
+          console.error("Token Inválido");
+          setDono(false);
+        }
+      }
+
     } catch (err) {
       console.error("Erro ao buscar dados:", err);
       setUsuario(null);
@@ -90,7 +103,7 @@ export default function UserPage() {
     }
   }
 
-  fetchUserAndProducts();
+  fetchUserData();
 }, [id]);
 
   if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
@@ -135,11 +148,15 @@ export default function UserPage() {
         </div>
       </div>
 
-      <div>
-        <button className="absolute top-[300px] right-40 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans">
-          Editar Perfil
-        </button>
-      </div>
+
+      {Dono && (
+        <div>
+          <button className="absolute top-[300px] right-40 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans">
+            Editar Perfil
+          </button>
+        </div>
+      )}
+        
 
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
@@ -210,7 +227,7 @@ export default function UserPage() {
                   key={`store-${a.id}`}
                   className="min-w-[400px] bg-white shadow rounded-4xl p-4 flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between">
                     <div className="flex items-center gap-2">
                       <img
                         src={usuario?.profile_picture_url || "/default-avatar.png"}
@@ -223,7 +240,7 @@ export default function UserPage() {
                       </div>
                     </div>
 
-                    <div className="flex gap-1 mt-1.5">
+                    <div className="flex gap-1 mt-1">
                       {Array.from({ length: a.rating }).map((_, i) => (
                         <svg
                           key={i}
@@ -262,7 +279,7 @@ export default function UserPage() {
                   key={`product-${a.id}`}
                   className="min-w-[400px] bg-white shadow rounded-4xl p-4 flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between">
 
                     <div className="flex items-center gap-3">
                       <img
