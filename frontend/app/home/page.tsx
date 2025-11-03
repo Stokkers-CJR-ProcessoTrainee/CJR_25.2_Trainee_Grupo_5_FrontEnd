@@ -1,22 +1,25 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 
 export default function HomePage() {
     const router = useRouter();
-    const token = localStorage.getItem('token');
+    const [foundToken, setFoundToken] = useState(false)
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
         if (!token) {
-        router.push('/login'); // redireciona se não tiver token
+            router.push('/login'); 
+        } else {
+            setFoundToken(true);
         }
     }, []);
     
     return (
         <main>
             <Navbar
-            Logado={!!token}
+            Logado={foundToken}
             />
             <h1>Bem-vindo a home page de usuário autenticado</h1>
         </main>
