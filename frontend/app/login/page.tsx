@@ -24,7 +24,6 @@ export default function LoginPage() {
       setLoading(true);
       const data = await login(email, password);
       localStorage.setItem('token', data.token);
-      localStorage.setItem('userId', data.userId)
       toast.success("Login bem-sucedido! Redirecionando...");
       setTimeout(() => {
       router.push('/home');

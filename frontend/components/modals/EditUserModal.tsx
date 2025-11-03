@@ -13,21 +13,16 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
 
-    function getUserId() {
+    function getUserId():number | null {
         const id = localStorage.getItem('userId');
-        return id;
+        return id ? Number(id) : null;
     }
 
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
+
         if (!name || !user || !email) {
             toast.error('Por favor preencha algum campo')
-            return;
-        }
-
-        const id = getUserId();
-        if (!id) {
-            toast.error('Usuário não identificado!');
             return;
         }
 
@@ -38,7 +33,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
         }
 
         try {
-            const res = await updateData(id, data)
+            const res = await updateData(data)
             toast.success('Dados atualizados com sucesso!')
             fechar();
         } catch (err:any) {

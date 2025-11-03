@@ -32,7 +32,10 @@ export async function resetPassword(userId, newPassword) {
   return res.data;
 }
 
-export async function updateData(id, data) {
-  const res = await api.patch('/user/me', {id, data})
+export async function updateData(data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch('/user/me', data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 }
