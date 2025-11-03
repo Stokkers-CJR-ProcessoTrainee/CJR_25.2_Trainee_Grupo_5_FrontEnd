@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import EditUserModal from '@/components/modals/EditUserModal';
+import { ToastContainer } from 'react-toastify';
 
 export default function HomePage() {
     const router = useRouter();
@@ -29,6 +30,7 @@ export default function HomePage() {
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
             />
+            <ToastContainer/>
         </div>
     );
 }

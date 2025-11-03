@@ -15,8 +15,9 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
         if (!name || !user || !email) {
-            toast.error('Por favor')
+            toast.error('Por favor preencha algum campo')
         }
+        
     }
 
     if (!mostrar) return null;
@@ -42,7 +43,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                         </button>
                     </div>
 
-                    <form>
+                    <form onSubmit={handleUpdate}>
                         <div className="relative mb-4">
                             <input
                             value={name}
