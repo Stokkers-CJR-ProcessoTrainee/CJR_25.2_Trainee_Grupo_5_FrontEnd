@@ -24,6 +24,10 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
         fechar();
     };
 
+    const mostrarModal = () => {
+        setMostrarPass(true)
+        fechar()
+    }
 
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
