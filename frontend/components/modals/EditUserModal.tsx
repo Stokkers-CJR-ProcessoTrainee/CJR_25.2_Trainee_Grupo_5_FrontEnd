@@ -4,7 +4,6 @@ export default function EditUserModal() {
     return (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                 <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg">
-                    <h2 className="text-laranja font-sans font-extrabold text-xl mb-6">Editar Perfil</h2>
 
                     <form>
                         <div className="relative mb-4">
@@ -37,32 +36,26 @@ export default function EditUserModal() {
                         <div className="mt-6 flex flex-col gap-3">
                             <button
                                 type="submit"
-                                className="w-full p-3 rounded-full font-sans tracking-wider text-white bg-laranja hover:brightness-90 transition flex items-center justify-center gap-2"
+                                className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2"
                             >
                                 Salvar Alterações
                             </button>
 
                             <button
                                 type="button"
-                                className="w-full p-3 rounded-full font-sans tracking-wider text-white bg-red-600 hover:brightness-90 transition flex items-center justify-center gap-2"
+                                className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2"
                             >
                                 <FaTrash /> Deletar Conta
                             </button>
 
                             <button
                                 type="button"
-                                className="w-full p-3 rounded-full font-sans tracking-wider text-white bg-blue-600 hover:brightness-90 transition flex items-center justify-center gap-2"
+                                className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-blue-500 hover:text-white hover:border-transparent transition cursor-pointer flex items-center justify-center gap-2"
                             >
                                 <FaLock /> Alterar Senha
                             </button>
                         </div>
                     </form>    
-
-                    <button
-                    className="mt-4 text-gray-500 hover:underline"
-                    >
-                    Fechar
-                    </button>
 
                 </div>
             </div>
