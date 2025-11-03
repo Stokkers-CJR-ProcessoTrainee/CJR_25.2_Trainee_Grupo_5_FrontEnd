@@ -1,15 +1,18 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FaBoxOpen, FaSignOutAlt, FaStore, FaUser } from "react-icons/fa";
 
-interface NavbarProps {
-    Logado: boolean;
-}
+export default function Navbar() {
+    const [logado, setLogado] = useState(false);
 
-export default function Navbar({Logado}: NavbarProps) {
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setLogado(!!token);
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        Logado = false;
+        setLogado(false);
     }
 
     return (
@@ -23,7 +26,7 @@ export default function Navbar({Logado}: NavbarProps) {
             </span>
             </Link>
 
-            {!Logado ? (
+            {!logado ? (
             <div className="flex space-x-8"> 
 
                 <div className="flex space-x-6">
