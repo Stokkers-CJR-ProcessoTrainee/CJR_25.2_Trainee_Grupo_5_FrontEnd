@@ -16,3 +16,19 @@ export async function register(name, username, email, password_hash) {
   const res = await api.post('/register', {name, username, email, password_hash});
   return res.data;
 }
+
+export async function forgotPassword(email) {
+  const res = await api.post('/login/forgot', { email });
+  return res.data;
+}
+
+export async function verifyCode(email, code) {
+  const res = await api.post('/login/verify', { email, code });
+  return res.data;
+}
+
+export async function resetPassword(userId, newPassword) {
+  const res = await api.post('/login/reset', { userId, newPassword });
+  return res.data;
+}
+

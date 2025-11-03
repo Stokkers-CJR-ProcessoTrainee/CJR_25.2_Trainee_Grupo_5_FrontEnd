@@ -1,9 +1,10 @@
 'use client';
 import Image from "next/image";
-import {login} from "../../api/api";
+import {forgotPassword, login} from "../../api/api";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
+import ResetPasswordModal from "@/components/modals/ResetPasswordModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,7 +12,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handle = async (e:FormEvent) => {
+  const [resetPassModal, setResetPassModal] = useState(false);
+
+  const handleLogin = async (e:FormEvent) => {
     e.preventDefault();
       if (!email || !password) {
       toast.error("Por favor preencha todos os campos!");
@@ -34,6 +37,24 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  const handleForgot = async (e:FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error("Por favor insira seu email para recuperar a senha!");
+      return;
+    }
+    try {
+      const data = await forgotPassword(email);
+      toast.success(data.message);
+      setResetPassModal(true);
+    } catch (error:any) {
+      const message = error?.response?.data?.message;
+      toast.error(
+        Array.isArray(message) ? message.join(", ") : message || "Erro ao recuperar a senha!"
+      );
+    }
+  }
 
   return (
     <main
@@ -64,7 +85,7 @@ export default function LoginPage() {
 
           <form 
             className="flex flex-col gap-3 my-2 text-gray-800 mb-3"
-            onSubmit={handle}
+            onSubmit={handleLogin}
           >
             <input
               className="bg-background rounded-full p-2 pl-4 border border-gray-300"
@@ -101,7 +122,8 @@ export default function LoginPage() {
             className="mb-5"
           ><a
             className="text-laranja hover:underline"
-            href=""
+            href="#"
+            onClick={(handleForgot)}
           >
             Esqueceu a senha?
           </a></p>
@@ -112,6 +134,13 @@ export default function LoginPage() {
         </div>
 
       </div>
+
+      <ResetPasswordModal
+        mostrar={resetPassModal}
+        fechar={() => setResetPassModal(false)}
+        email = {email}
+      />
+
     </main>
   );
 }
