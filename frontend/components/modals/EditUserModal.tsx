@@ -27,7 +27,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
 
-        if (!name || !user || !email) {
+        if (!name && !user && !email) {
             toast.error('Por favor preencha algum campo')
             return;
         }
