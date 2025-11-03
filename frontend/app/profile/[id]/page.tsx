@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Navbar from "@/components/Navbar";
 import { getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 
 type Usuario = {
@@ -77,7 +78,11 @@ export default function UserPage() {
   if (!usuario) return <p className="text-center mt-20 text-laranja">Usuário não encontrado.</p>;
 
   return (
+
     <main className="min-h-screen bg-gray-100 pb-16">
+
+      <Navbar />
+      
       {/* Banner */}
       <div className="w-full h-70 bg-gray-300 relative flex items-end px-16"></div>
 
