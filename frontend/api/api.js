@@ -33,6 +33,6 @@ export async function resetPassword(userId, newPassword) {
 }
 
 export async function updateData(id, data) {
-  const res = await api.post('/user/update', {id, data})
+  const res = await api.patch('/user/me', {id, data})
   return res.data;
 }

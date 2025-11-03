@@ -1,3 +1,4 @@
+import { updateData } from "@/api/api";
 import { FormEvent, useState } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -5,19 +6,35 @@ import { toast } from "react-toastify";
 interface EditUserModalProps {
     mostrar: boolean;
     fechar: () => void;
+    id: number;
 }
 
-export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
+export default function EditUserModal({mostrar, fechar, id}: EditUserModalProps) {
     const [name, setName] = useState('');
     const [user, setUser] = useState('');
-    const [email, SetEmail] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
         if (!name || !user || !email) {
             toast.error('Por favor preencha algum campo')
+            return;
         }
-        
+
+        const data = {
+            name,
+            username: user,
+            email,
+        }
+
+        try {
+            const res = await updateData(id, data)
+            toast.success('Dados atualizados com sucesso!')
+            fechar();
+        } catch (err:any) {
+            const message = err?.response?.data?.message || "Erro ao atualizar dados!";
+            toast.error(message);
+        }
     }
 
     if (!mostrar) return null;
@@ -69,7 +86,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                         <div className="relative mb-4">
                             <input
                             value={email}
-                            onChange={(e) => SetEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                             type="email"
                             placeholder="Email"
                             className="bg-background rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
