@@ -17,8 +17,6 @@ export async function register(name, username, email, password_hash) {
   return res.data;
 }
 
-
-// rotas de usuários
 export async function getUserById(id) {
   const res = await api.get(`/user/${id}`);
   return res.data;
@@ -46,6 +44,11 @@ export async function verifyCode(email, code) {
 
 export async function resetPassword(userId, newPassword) {
   const res = await api.post('/login/reset', { userId, newPassword });
+  return res.data;
+}
+
+export async function getUserRatings(id) {
+  const res = await api.get(`/user/${id}/ratings`);
   return res.data;
 }
 
