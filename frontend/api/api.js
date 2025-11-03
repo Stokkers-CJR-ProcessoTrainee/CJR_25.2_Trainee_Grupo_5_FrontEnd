@@ -13,7 +13,7 @@ export async function login(email, password) {
 }
 
 export async function register(name, username, email, password_hash) {
-  const res = await api.post('/register', {name, username, email, password_hash});
+  const res = await api.post('user/register', {name, username, email, password_hash});
   return res.data;
 }
 
