@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaBoxOpen, FaStore } from "react-icons/fa";
+import { FaBoxOpen, FaSignOutAlt, FaStore, FaUser } from "react-icons/fa";
 
 interface NavbarProps {
     Logado: boolean;
@@ -17,18 +17,18 @@ export default function Navbar({Logado}: NavbarProps) {
           </span>
         </Link>
 
+        {!Logado ? (
         <div className="flex space-x-8"> 
-            {/* Ícones */}
+
             <div className="flex space-x-6">
-            <Link href="/produtos" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+            <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
                 <FaBoxOpen />
             </Link>
-            <Link href="/lojas" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+            <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
                 <FaStore />
             </Link>
             </div>
         
-            {/* Botões */}
             <div className="space-x-4">
             <Link
                 href="/login"
@@ -44,6 +44,22 @@ export default function Navbar({Logado}: NavbarProps) {
             </Link>
             </div>
         </div>
+        ) : (
+            <div className="flex space-x-6">
+                <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <FaBoxOpen />
+                </Link>
+                <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <FaStore />
+                </Link>
+                <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <FaUser /> 
+                </Link>
+                <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <FaSignOutAlt />
+                </Link>
+            </div>
+        )}
 
       </div>
     </nav>
