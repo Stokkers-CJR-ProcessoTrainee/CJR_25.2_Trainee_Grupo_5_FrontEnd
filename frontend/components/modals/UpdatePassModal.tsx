@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { FaArrowLeft, FaEye, FaEyeSlash, FaKey } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface EditUserPassProps {
     mostrar: boolean;
@@ -22,10 +23,17 @@ export default function EditUserPass({mostrar,voltar}: EditUserPassProps) {
         voltar();
     };
 
+    const handleUpdatePassword = async (e:FormEvent) => {
+        e.preventDefault()
+        if (!passAtual || !passNew || !passConfirm) {
+            toast.error('Por favor, preencha todos os campos!')
+        }
+    }
+
     if (!mostrar) return null;
 
     return(
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-70">
             <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg relative">
 
                 <button
@@ -39,8 +47,9 @@ export default function EditUserPass({mostrar,voltar}: EditUserPassProps) {
                 <FaKey className="mx-auto" />
                 </div>
 
-                <form className="flex flex-col gap-4">
-
+                <form 
+                onSubmit={handleUpdatePassword}
+                className="flex flex-col gap-4">
                     <div className="relative">
                         <input
                         value={passAtual}
@@ -93,7 +102,6 @@ export default function EditUserPass({mostrar,voltar}: EditUserPassProps) {
                     </div>
 
                     <button
-                        type="submit"
                         className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2 mt-4"
                     >
                         Alterar Senha
