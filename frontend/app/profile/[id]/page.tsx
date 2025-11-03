@@ -120,6 +120,7 @@ export default function UserPage() {
 
       <div className="relative w-full max-w-5xl mx-auto">
         <div className="absolute -top-[104px] left-24 flex flex-col items-start">
+          
           {usuario ? (
             <img
               src={usuario.profile_picture_url && usuario.profile_picture_url.trim() !== "" 
@@ -145,16 +146,15 @@ export default function UserPage() {
             </p>
           </div>
         </div>
-      </div>
 
-
-      {Dono && (
+        {Dono && (
         <div>
-          <button className="absolute top-[300px] right-40 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans">
+          <button className="absolute top-5 flex right-20 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans">
             Editar Perfil
           </button>
         </div>
       )}
+      </div>
         
 
       {/* Produtos */}
