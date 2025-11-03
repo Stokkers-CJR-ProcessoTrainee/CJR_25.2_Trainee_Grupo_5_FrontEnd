@@ -13,10 +13,13 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
 
-    function getUserId():number | null {
-        const id = localStorage.getItem('userId');
-        return id ? Number(id) : null;
-    }
+    const handleClose = () => {
+        setName('');
+        setUser('');
+        setEmail('');
+        fechar();
+    };
+
 
     const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
@@ -49,7 +52,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                 <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg relative">
 
                     <button
-                    onClick={fechar}
+                    onClick={handleClose}
                     className="absolute top-4 cursor-pointer right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
                     >
                         <FaTimes />
