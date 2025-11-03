@@ -39,3 +39,11 @@ export async function updateData(data) {
   });
   return res.data;
 }
+
+export async function deleteUser(params) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete('/user/delete',{
+    headres: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}

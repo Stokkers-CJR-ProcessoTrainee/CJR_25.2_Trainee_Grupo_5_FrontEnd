@@ -45,6 +45,10 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
         }
     }
 
+    const handleDelete = async (e:FormEvent) => {
+        
+    }   
+
     if (!mostrar) return null;
 
     return (
