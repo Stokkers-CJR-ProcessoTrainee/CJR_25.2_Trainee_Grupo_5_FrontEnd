@@ -6,6 +6,7 @@ import EditUserModal from '@/components/modals/EditUserModal';
 
 export default function HomePage() {
     const router = useRouter();
+    const [mostrarModal, setMostrar] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -13,11 +14,21 @@ export default function HomePage() {
             router.push('/login'); 
         }
     }, []);
-    
+
+
     return (
         <div>
             <Navbar/>
-            <EditUserModal/>
+
+            <button 
+            className='my-40 mx-40 cursor-pointer border rounded-md p-2 hover:bg-gray-200'
+            onClick={() => setMostrar(true)}
+            >TESTE MODAL</button>
+
+            <EditUserModal
+            mostrar={mostrarModal}
+            fechar={() => setMostrar(false)}
+            />
         </div>
     );
 }
