@@ -25,9 +25,15 @@ export default function EditUserPass({mostrar,voltar}: EditUserPassProps) {
 
     const handleUpdatePassword = async (e:FormEvent) => {
         e.preventDefault()
+
         if (!passAtual || !passNew || !passConfirm) {
             toast.error('Por favor, preencha todos os campos!')
         }
+
+        if (passNew !== passConfirm) {
+            toast.error('As novas senhas não coincidem!')
+        }
+
     }
 
     if (!mostrar) return null;
