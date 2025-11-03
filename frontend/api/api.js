@@ -40,6 +40,14 @@ export async function updateData(data) {
   return res.data;
 }
 
+export async function updatePassword(data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch('/user/update-pass', data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
 export async function deleteUser() {
   const token = localStorage.getItem('token');
   const res = await api.delete('/user/delete',{

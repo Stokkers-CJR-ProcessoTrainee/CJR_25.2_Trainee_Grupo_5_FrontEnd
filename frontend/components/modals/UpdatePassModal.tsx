@@ -1,3 +1,4 @@
+import { updatePassword } from "@/api/api";
 import { FormEvent, useState } from "react";
 import { FaArrowLeft, FaEye, FaEyeSlash, FaKey } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -27,13 +28,28 @@ export default function EditUserPass({mostrar,voltar}: EditUserPassProps) {
         e.preventDefault()
 
         if (!passAtual || !passNew || !passConfirm) {
-            toast.error('Por favor, preencha todos os campos!')
+            toast.error('Por favor, preencha todos os campos!');
+            return;
         }
 
         if (passNew !== passConfirm) {
-            toast.error('As novas senhas não coincidem!')
+            toast.error('As novas senhas não coincidem!');
+            return;
         }
 
+        const data = {
+            currentPassword: passAtual,
+            newPassword: passNew,
+        }
+
+        try {
+            const res = await updatePassword(data);
+            toast.success('Senha atualizda com sucesso!');
+            voltar();
+        } catch (err:any) {
+            const message = err?.response?.data?.message || "Erro ao atualizar dados!";
+            toast.error(message);
+        }
     }
 
     if (!mostrar) return null;
