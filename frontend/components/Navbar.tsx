@@ -64,7 +64,7 @@ export default function Navbar() {
                     <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
                         <FaUser /> 
                     </Link>
-                    <button onClick={handleLogout} className="text-laranja text-2xl hover:text-laranja/80 transition-colors cursor-pointer">
+                    <button onClick={handleLogout} className="text-laranja text-2xl hover:text-red-500 transition-colors cursor-pointer">
                         <FaSignOutAlt />
                     </button>
                 </div>
