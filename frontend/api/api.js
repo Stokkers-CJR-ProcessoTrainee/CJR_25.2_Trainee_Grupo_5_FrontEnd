@@ -28,3 +28,8 @@ export async function getProductsByUser(id) {
   const res = await api.get(`/user/${id}/products`);
   return res.data;
 }
+
+export async function getStoresByUser(id) {
+  const res = await api.get(`/user/${id}/stores`);
+  return res.data;
+}

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getProductsByUser, getUserById } from "@/api/api";
+import { getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 
 type Usuario = {
   id: number;
@@ -20,20 +20,24 @@ type Produto = {
   store: { id: number; name: string; sticker_url: string };
 };
 
-type Loja = { id: number; nome: string; image_url?: string };
+type Loja = {
+  id: number;
+  name: string;
+  description?: string;
+  logo_url?: string;
+  banner_url?: string;
+  sticker_url?: string;
+};
+
 type Avaliacao = { id: number; titulo: string; image_url?: string };
 
 export default function UserPage() {
   const { id } = useParams();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [produtos, setProdutos] = useState<Produto[]>([]); 
+  const [lojas, setlojas] = useState<Loja[]>([]);
 
-  const lojas: Loja[] = [
-    { id: 1, nome: "Loja 1" },
-    { id: 2, nome: "Loja 2" },
-  ];
   const avaliacoes: Avaliacao[] = [
     { id: 1, titulo: "Avaliação 1" },
     { id: 2, titulo: "Avaliação 2" },
@@ -52,10 +56,15 @@ export default function UserPage() {
 
       const produtosData = await getProductsByUser(Number(id));
       setProdutos(produtosData);
+
+      const lojasData = await getStoresByUser(Number(id));
+      setlojas(lojasData);
+
     } catch (err) {
       console.error("Erro ao buscar dados:", err);
       setUsuario(null);
       setProdutos([]);
+      setlojas([]);
     } finally {
       setLoading(false);
     }
@@ -64,8 +73,8 @@ export default function UserPage() {
   fetchUserAndProducts();
 }, [id]);
 
-  if (loading) return <p className="text-center mt-20 text-gray-500">Carregando usuário...</p>;
-  if (!usuario) return <p className="text-center mt-20 text-gray-500">Usuário não encontrado.</p>;
+  if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
+  if (!usuario) return <p className="text-center mt-20 text-laranja">Usuário não encontrado.</p>;
 
   return (
     <main className="min-h-screen bg-gray-100 pb-16">
@@ -75,11 +84,16 @@ export default function UserPage() {
       {/* Perfil */}
       <div className="relative w-full max-w-5xl mx-auto">
         <div className="absolute -top-[104px] left-24 flex flex-col items-start">
-          <img
-            src={usuario.profile_picture_url || "/default-avatar.png"}
-            alt="Foto de Perfil"
-            className="w-40 h-40 rounded-full object-cover"
-          />
+          {usuario ? (
+            <img
+              src={usuario.profile_picture_url && usuario.profile_picture_url.trim() !== "" 
+                  ? usuario.profile_picture_url 
+                  : "/default-avatar.png"}
+              alt="Foto de Perfil"
+              className="w-40 h-40 rounded-full object-cover"
+              onError={(e) => { e.currentTarget.src = "/default-avatar.png"; }}
+            />
+          ) : null}
 
           <div className="mt-1 font-sans text-left flex flex-col gap-0.5">
             <h2 className="text-3xl font-semibold text-gray-800">{usuario.name}</h2>
@@ -113,7 +127,7 @@ export default function UserPage() {
               className="min-w-[175px] bg-white shadow rounded-4xl p-4 h-50 flex flex-col items-center justify-center text-gray-500 transition-transform cursor-pointer"
             >
               <img
-                src={produto.product_images?.[0]?.image_url}
+                src={produto.product_images?.[0]?.image_url || "/images/default-product.png"}
                 alt={produto.name}
                 className=" h-24"
               />
@@ -152,9 +166,22 @@ export default function UserPage() {
           {lojas.map((loja) => (
             <div
               key={loja.id}
-              className="min-w-[400px] bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-500"
+              className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 font-semibold"
             >
-              {loja.nome}
+              <div className="text-2xl flex flex-col items-center justify-center">
+                {loja.name}
+                
+              </div>
+              
+
+              <div>
+                <img
+                  src={loja.sticker_url}
+                  alt={`${loja.name} sticker`}
+                  className="w-24 h-24 rounded-full object-cover ml-4"
+                />
+              </div>
+
             </div>
           ))}
         </div>
