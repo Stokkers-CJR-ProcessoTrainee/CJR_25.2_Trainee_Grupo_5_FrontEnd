@@ -1,21 +1,39 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import EditUserModal from '@/components/modals/EditUserModal';
+import { ToastContainer } from 'react-toastify';
+import EditUserPass from '@/components/modals/UpdatePassModal';
 
 export default function HomePage() {
     const router = useRouter();
+    const [mostrarModal, setMostrar] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-        router.push('/login'); // redireciona se não tiver token
+            router.push('/login'); 
         }
     }, []);
-    
+
+
     return (
-        <main>
-            <h1>Bem-vindo a home page de usuário autenticado</h1>
-        </main>
+        <div>
+            <Navbar/>
+
+            <button 
+            className='my-40 mx-40 cursor-pointer border rounded-md p-2 hover:bg-gray-200'
+            onClick={() => setMostrar(true)}
+            >TESTE MODAL</button>
+
+            <EditUserModal
+            mostrar={mostrarModal}
+            fechar={() => setMostrar(false)}
+            />
+
+            <ToastContainer/>
+        </div>
     );
 }
 
