@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import EditUserModal from '@/components/modals/EditUserModal';
 
 export default function HomePage() {
     const router = useRouter();
@@ -14,9 +15,10 @@ export default function HomePage() {
     }, []);
     
     return (
-        <main>
+        <div>
             <Navbar/>
-        </main>
+            <EditUserModal/>
+        </div>
     );
 }
 
