@@ -1,9 +1,25 @@
-import { FaCrown, FaEnvelope, FaLock, FaTrash, FaUser } from "react-icons/fa";
+import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 
 export default function EditUserModal() {
     return (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg">
+                <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg relative">
+
+                    <button
+                    className="absolute top-4 cursor-pointer right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
+                    >
+                        <FaTimes />
+                    </button>
+
+                    <div className="relative w-24 h-24 mx-auto mb-6">
+                        <img
+                            alt="Foto"
+                            className="w-24 h-24 rounded-full object-cover border-2 border-laranja"
+                        />
+                        <button className="absolute bottom-0 right-0 bg-laranja p-2 rounded-full text-white hover:brightness-90 cursor-pointer transition">
+                            <FaPen />
+                        </button>
+                    </div>
 
                     <form>
                         <div className="relative mb-4">
