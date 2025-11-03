@@ -1,4 +1,5 @@
-import { updateData } from "@/api/api";
+import { deleteUser, updateData } from "@/api/api";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -47,6 +48,17 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
 
     const handleDelete = async (e:FormEvent) => {
         
+        const confirm = window.confirm("Tem certeza que deseja deletar a conta? Isso é permanente e vai apagar todos os dados do usuário!")
+        if (!confirm) return;
+
+        try {
+            const res = await deleteUser();
+            toast.warning('Usuário deletado com sucesso!');
+            localStorage.removeItem('token');
+        } catch (err:any) {
+            const message = err?.response?.data?.message || "Erro ao atualizar dados!";
+            toast.error(message);
+        }
     }   
 
     if (!mostrar) return null;
@@ -115,6 +127,7 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
                             </button>
 
                             <button
+                                onClick={handleDelete}
                                 type="button"
                                 className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2"
                             >
