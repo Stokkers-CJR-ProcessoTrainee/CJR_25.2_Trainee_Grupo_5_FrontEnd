@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { ToastContainer } from 'react-toastify';
 import EditUserPass from '@/components/modals/UpdatePassModal';
+import AddCommentModal from '@/components/modals/AddCommentModal';
 
 export default function HomePage() {
     const router = useRouter();
@@ -27,9 +28,11 @@ export default function HomePage() {
             onClick={() => setMostrar(true)}
             >TESTE MODAL</button>
 
-            <EditUserModal
+            <AddCommentModal
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
+            tipo={"store"}
+            id = {1} //Esse deve ser trocado para o rating_id dinâmica
             />
 
             <ToastContainer/>
