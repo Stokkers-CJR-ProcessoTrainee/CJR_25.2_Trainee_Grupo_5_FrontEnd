@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
 interface AddCommentModalProps {
     mostrar: boolean,
     fechar: () => void,
+    tipo: "store" | "product"
 }
 
-export default function AddCommentModal({mostrar, fechar}: AddCommentModalProps) {
+export default function AddCommentModal({mostrar, fechar, tipo}: AddCommentModalProps) {
+    const [comment, setComment] = useState("");
+
     
-    
+
     if (!mostrar) return null
 
     return(
@@ -26,6 +30,8 @@ export default function AddCommentModal({mostrar, fechar}: AddCommentModalProps)
                 </h2>
 
                 <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
                 placeholder="Escreva seu comentário..."
                 className="w-full h-32 p-3 border border-laranja rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-laranja resize-none"
                 />

@@ -31,6 +31,7 @@ export default function HomePage() {
             <AddCommentModal
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
+            tipo="store"
             />
 
             <ToastContainer/>
