@@ -75,3 +75,11 @@ export async function deleteUser() {
   }); 
   return res.data;
 }
+
+export async function addProductComment(ratingId, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/comments/product-rating/${ratingId}`, data, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
