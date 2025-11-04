@@ -27,6 +27,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
         });
 
         const data = await res.json();
+        console.log("Upload result:", data);
         return data.url;
     }
 
@@ -40,14 +41,20 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
             const logoUrl = logo_url ? await UploadFile(logo_url) : undefined;
             const bannerUrl = banner_url ? await UploadFile(banner_url) : undefined;
 
-            await createStore({ 
-                name, 
-                description, 
-                sticker_url, 
-                logo_url, 
-                banner_url 
-            });
-            
+            console.log( {stickerUrl, logoUrl, bannerUrl} )
+
+            const payload: Record<string, string> = { name };
+
+            // Adiciona campos somente se tiverem valor válido
+            if (description.trim()) payload.description = description.trim();
+            if (stickerUrl) payload.sticker_url = stickerUrl;
+            if (logoUrl) payload.logo_url = logoUrl;
+            if (bannerUrl) payload.banner_url = bannerUrl;
+
+            console.log("Payload enviado:", payload);
+
+            await createStore(payload);
+
             alert("Loja adicionada com sucesso!")
             fechar();
         }   catch (err) {
@@ -107,7 +114,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
 
                 <div className="w-full mt-4 flex justify-center h-25">
                     <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" stroke-width="2" stroke-dasharray="30 30"/>
+                        <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30"/>
                     </svg>
 
                     <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">

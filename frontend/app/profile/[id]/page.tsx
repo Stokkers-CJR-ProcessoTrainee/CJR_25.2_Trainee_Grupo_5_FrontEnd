@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
 import { ToastContainer } from "react-toastify";
+import CreateStoreModel from "@/components/modals/CreateStoreModal";
 
 type Usuario = {
   id: number;
@@ -61,6 +62,8 @@ export default function UserPage() {
   const [Dono, setDono] = useState(false);
 
   const [mostrar, setMostrar] = useState(false);
+
+  const [abrir, setAbrir] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -213,7 +216,11 @@ export default function UserPage() {
           <h3 className="text-xl font-sans font-bold">Lojas</h3>
 
           {Dono && (
-          <div className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition ">
+          <div 
+          className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition"
+          onClick={() => setAbrir(true)}
+          >
+          
             +
           </div>
           )}
@@ -337,7 +344,12 @@ export default function UserPage() {
       <EditUserModal
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
-      />      
+      />    
+
+      <CreateStoreModel
+      abrir={abrir}
+      fechar={() => setAbrir(false)}
+      />        
       
       <ToastContainer/>
       
