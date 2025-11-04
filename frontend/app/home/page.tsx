@@ -31,7 +31,8 @@ export default function HomePage() {
             <AddCommentModal
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
-            tipo="store"
+            tipo={"store"}
+            id = {1} //Esse deve ser trocado para o rating_id dinâmica
             />
 
             <ToastContainer/>

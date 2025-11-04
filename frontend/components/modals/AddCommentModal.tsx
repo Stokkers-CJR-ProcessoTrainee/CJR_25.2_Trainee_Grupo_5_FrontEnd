@@ -1,3 +1,4 @@
+import { addProductComment, addStoreComment } from "@/api/api";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -5,10 +6,11 @@ import { toast } from "react-toastify";
 interface AddCommentModalProps {
     mostrar: boolean,
     fechar: () => void,
-    tipo: "store" | "product"
+    tipo: "store" | "product",
+    id: number;
 }
 
-export default function AddCommentModal({mostrar, fechar, tipo}: AddCommentModalProps) {
+export default function AddCommentModal({mostrar, fechar, tipo, id}: AddCommentModalProps) {
     const [comment, setComment] = useState("");
 
     const handleAvaliar = async () => {
@@ -17,9 +19,23 @@ export default function AddCommentModal({mostrar, fechar, tipo}: AddCommentModal
             return;
         }
 
-        const data = {text: comment};
+        try {
+            const data = {text: comment};
+            const request =
+                tipo === 'store'
+                    ? addStoreComment(id,data)
+                    : addProductComment(id,data);
+            await request;
 
+            toast.success('Comentário feito com sucesso!');
+            setComment('');
+            fechar();
+        } catch(err:any) {
+            const message = err?.response?.data?.message || "Erro ao comentar!";
+            toast.error(message);
+        }
     }
+
 
     if (!mostrar) return null
 
@@ -46,6 +62,7 @@ export default function AddCommentModal({mostrar, fechar, tipo}: AddCommentModal
                 />
 
                 <button
+                onClick={handleAvaliar}
                 className="p-3 rounded-full font-sans tracking-wider text-laranja border text-white border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
                 >
                 Comentar
