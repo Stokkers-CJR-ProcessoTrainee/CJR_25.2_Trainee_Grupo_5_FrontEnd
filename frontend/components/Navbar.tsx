@@ -9,7 +9,8 @@ export default function Navbar() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            throw Error;
+            setLogado(false);
+            return;
         }
         const payload = JSON.parse(atob(token.split('.')[1]));
         setUserId(payload.sub);
