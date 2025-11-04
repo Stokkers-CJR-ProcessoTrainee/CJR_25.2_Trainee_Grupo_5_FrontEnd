@@ -149,7 +149,7 @@ export default function UserPage() {
 
         {Dono && (
         <div>
-          <button className="absolute top-5 flex right-20 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans">
+          <button className="absolute top-5 flex right-20 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans tracking-wider">
             Editar Perfil
           </button>
         </div>
@@ -248,7 +248,7 @@ export default function UserPage() {
             avaliacoes.store_ratings.map((a) => (
               <div
                 key={`store-${a.id}`}
-                className="min-w-[400px] bg-white shadow rounded-4xl p-4 flex flex-col justify-between"
+                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between"
               >
                 {/* Conteúdo do card da loja */}
                 <div className="flex justify-between">
@@ -291,7 +291,7 @@ export default function UserPage() {
             avaliacoes.product_ratings.map((a) => (
               <div
                 key={`product-${a.id}`}
-                className="min-w-[400px] bg-white shadow rounded-4xl p-4 flex flex-col justify-between"
+                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between"
               >
                 {/* Conteúdo do card do produto */}
                 <div className="flex justify-between">
