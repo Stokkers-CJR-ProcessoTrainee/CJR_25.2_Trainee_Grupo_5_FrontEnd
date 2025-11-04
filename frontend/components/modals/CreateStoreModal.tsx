@@ -37,9 +37,23 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
         setLoading(true);
 
         try {
-            const stickerUrl = sticker_url ? await UploadFile(sticker_url) : undefined;
-            const logoUrl = logo_url ? await UploadFile(logo_url) : undefined;
-            const bannerUrl = banner_url ? await UploadFile(banner_url) : undefined;
+            const stickerPromise = sticker_url 
+                ? UploadFile(sticker_url) 
+                : Promise.resolve(undefined);
+
+            const logoPromise = logo_url 
+                ? UploadFile(logo_url) 
+                : Promise.resolve(undefined);
+            
+            const bannerPromise = banner_url 
+                ? UploadFile(banner_url) 
+                : Promise.resolve(undefined);
+
+            const [stickerUrl, logoUrl, bannerUrl] = await Promise.all([
+                stickerPromise,
+                logoPromise,
+                bannerPromise
+            ]);
 
             console.log( {stickerUrl, logoUrl, bannerUrl} )
 
@@ -122,7 +136,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
                     </svg>
 
                     <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        Anexe a foto de perfil de sua loja
+                        {sticker_url ? sticker_url.name : 'Anexe a foto de perfil de sua loja'}
                     </p>
 
                     <input
@@ -142,7 +156,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
                     </svg>
 
                     <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        Anexe a logo em SVG de sua loja
+                        {logo_url ? logo_url.name : 'Anexe a logo em SVG de sua loja'}
                     </p>
 
                     <input
@@ -163,7 +177,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
                     </svg>
 
                     <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        Anexe o banner da sua loja
+                        {banner_url? banner_url.name : 'Anexe o banner da sua loja'}
                     </p>
 
                     <input
