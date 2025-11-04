@@ -17,6 +17,26 @@ export async function register(name, username, email, password_hash) {
   return res.data;
 }
 
+export async function getUserById(id) {
+  const res = await api.get(`/user/${id}`);
+  return res.data;
+}
+
+export async function getProductsByUser(id) {
+  const res = await api.get(`/user/${id}/products`);
+  return res.data;
+}
+
+export async function getStoresByUser(id) {
+  const res = await api.get(`/user/${id}/stores`);
+  return res.data;
+}
+
+export async function getUserRatings(id) {
+  const res = await api.get(`/user/${id}/ratings`);
+  return res.data;
+}
+
 export async function forgotPassword(email) {
   const res = await api.post('/login/forgot', { email });
   return res.data;
