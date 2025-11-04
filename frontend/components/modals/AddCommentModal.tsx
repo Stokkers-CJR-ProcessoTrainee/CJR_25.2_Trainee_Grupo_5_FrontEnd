@@ -16,7 +16,7 @@ export default function AddCommentModal({mostrar, fechar}: AddCommentModalProps)
 
                 <button
                 onClick={fechar}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
+                className="absolute cursor-pointer top-4 right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
                 >
                 <FaTimes />
                 </button>
