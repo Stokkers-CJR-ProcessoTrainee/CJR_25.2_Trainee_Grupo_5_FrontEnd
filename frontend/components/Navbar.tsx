@@ -4,9 +4,15 @@ import { FaBoxOpen, FaSignOutAlt, FaStore, FaUser } from "react-icons/fa";
 
 export default function Navbar() {
     const [logado, setLogado] = useState(false);
+    const [userId, setUserId] = useState<number | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            throw Error;
+        }
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUserId(payload.sub);
         setLogado(!!token);
     }, []);
 
@@ -61,7 +67,7 @@ export default function Navbar() {
                     <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
                         <FaStore />
                     </Link>
-                    <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <Link href={`/profile/${userId}`} className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
                         <FaUser /> 
                     </Link>
                     <button onClick={handleLogout} className="text-laranja text-2xl hover:text-red-500 transition-colors cursor-pointer">
