@@ -1,15 +1,25 @@
 import Image from "next/image";
 import Caixa from "./caixa";
+import { getCategories } from "@/api/api";
+import { use, useState } from "react";
 
-export default async function Home() {
+type Category = {
+  id: number;
+  name: string;
+};
+
+export default function Home() {
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  async function fetchCategories() {
+    const categories = await getCategories();
+    return categories;
+  }
+
+  const categories1 = fetchCategories();
   
-  const res = await fetch("http://localhost:3001/categories", {
-    cache: "no-store",
-  });
-  const categories = await res.json();
-
-  console.log(categories);
-  console.log("TYPE:", typeof categories);
+  
   return (
     <main>
       <div className="flex justify-center items-center bg-background min-h-screen p-10 gap-10"> 
@@ -33,7 +43,7 @@ export default async function Home() {
           <h2 className="text-laranja font-sans text-4xl ml">Categorias</h2>
          <Caixa></Caixa>
           <h2 className="text-laranja font-sans text-4xl ml">Produtos <span className="text-sm"> em Mercado</span></h2>
-          <div className="flex flex-wrap gap-4 m-10">
+          { <div className="flex flex-wrap gap-4 m-10">
             {categories.map((cat: any) => (
               <div
                 key={cat.id}
@@ -48,7 +58,7 @@ export default async function Home() {
                 {cat.name} 
               </div>
             ))}
-          </div>
+          </div> }
           <h2 className="text-laranja font-sans text-4xl ml">Produtos <span className="text-sm"> em Beleza</span></h2>
           <div className="flex flex-wrap gap-4 m-10">
             <div className="bg-card p-4 rounded-lg hover:shadow-lg w-48 h-48 flex items-center justify-center flex-col">
@@ -87,9 +97,9 @@ export default async function Home() {
               />
               Categoria 4
             </div>
-          </div>
+          </div>nâo
           <h2 className="text-laranja font-sans text-4xl ml">Lojas</h2>
-          <div className="flex flex-wrap gap-4 m-10">
+          { <div className="flex flex-wrap gap-4 m-10">
             {categories.map((cat: any) => (
               <div
                 key={cat.id}
@@ -98,7 +108,7 @@ export default async function Home() {
                 {cat.name}
               </div>
             ))}
-          </div>
+          </div> }
       </div>
     </main>
   );

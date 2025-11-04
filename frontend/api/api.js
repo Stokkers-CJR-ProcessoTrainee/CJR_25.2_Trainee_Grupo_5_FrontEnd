@@ -16,3 +16,8 @@ export async function register(name, username, email, password_hash) {
   const res = await api.post('/register', {name, username, email, password_hash});
   return res.data;
 }
+
+export async function getCategories() {
+  const res = await api.get('/categories');
+  return res.data;
+}
