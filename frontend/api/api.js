@@ -75,3 +75,20 @@ export async function deleteUser() {
   }); 
   return res.data;
 }
+
+export async function createStore(data) {
+  const formData = new FormData()
+
+  formData.append("name", data.name);
+
+  if(data.description) formData.append("description", data.description)
+  if(data.sticker_url) formData.append("sticker_url", data.sticker_url)
+  if(data.logo_url) formData.append("logo_url", data.logo_url)
+  if(data.banner_url) formData.append("banner_url", data.banner_url)
+
+  const res = await api.post("/stores", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return res.data;
+}
