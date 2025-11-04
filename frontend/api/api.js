@@ -32,6 +32,11 @@ export async function getStoresByUser(id) {
   return res.data;
 }
 
+export async function getUserRatings(id) {
+  const res = await api.get(`/user/${id}/ratings`);
+  return res.data;
+}
+
 export async function forgotPassword(email) {
   const res = await api.post('/login/forgot', { email });
   return res.data;
@@ -47,8 +52,26 @@ export async function resetPassword(userId, newPassword) {
   return res.data;
 }
 
-export async function getUserRatings(id) {
-  const res = await api.get(`/user/${id}/ratings`);
+export async function updateData(data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch('/user/update', data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 }
 
+export async function updatePassword(data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch('/user/update-pass', data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+export async function deleteUser() {
+  const token = localStorage.getItem('token');
+  const res = await api.delete('/user/delete',{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
