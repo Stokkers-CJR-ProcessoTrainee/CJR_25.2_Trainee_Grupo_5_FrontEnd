@@ -1,5 +1,4 @@
 import { deleteUser, updateData } from "@/api/api";
-import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
