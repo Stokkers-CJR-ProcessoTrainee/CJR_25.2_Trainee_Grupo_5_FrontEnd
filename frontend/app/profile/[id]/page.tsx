@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
+import EditUserModal from "@/components/modals/EditUserModal";
+import { ToastContainer } from "react-toastify";
 
 type Usuario = {
   id: number;
@@ -57,6 +59,8 @@ export default function UserPage() {
     product_ratings: Avaliacao[];
   } | null>(null);
   const [Dono, setDono] = useState(false);
+
+  const [mostrar, setMostrar] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -149,7 +153,9 @@ export default function UserPage() {
 
         {Dono && (
         <div>
-          <button className="absolute top-5 flex right-20 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans tracking-wider">
+          <button 
+          onClick={() => setMostrar(true)}
+          className="absolute top-5 flex right-20 bg-laranja text-white px-20 py-2 rounded-full hover:brightness-90 transition hover:cursor-pointer font-sans tracking-wider">
             Editar Perfil
           </button>
         </div>
@@ -328,6 +334,13 @@ export default function UserPage() {
         </div>
       </div>
 
+      <EditUserModal
+      mostrar={mostrar}
+      fechar={() => setMostrar(false)}
+      />      
+      
+      <ToastContainer/>
+      
     </main>
 
   );
