@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 interface AddCommentModalProps {
     mostrar: boolean,
@@ -10,7 +11,15 @@ interface AddCommentModalProps {
 export default function AddCommentModal({mostrar, fechar, tipo}: AddCommentModalProps) {
     const [comment, setComment] = useState("");
 
-    
+    const handleAvaliar = async () => {
+        if (!comment.trim()) {
+            toast.error('O comentário não pode estar vazio!');
+            return;
+        }
+
+        const data = {text: comment};
+
+    }
 
     if (!mostrar) return null
 
