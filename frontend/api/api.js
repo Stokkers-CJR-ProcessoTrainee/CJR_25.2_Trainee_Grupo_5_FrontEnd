@@ -88,3 +88,16 @@ export async function createStore(data) {
 
     return res.data;
 }
+
+export async function updateStore(id, data) {
+    const token = localStorage.getItem("token");
+
+    const res = await api.put("/stores/${id}", data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.data;
+}
