@@ -1,5 +1,10 @@
+'use client'
+import Navbar from "@/components/Navbar";
+
 export default function RatingsPage() {
     return(
-        <h1>TESTE</h1>
+        <main>
+            <Navbar />
+        </main>
     );
 }
