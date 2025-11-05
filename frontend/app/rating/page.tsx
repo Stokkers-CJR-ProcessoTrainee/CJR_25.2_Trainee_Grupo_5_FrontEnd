@@ -1,6 +1,7 @@
 'use client'
 import Navbar from "@/components/Navbar";
-import { FaArrowLeft, FaStar } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaArrowLeft, FaPaperPlane, FaStar } from "react-icons/fa";
 
 export default function RatingsPage() {
     const comentarios = [
@@ -26,6 +27,20 @@ export default function RatingsPage() {
       tempo: "1h"
     },
   ];
+
+  const [logado, setLogado] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            setLogado(true)
+        } catch (err) {
+            console.error('Token Recusado')
+            setLogado(false);
+        }
+    }
+  }, []);
 
   return (
     <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-gray-50">
@@ -55,11 +70,20 @@ export default function RatingsPage() {
 
                 <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar
+                        <svg
                         key={star}
-                        size={35}
-                        className={star <= 4 ? "text-yellow-300" : "text-white/40"}
-                    />
+                        width="35"
+                        height="35"
+                        viewBox="0 0 29 28"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={star <= 4 ? "opacity-100" : "opacity-40"}
+                        >
+                        <path
+                            d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                            fill="#FFEB3A"
+                        />
+                        </svg>
                     ))}
                 </div>
 
@@ -73,26 +97,26 @@ export default function RatingsPage() {
 
         <div className="mt-10 px-12 sm:px-24 lg:px-40 pb-16">
             <div className="flex">
-            <div className="w-1 bg-gray-400 rounded-full"></div>
+                <div className="w-1 bg-gray-400 rounded-full"></div>
 
-            <div className="flex flex-col gap-8 pl-12">
-                {comentarios.map((c, i) => (
-                    <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150">
-                        <div className="flex gap-3">
-                            <img
-                            src="/user-placeholder.png"
-                            alt="Foto do usuário"
-                            className="w-10 h-10 rounded-full border-2 border-white object-cover"
-                            />
-                            <div className="flex gap-2 items-center">
-                                <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.autor}</p>
-                                <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{c.tempo}</p>
+                <div className="flex flex-col gap-8 pl-12">
+                    {comentarios.map((c, i) => (
+                        <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150">
+                            <div className="flex gap-3">
+                                <img
+                                src="/user-placeholder.png"
+                                alt="Foto do usuário"
+                                className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                                />
+                                <div className="flex gap-2 items-center">
+                                    <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.autor}</p>
+                                    <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{c.tempo}</p>
+                                </div>
                             </div>
+                            <p className="text-md text-gray-700 font-sans mt-3">{c.texto}</p>
                         </div>
-                        <p className="text-md text-gray-700 font-sans mt-3">{c.texto}</p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
             </div>
 
 
