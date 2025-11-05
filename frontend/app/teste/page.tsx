@@ -21,7 +21,6 @@ export default function TestePage() {
         onClick={() => setAbrir(true)}
         className="bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition"
       >
-        Abrir modal de atualização
       </button>
 
       <UpdateStoreModal

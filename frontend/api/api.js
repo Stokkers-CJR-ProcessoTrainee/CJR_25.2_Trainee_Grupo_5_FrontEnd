@@ -92,7 +92,7 @@ export async function createStore(data) {
 export async function updateStore(id, data) {
     const token = localStorage.getItem("token");
 
-    const res = await api.put("/stores/${id}", data, {
+    const res = await api.put(`/stores/${id}`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -100,4 +100,14 @@ export async function updateStore(id, data) {
     });
 
     return res.data;
+}
+
+export async function deleteStore(id) {
+  const token = localStorage.getitem("token");
+
+  const res = await api.delete(`/stores/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
 }

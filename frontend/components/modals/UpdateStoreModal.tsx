@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
-import { updateStore } from "@/api/api";
+import { updateStore, deleteStore } from "@/api/api";
+import { toast } from "react-toastify";
 
 interface UpdateStoreModalProps {
     abrir: boolean;
@@ -88,6 +89,20 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
             setLoading(false);
         }
     };
+
+    const handleDelete = async () => {
+        if (!confirm("Tem certeza que deseja deletar esta loja?")) return;
+
+        try {
+            await deleteStore(store.id);
+            toast.success("Loja deletada com sucesso");
+            if (onUpdated) onUpdated();
+            fechar();
+        } catch (error) {
+            console.error(error);
+            toast.error("Erro ao deletar loja!");
+        }
+    }
 
     return (
         <div 
@@ -210,7 +225,9 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                     />
                 </div>
                 
-                <div className="flex justify-center">
+                <div 
+                onClick={handleDelete}
+                className="flex justify-center">
                     <button className="bg-red-600 text-white text-xs font-sans px-10 py-0.5 rounded-2xl mt-11 hover:brightness-90 hover:cursor-pointer transition-all">
                         Deletar
                     </button>
