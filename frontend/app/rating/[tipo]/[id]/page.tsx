@@ -1,4 +1,5 @@
 'use client'
+import { getStoreComment } from "@/api/api";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,16 +20,10 @@ export default function RatingsPage() {
             if (!tipo || !id) return;
 
             try {
-            const res = await fetch(`http://localhost:3001/comments/${tipo}-rating/${id}`);
-            const data = await res.json();
+                const commentsData = await getStoreComment(Number(id));
 
+                setComentarios(commentsData);
 
-            if (!res.ok || !Array.isArray(data)) {
-                setComentarios([]); 
-                return;
-            }
-
-            setComentarios(data);
             } catch (error) {
             console.error("Erro ao buscar comentários:", error);
             setComentarios([]); 
@@ -105,7 +100,7 @@ export default function RatingsPage() {
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                     />
                                     <div className="flex gap-2 items-center">
-                                        <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username || "Usuário"}</p>
+                                        <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username}</p>
                                         <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{c.tempo}</p>
                                     </div>
                                 </div>

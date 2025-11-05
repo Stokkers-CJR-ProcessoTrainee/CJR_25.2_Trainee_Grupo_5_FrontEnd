@@ -91,3 +91,11 @@ export async function addStoreComment(ratingId, data) {
   }); 
   return res.data;
 }
+
+export async function getStoreComment(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/comments/store-rating/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
