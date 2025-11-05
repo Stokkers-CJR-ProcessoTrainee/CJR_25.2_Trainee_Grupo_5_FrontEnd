@@ -71,8 +71,8 @@ export default function RatingsPage() {
         
         </div>
 
-        <div className="flex mt-10 px-12 sm:px-24 lg:px-40 pb-16">
-
+        <div className="mt-10 px-12 sm:px-24 lg:px-40 pb-16">
+            <div className="flex">
             <div className="w-1 bg-gray-400 rounded-full"></div>
 
             <div className="flex flex-col gap-8 pl-12">
@@ -93,6 +93,21 @@ export default function RatingsPage() {
                     </div>
                 ))}
             </div>
+            </div>
+
+
+            {logado && (
+                <form className="relative" >
+                    <input 
+                    className=" border font-sans tracking-wider border-transparent mt-16 w-full bg-card px-8 py-5 rounded-full focus:border-laranja focus:outline-none"
+                    type="text"
+                    placeholder="Adicionar Comentário"
+                    />
+                    <button type="submit" className="absolute top-21 right-12 text-laranja hover:text-orange-600 hover:cursor-pointer transition">
+                        <FaPaperPlane size={22} />
+                    </button>
+                </form>
+            )}
 
         </div>
 
