@@ -1,14 +1,16 @@
 'use client'
-import { getStoreComment } from "@/api/api";
+import { addProductComment, addStoreComment, getStoreComment } from "@/api/api";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FaArrowLeft, FaPaperPlane,} from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function RatingsPage() {
     const [logado, setLogado] = useState(false);
     const { tipo, id} = useParams();
     const [comentarios, setComentarios] = useState<any[]>([]);
+    const [newComentario, setNewComentario] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -32,6 +34,28 @@ export default function RatingsPage() {
 
         fetchComments();
     }, [tipo, id]); 
+
+    const handleAddComment = async (e:FormEvent) => {
+        if (!newComentario) {
+            toast.error("Escreva algo para comentar!");
+            return;
+        }
+        try {
+            const data = {
+                content: newComentario
+            }
+            const request =
+                tipo === 'store'
+                ? addStoreComment(Number(id),data)
+                : addProductComment(Number(id),data);
+            await request;
+            
+            toast.success('Comentário feito com sucesso!');
+        } catch (err:any) {
+            const message = err?.response?.data?.message || "Erro ao comentar!";
+            toast.error(message);
+        }
+    }
 
     return (
         <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-gray-50">
@@ -112,8 +136,12 @@ export default function RatingsPage() {
 
 
                 {logado && (
-                    <form className="relative" >
+                    <form 
+                    onSubmit={handleAddComment}
+                    className="relative"  >
                         <input 
+                        value={newComentario}
+                        onChange={(e) => setNewComentario(e.target.value)}
                         className=" border font-sans tracking-wider border-transparent mt-16 w-full bg-card px-8 py-5 rounded-full focus:border-laranja focus:outline-none"
                         type="text"
                         placeholder="Adicionar Comentário"
@@ -125,7 +153,7 @@ export default function RatingsPage() {
                 )}
 
             </div>
-
+            <ToastContainer/>
         </main>
     );
 }
