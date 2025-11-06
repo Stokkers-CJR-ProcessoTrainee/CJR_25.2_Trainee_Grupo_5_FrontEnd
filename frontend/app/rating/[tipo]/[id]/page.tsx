@@ -1,5 +1,5 @@
 'use client'
-import { addProductComment, addStoreComment, getStoreComment } from "@/api/api";
+import { addProductComment, addStoreComment, getStoreComment, getStoreRating } from "@/api/api";
 import { timeDiff } from "@/api/auxiliar/timeDiff";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
@@ -7,16 +7,45 @@ import { FormEvent, useEffect, useState } from "react";
 import { FaArrowLeft, FaPaperPlane,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
+interface Rating {
+  id: number;
+  comment: string;
+  user: {
+    id: number;
+    username: string;
+    profile_picture_url?: string;
+  };
+}
+
 export default function RatingsPage() {
     const [logado, setLogado] = useState(false);
     const { tipo, id} = useParams();
     const [comentarios, setComentarios] = useState<any[]>([]);
+    const [rating, setRating] = useState<Rating | null>(null);
     const [newComentario, setNewComentario] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) setLogado(true);
     }, []);
+
+    useEffect(() => {
+        async function fetchRating() {
+            if (!tipo || !id) return;
+
+            try {
+                const rating = await getStoreRating(Number(id));
+
+                setRating(rating);
+
+            } catch (error) {
+            console.error("Erro ao acessar a avaliação:", error);
+            setComentarios([]); 
+            }
+        }
+
+        fetchRating();
+    }, [tipo, id]); 
 
     useEffect(() => {
         async function fetchComments() {
@@ -78,7 +107,7 @@ export default function RatingsPage() {
                         />
 
                         <div className="flex flex-row items-center gap-4">
-                            <h2 className="text-3xl font-semibold font-sans leading-tight">Felipe Ferreira</h2>
+                            <h2 className="text-3xl font-semibold font-sans leading-tight">{rating?.user.username}</h2>
                             <p className="text-md font-sans font-semibold opacity-80 leading-tight">há 2 dias</p>
                         </div>
                         
@@ -106,7 +135,7 @@ export default function RatingsPage() {
                 </div>
 
                 <p className="mt-8 text-2xl font-sans tracking-wider opacity-95 ml-52 max-w-8xl">
-                O atendimento foi ótimo e o produto chegou dentro do prazo. Voltaria a comprar!
+                    {rating?.comment}
                 </p>
             
             </div>
