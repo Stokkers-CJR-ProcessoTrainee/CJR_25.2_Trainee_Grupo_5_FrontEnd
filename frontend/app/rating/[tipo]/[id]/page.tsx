@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 interface Rating {
   id: number;
   comment: string;
+  user_id: number;
   rating: number;
   createdAt: string;
   user: {
@@ -33,7 +34,18 @@ export default function RatingsPage() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            return;
+        }
+
         if (token) setLogado(true);
+
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const userId_rating = rating?.user_id;
+        if (userId_rating == payload.sub) {
+            setDonoRating(true);
+        }
+
     }, []);
 
     useEffect(() => {
