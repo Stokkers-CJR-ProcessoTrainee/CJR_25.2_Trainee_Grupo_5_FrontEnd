@@ -108,17 +108,17 @@ export async function getStoreRating(ratingId) {
   return res.data;
 }
 
-export async function updateStoreComment(id,data) {
+export async function updateStoreComment(id,data,ratingId) {
   const token = localStorage.getItem('token');
-  const res = await api.patch(`/comments/${id}`, data,{
+  const res = await api.patch(`/comments/store-rating/${ratingId}/${id}`, data,{
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;
 }
 
-export async function updateProductComment(id,data) {
+export async function updateProductComment(id,data,ratingId) {
   const token = localStorage.getItem('token');
-  const res = await api.patch(`/comments/${id}`, data,{
+  const res = await api.patch(`/comments/product-rating/${ratingId}/${id}`, data,{
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;

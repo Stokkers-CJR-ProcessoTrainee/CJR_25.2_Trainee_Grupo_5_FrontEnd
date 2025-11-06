@@ -1,5 +1,5 @@
 import { updateProductComment, updateStoreComment } from "@/api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
@@ -9,10 +9,15 @@ interface UpdateCommentModalProps {
     tipo: "store" | "product",
     comentario: any | null;
     onUpdate: (updated: any) => void;
+    rating_id: number | undefined;
 }
 
-export default function UpdateCommentModal({mostrar, fechar, tipo, comentario, onUpdate}: UpdateCommentModalProps) {
-    const [comment, setComment] = useState("");
+export default function UpdateCommentModal({mostrar, fechar, tipo, rating_id ,comentario, onUpdate}: UpdateCommentModalProps) {
+    const [comment, setComment] = useState(comentario?.content || "");
+
+    useEffect(() => {
+    setComment(comentario?.content || "");
+    }, [comentario]);
 
     const handleClose = () => {
         setComment('');
@@ -28,7 +33,7 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, comentario, o
         try {
             const data = { content: comment };
             if (tipo == "store") {
-                const updated = await updateStoreComment(comentario.id, data);
+                const updated = await updateStoreComment(comentario.id, data, rating_id);
                 onUpdate(updated);
             }
             if (tipo == "product") {

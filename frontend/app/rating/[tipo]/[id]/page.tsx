@@ -226,6 +226,7 @@ export default function RatingsPage() {
             mostrar={!!comentarioEditar}
             fechar={() => setComentarioEditar(null)}
             tipo={tipo as "store" | "product"} 
+            rating_id={rating?.id}
             comentario={comentarioEditar}
             onUpdate={(updated) => {
                 setComentarios((prev) =>
