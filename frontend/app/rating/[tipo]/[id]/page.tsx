@@ -20,11 +20,16 @@ interface Rating {
 }
 
 export default function RatingsPage() {
-    const [logado, setLogado] = useState(false);
     const { tipo, id} = useParams();
+
+    const [logado, setLogado] = useState(false);
+    const [donoRating, setDonoRating] = useState(false);
+    const [donoComment, setDonoComment] = useState(false);
+
     const [comentarios, setComentarios] = useState<any[]>([]);
-    const [rating, setRating] = useState<Rating | null>(null);
     const [newComentario, setNewComentario] = useState('');
+
+    const [rating, setRating] = useState<Rating | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
