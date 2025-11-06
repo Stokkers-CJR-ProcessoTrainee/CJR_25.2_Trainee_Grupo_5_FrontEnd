@@ -1,5 +1,6 @@
 'use client'
 import { addProductComment, addStoreComment, getStoreComment } from "@/api/api";
+import { timeDiff } from "@/api/auxiliar/timeDiff";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -117,7 +118,7 @@ export default function RatingsPage() {
                     <div className="flex flex-col gap-8 pl-12">
                         {comentarios.map((c, i) => (
                             <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150">
-                                <div className="flex gap-3">
+                                <div className="flex gap-3 items-center">
                                     <img
                                     src="/user-placeholder.png"
                                     alt="Foto do usuário"
@@ -125,7 +126,7 @@ export default function RatingsPage() {
                                     />
                                     <div className="flex gap-2 items-center">
                                         <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username}</p>
-                                        <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{c.tempo}</p>
+                                        <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                     </div>
                                 </div>
                                 <p className="text-md text-gray-700 font-sans mt-3">{c.content}</p>
