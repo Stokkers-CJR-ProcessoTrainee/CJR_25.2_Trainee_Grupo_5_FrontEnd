@@ -75,3 +75,13 @@ export async function deleteUser() {
   }); 
   return res.data;
 }
+
+export async function getCategories() {
+  const res = await api.get('/categories');
+  return res.data;
+}
+
+export async function getProductsByCategory(categoryId) {
+  const res = await api.get(`/products/category/${categoryId}`);
+  return res.data;
+}
