@@ -60,9 +60,77 @@ const comentarios = [
 ];
 
 
+const produtos = [
+    {
+        id: 1,
+        name: "Celular Samsung",
+        price: 500,
+        stock: 15,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.8,
+    },
+    {
+        id: 2,
+        name: "Celular Xiaomi",
+        price: 500,
+        stock: 8,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.6,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 3,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+]
+
+
 export default function storePage() {
     return (
-        <main className="min-h-screen bg-gray-100 pb-16">
+        <main className="min-h-screen bg-amber-50 pb-16">
 
             <Navbar />
 
@@ -78,9 +146,8 @@ export default function storePage() {
                 <p className="text-center text-5xl font-sans font-semibold text-laranja mt-2"> 
                     4.8
                 </p>
-            </div>
-            
-            <div className="bg-gray-100 px-40 mt-5 py-10 p-10">
+
+                <div className="px-40 mt-5 py-10">
                 <Carrossel>
                     {comentarios.length > 0 ? (
                         comentarios.map((comentario) => (
@@ -141,12 +208,53 @@ export default function storePage() {
                         Nenhum comentário disponível.
                         </p>
                     )}
-                    </Carrossel>
+                </Carrossel>
+                </div>
             </div>
 
-            <div className="bg-gray-300 mt-10 p-30">
-                div produtos melhores avaliados
-            </div>
+            {/* Produtos */}
+            <div className="w-full max-w-5xl font-sans mx-auto mt-3 px-4">
+                <div className="flex text-center gap-1">
+                    <h3 className="text-xl font-sans font-bold mb-4">
+                    Produtos 
+                    </h3>
+                    <h3 className="text-xs mt-2.5 font-sans font-bold">melhor avaliados</h3>
+                </div>
+                
+                <div className="flex relative rounded-3xl px-2 font-sans gap-6">
+                    <Carrossel>
+                      {produtos.length > 0 ? (
+                        produtos.map((produto) => (
+                          <div
+                            key={produto.id}
+                            className="relative min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                          >
+                            <div className="flex justify-center items-center flex-1">
+                            <img
+                              src={produto.product_images?.[0]?.image_url}
+                              alt={produto.name}
+                              className="h-24"
+                            />
+                            </div>
+            
+                            <div className="flex flex-col items-start">
+                              <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
+                              <p className="text-gray-800 font-semibold">R${produto.price}</p>
+                              {produto.stock > 0 ? (
+                                <p className="text-green-600 font-bold text-sm">Disponível</p>
+                              ) : (
+                                <p className="text-red-600 font-bold text-sm">Indisponível</p>
+                              )}
+                            </div>
+                            
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 font-sans">Este usuário ainda não possui produtos.</p>
+                      )}
+                    </Carrossel>
+                    </div>
+                </div>
 
             <div className="bg-gray-300 mt-10 p-30">
                 div todos os produtos
