@@ -2,10 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import EditUserModal from '@/components/modals/EditUserModal';
 import { ToastContainer } from 'react-toastify';
-import EditUserPass from '@/components/modals/UpdatePassModal';
-import AddCommentModal from '@/components/modals/AddCommentModal';
+import UpdateCommentModal from '@/components/modals/UpdateCommentModal';
+
 
 export default function HomePage() {
     const router = useRouter();
@@ -28,7 +27,7 @@ export default function HomePage() {
             onClick={() => setMostrar(true)}
             >TESTE MODAL</button>
 
-            <AddCommentModal
+            <UpdateCommentModal
             mostrar={mostrarModal}
             fechar={() => setMostrar(false)}
             tipo={"store"}

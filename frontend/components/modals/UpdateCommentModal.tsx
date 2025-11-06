@@ -3,14 +3,14 @@ import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-interface AddCommentModalProps {
+interface UpdateCommentModalProps {
     mostrar: boolean,
     fechar: () => void,
     tipo: "store" | "product",
     id: number;
 }
 
-export default function AddCommentModal({mostrar, fechar, tipo, id}: AddCommentModalProps) {
+export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCommentModalProps) {
     const [comment, setComment] = useState("");
 
     const handleAvaliar = async () => {
