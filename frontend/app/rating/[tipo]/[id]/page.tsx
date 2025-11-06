@@ -4,7 +4,7 @@ import { timeDiff } from "@/api/auxiliar/timeDiff";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { FaArrowLeft, FaPaperPlane,} from "react-icons/fa";
+import { FaArrowLeft, FaPaperPlane, FaPen,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
 interface Rating {
@@ -46,7 +46,7 @@ export default function RatingsPage() {
             setDonoRating(true);
         }
 
-    }, []);
+    }, [rating]);
 
     useEffect(() => {
         async function fetchRating() {
@@ -99,6 +99,7 @@ export default function RatingsPage() {
                 : addProductComment(Number(id),data);
             await request;
             
+            setNewComentario('');
             toast.success('Comentário feito com sucesso!');
         } catch (err:any) {
             const message = err?.response?.data?.message || "Erro ao comentar!";
@@ -113,6 +114,13 @@ export default function RatingsPage() {
             <div className="bg-laranja w-full h-115 text-white shadow-md relative flex flex-col justify-center px-8">
             
                 <div className="flex items-center justify-between mx-40">
+
+                    {donoRating &&
+                        <button className="absolute top-[28%] right-[11%] text-white cursor-pointer hover:text-gray-300 transition">
+                            <FaPen size={28} />
+                        </button>
+                    }
+
                     <div className="flex items-center gap-4">
 
                         <button className="hover:opacity-80 transition hover:cursor-pointer">
