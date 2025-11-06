@@ -14,6 +14,7 @@ interface Rating {
   user_id: number;
   rating: number;
   createdAt: string;
+  updatedAt: string;
   user: {
     id: number;
     username: string;
@@ -230,7 +231,11 @@ export default function RatingsPage() {
                                         {(donoLoja == donoComment) && (
                                             <p className="absolute top-7 text-sm text-laranja font-sans opacity-80 leading-tight">Dono da loja</p>
                                         )}
-                                        <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
+                                        {(c.createdAt == c.updatedAt) ?
+                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
+                                        : 
+                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
+                                        }
                                     </div>
                                 </div>
                                 <p className="text-md text-gray-700 font-sans mt-4">{c.content}</p>
@@ -265,8 +270,8 @@ export default function RatingsPage() {
             rating_id={rating?.id}
             comentario={comentarioEditar}
             onUpdate={(updated) => {
-            setComentarios((prev) =>
-                prev.map((c) => (c.id === updated.id ? { ...c, ...updated } : c))
+            setComentarios(prev =>
+            prev.map(c => c.id === updated.id ? { ...c, ...updated } : c)
             );
             }}
             />
