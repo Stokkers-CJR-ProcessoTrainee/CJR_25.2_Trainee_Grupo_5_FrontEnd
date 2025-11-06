@@ -1,5 +1,5 @@
 'use client'
-import { addProductComment, addStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating } from "@/api/api";
+import { addProductComment, addStoreComment, deleteProductComment, deleteStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating } from "@/api/api";
 import { timeDiff } from "@/api/auxiliar/timeDiff";
 import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
@@ -34,7 +34,6 @@ export default function RatingsPage() {
     const [rating, setRating] = useState<Rating | null>(null);
 
     const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
-    const [comentarioDeletar,setComentarioDeletar] = useState<any | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -113,8 +112,22 @@ export default function RatingsPage() {
         }
     }
 
-    const handleDelete = async () => {
-        
+    const handleDelete = async (comentario:any) => {
+        const confirm = window.confirm("Tem certeza que deseja deletar a conta? Isso é permanente e vai apagar todos os dados do usuário!")
+        if (!confirm) return;
+
+        try {
+            if (tipo === 'store') {
+                await deleteStoreComment(Number(comentario.id), rating?.id);
+            } else {
+                await deleteProductComment(Number(comentario.id), rating?.id);
+            }
+            setComentarios(prev => prev.filter(c => c.id !== comentario.id));
+            toast.success('Comentário deletado com sucesso');
+        } catch (err:any) {
+            const message = err?.response?.data?.message || "Erro ao comentar!";
+            toast.error(message);
+        }
     }
 
     return (
@@ -195,7 +208,7 @@ export default function RatingsPage() {
                                     )}
                                     {donoComment && (
                                         <button 
-                                        onClick={() => setComentarioDeletar(c)}
+                                        onClick={() => handleDelete(c)}
                                         className="absolute right-7 bottom-4 text-laranja2 cursor-pointer hover:text-red-600 transition">
                                             <FaTrash size={20} />
                                         </button>

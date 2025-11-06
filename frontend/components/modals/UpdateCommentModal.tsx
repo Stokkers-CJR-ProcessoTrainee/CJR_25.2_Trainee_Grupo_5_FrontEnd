@@ -37,7 +37,7 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, rating_id ,co
                 onUpdate(updated);
             }
             if (tipo == "product") {
-                const updated = await updateProductComment(comentario.id, data);
+                const updated = await updateProductComment(comentario.id, data, rating_id);
                 onUpdate(updated);
             }
             toast.success("Comentário atualizado!");

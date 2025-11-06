@@ -142,7 +142,7 @@ export async function updateProductComment(id,data,ratingId) {
 
 export async function deleteStoreComment(id,ratingId) {
   const token = localStorage.getItem('token');
-  const res = await api.delete(`store-rating/${ratingId}/${id}`,{
+  const res = await api.delete(`/comments/store-rating/${ratingId}/${id}`,{
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;
@@ -150,7 +150,7 @@ export async function deleteStoreComment(id,ratingId) {
 
   export async function deleteProductComment(id,ratingId) {
   const token = localStorage.getItem('token');
-  const res = await api.delete(`product-rating/${ratingId}/${id}`,{
+  const res = await api.delete(`/comments/product-rating/${ratingId}/${id}`,{
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;
