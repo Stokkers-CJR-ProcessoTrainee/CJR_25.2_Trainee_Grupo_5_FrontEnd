@@ -33,7 +33,7 @@ export default function RatingsPage() {
 
     const [rating, setRating] = useState<Rating | null>(null);
 
-    const [mostrar,setMostrar] = useState(false);
+    const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -181,7 +181,7 @@ export default function RatingsPage() {
                             <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
                                     {donoComment && (
                                         <button 
-                                        onClick={() => setMostrar(true)}
+                                        onClick={() => setComentarioEditar(c)}
                                         className="absolute right-7 text-laranja2 cursor-pointer hover:text-laranja transition">
                                             <FaPen size={20} />
                                         </button>
@@ -223,11 +223,15 @@ export default function RatingsPage() {
 
             </div>
             <UpdateCommentModal
-            mostrar={mostrar}
-            fechar={() => setMostrar(false)}
-            tipo={"store"}
-            id = {rating?.id}
-            />
+            mostrar={!!comentarioEditar}
+            fechar={() => setComentarioEditar(null)}
+            tipo={tipo as "store" | "product"} 
+            comentario={comentarioEditar}
+            onUpdate={(updated) => {
+                setComentarios((prev) =>
+                prev.map((c) => (c.id === updated.id ? updated : c))
+                );
+            }}/>
             <ToastContainer/>
         </main>
     );

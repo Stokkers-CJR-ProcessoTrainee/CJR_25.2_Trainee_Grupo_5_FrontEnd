@@ -1,4 +1,4 @@
-import { addProductComment, addStoreComment } from "@/api/api";
+import { updateProductComment, updateStoreComment } from "@/api/api";
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -7,10 +7,11 @@ interface UpdateCommentModalProps {
     mostrar: boolean,
     fechar: () => void,
     tipo: "store" | "product",
-    id: number | undefined;
+    comentario: any | null;
+    onUpdate: (updated: any) => void;
 }
 
-export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCommentModalProps) {
+export default function UpdateCommentModal({mostrar, fechar, tipo, comentario, onUpdate}: UpdateCommentModalProps) {
     const [comment, setComment] = useState("");
 
     const handleClose = () => {
@@ -18,25 +19,26 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCo
         fechar();
     };
 
-    const handleComentar = async () => {
+    const handleUpdate = async () => {
         if (!comment.trim()) {
             toast.error('O comentário não pode estar vazio!');
             return;
         }
 
         try {
-            const data = {text: comment};
-            const request =
-                tipo === 'store'
-                    ? addStoreComment(id,data)
-                    : addProductComment(id,data);
-            await request;
-
-            toast.success('Comentário feito com sucesso!');
-            setComment('');
-            fechar();
-        } catch(err:any) {
-            const message = err?.response?.data?.message || "Erro ao comentar!";
+            const data = { content: comment };
+            if (tipo == "store") {
+                const updated = await updateStoreComment(comentario.id, data);
+                onUpdate(updated);
+            }
+            if (tipo == "product") {
+                const updated = await updateProductComment(comentario.id, data);
+                onUpdate(updated);
+            }
+            toast.success("Comentário atualizado!");
+            handleClose();
+        } catch (err: any) {
+            const message = err?.response?.data?.message || "Erro ao atualizar!";
             toast.error(message);
         }
     }
@@ -67,10 +69,10 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCo
                 />
 
                 <button
-                onClick={handleComentar}
+                onClick={handleUpdate}
                 className="p-3 rounded-full font-sans tracking-wider text-laranja border text-white border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
                 >
-                Comentar
+                Atualizar
                 </button>
 
             </div>
