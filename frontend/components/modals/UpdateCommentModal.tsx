@@ -51,7 +51,7 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCo
                 </button>
 
                 <h2 className="text-xl font-semibold font-sans text-laranja tracking-wider text-center text-foreground">
-                Adicionar Comentário
+                Editar Comentário
                 </h2>
 
                 <textarea
