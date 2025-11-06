@@ -23,9 +23,9 @@ interface Rating {
 export default function RatingsPage() {
     const { tipo, id} = useParams();
 
+    const [userId, setUserId] = useState(0);
     const [logado, setLogado] = useState(false);
     const [donoRating, setDonoRating] = useState(false);
-    const [donoComment, setDonoComment] = useState(true);
 
     const [comentarios, setComentarios] = useState<any[]>([]);
     const [newComentario, setNewComentario] = useState('');
@@ -34,22 +34,19 @@ export default function RatingsPage() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
-            return;
-        }
+        if (!token) { return; }
 
-        if (token) setLogado(true);
+        setLogado(true);
 
         const payload = JSON.parse(atob(token.split('.')[1]));
-        const userId = rating?.user_id;
-        if (userId == payload.sub) {
-            setDonoRating(true);
-        }
-        if (userId == null) {
-            setDonoComment(true);
-        }
+        setUserId(payload.sub);
+    }, []);
 
-    }, [rating]);
+    useEffect(() => {
+        if (rating && userId) {
+            setDonoRating(rating.user_id === userId);
+        }
+    }, [rating, userId]);
 
     useEffect(() => {
         async function fetchRating() {
@@ -175,13 +172,15 @@ export default function RatingsPage() {
                     <div className="w-1 bg-gray-400 rounded-full"></div>
 
                     <div className="flex flex-col gap-8 pl-12">
-                        {comentarios.map((c, i) => (
+                        {comentarios.map((c, i) => {
+                            const donoComment = c.user_id === userId;
+                            return (
                             <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
-                                    {donoComment &&
-                                        <button className="absolute right-7 text-white cursor-pointer hover:text-laranja transition">
-                                            <FaPen size={24} />
+                                    {donoComment && (
+                                        <button className="absolute right-7 text-laranja2 cursor-pointer hover:text-laranja transition">
+                                            <FaPen size={20} />
                                         </button>
-                                    }
+                                    )}
                                 <div className="flex gap-3 items-center">
                                     <img
                                     src="/user-placeholder.png"
@@ -195,7 +194,7 @@ export default function RatingsPage() {
                                 </div>
                                 <p className="text-md text-gray-700 font-sans mt-3">{c.content}</p>
                             </div>
-                        ))}
+                        );})}
                     </div>
                 </div>
 
@@ -211,7 +210,7 @@ export default function RatingsPage() {
                         type="text"
                         placeholder="Adicionar Comentário"
                         />
-                        <button type="submit" className="absolute top-21 right-12 text-laranja hover:text-orange-600 hover:cursor-pointer transition">
+                        <button type="submit" className="absolute top-21 right-12 text-laranja2 hover:text-laranja hover:cursor-pointer transition">
                             <FaPaperPlane size={22} />
                         </button>
                     </form>
