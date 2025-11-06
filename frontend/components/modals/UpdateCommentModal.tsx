@@ -13,7 +13,7 @@ interface UpdateCommentModalProps {
 export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCommentModalProps) {
     const [comment, setComment] = useState("");
 
-    const handleAvaliar = async () => {
+    const handleComentar = async () => {
         if (!comment.trim()) {
             toast.error('O comentário não pode estar vazio!');
             return;
@@ -62,7 +62,7 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, id}: UpdateCo
                 />
 
                 <button
-                onClick={handleAvaliar}
+                onClick={handleComentar}
                 className="p-3 rounded-full font-sans tracking-wider text-laranja border text-white border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
                 >
                 Comentar

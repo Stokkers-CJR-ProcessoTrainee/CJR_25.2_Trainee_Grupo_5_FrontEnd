@@ -1,6 +1,7 @@
 'use client'
 import { addProductComment, addStoreComment, getStoreComment, getStoreRating } from "@/api/api";
 import { timeDiff } from "@/api/auxiliar/timeDiff";
+import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -31,6 +32,8 @@ export default function RatingsPage() {
     const [newComentario, setNewComentario] = useState('');
 
     const [rating, setRating] = useState<Rating | null>(null);
+
+    const [mostrar,setMostrar] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -177,7 +180,9 @@ export default function RatingsPage() {
                             return (
                             <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
                                     {donoComment && (
-                                        <button className="absolute right-7 text-laranja2 cursor-pointer hover:text-laranja transition">
+                                        <button 
+                                        onClick={() => setMostrar(true)}
+                                        className="absolute right-7 text-laranja2 cursor-pointer hover:text-laranja transition">
                                             <FaPen size={20} />
                                         </button>
                                     )}
@@ -217,6 +222,12 @@ export default function RatingsPage() {
                 )}
 
             </div>
+            <UpdateCommentModal
+            mostrar={mostrar}
+            fechar={() => setMostrar(false)}
+            tipo={"store"}
+            id = {1}
+            />
             <ToastContainer/>
         </main>
     );
