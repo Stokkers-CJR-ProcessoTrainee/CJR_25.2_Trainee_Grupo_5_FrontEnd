@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 interface Rating {
   id: number;
   comment: string;
+  createdAt: string;
   user: {
     id: number;
     username: string;
@@ -108,7 +109,7 @@ export default function RatingsPage() {
 
                         <div className="flex flex-row items-center gap-4">
                             <h2 className="text-3xl font-semibold font-sans leading-tight">{rating?.user.username}</h2>
-                            <p className="text-md font-sans font-semibold opacity-80 leading-tight">há 2 dias</p>
+                            <p className="text-md font-sans font-semibold opacity-80 leading-tight">{timeDiff(rating?.createdAt)}</p>
                         </div>
                         
                     </div>
