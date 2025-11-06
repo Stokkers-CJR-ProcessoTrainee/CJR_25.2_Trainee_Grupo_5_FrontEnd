@@ -1,5 +1,5 @@
 'use client'
-import { addProductComment, addStoreComment, getStoreComment, getStoreRating } from "@/api/api";
+import { addProductComment, addStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating } from "@/api/api";
 import { timeDiff } from "@/api/auxiliar/timeDiff";
 import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
@@ -56,16 +56,15 @@ export default function RatingsPage() {
             if (!tipo || !id) return;
 
             try {
-                const rating = await getStoreRating(Number(id));
-
+                const rating = tipo === 'store'
+                    ? await getStoreRating(Number(id))
+                    : await getProductRating(Number(id));
                 setRating(rating);
-
             } catch (error) {
             console.error("Erro ao acessar a avaliação:", error);
             setComentarios([]); 
             }
         }
-
         fetchRating();
     }, [tipo, id]); 
 
@@ -74,13 +73,13 @@ export default function RatingsPage() {
             if (!tipo || !id) return;
 
             try {
-                const commentsData = await getStoreComment(Number(id));
-
+                const commentsData = tipo === 'store'
+                    ? await getStoreComment(Number(id))
+                    : await getProductComment(Number(id));
                 setComentarios(commentsData);
-
             } catch (error) {
-            console.error("Erro ao buscar comentários:", error);
-            setComentarios([]); 
+                console.error("Erro ao buscar comentários:", error);
+                setComentarios([]); 
             }
         }
 
@@ -88,6 +87,7 @@ export default function RatingsPage() {
     }, [tipo, id]); 
 
     const handleAddComment = async (e:FormEvent) => {
+        e.preventDefault();
         if (!newComentario) {
             toast.error("Escreva algo para comentar!");
             return;
@@ -96,12 +96,14 @@ export default function RatingsPage() {
             const data = {
                 content: newComentario
             }
-            const request =
-                tipo === 'store'
-                ? addStoreComment(Number(id),data)
-                : addProductComment(Number(id),data);
-            await request;
-            
+            let newComment;
+            if (tipo === 'store') {
+                newComment = await addStoreComment(Number(id), data);
+            } else {
+                newComment = await addProductComment(Number(id), data);
+            }
+
+            setComentarios((prev) => [...prev, newComment]); 
             setNewComentario('');
             toast.success('Comentário feito com sucesso!');
         } catch (err:any) {

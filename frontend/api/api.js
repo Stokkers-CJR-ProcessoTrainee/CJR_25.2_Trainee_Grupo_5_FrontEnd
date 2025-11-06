@@ -100,9 +100,25 @@ export async function getStoreComment(ratingId) {
   return res.data;
 }
 
+export async function getProductComment(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/comments/product-rating/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
 export async function getStoreRating(ratingId) {
   const token = localStorage.getItem('token');
   const res = await api.get(`/store-ratings/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getProductRating(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/product-ratings/${ratingId}`, {
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;

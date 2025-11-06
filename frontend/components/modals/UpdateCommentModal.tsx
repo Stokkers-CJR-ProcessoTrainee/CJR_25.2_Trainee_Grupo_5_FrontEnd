@@ -16,7 +16,7 @@ export default function UpdateCommentModal({mostrar, fechar, tipo, rating_id ,co
     const [comment, setComment] = useState(comentario?.content || "");
 
     useEffect(() => {
-    setComment(comentario?.content || "");
+        setComment(comentario?.content || "");
     }, [comentario]);
 
     const handleClose = () => {
