@@ -19,6 +19,9 @@ interface Rating {
     username: string;
     profile_picture_url?: string;
   };
+  store: {
+    user_id:number;
+  }
 }
 
 export default function RatingsPage() {
@@ -27,6 +30,7 @@ export default function RatingsPage() {
     const [userId, setUserId] = useState(0);
     const [logado, setLogado] = useState(false);
     const [donoRating, setDonoRating] = useState(false);
+    const [donoLoja, setDonoLoja] = useState(false);
 
     const [comentarios, setComentarios] = useState<any[]>([]);
     const [newComentario, setNewComentario] = useState('');
@@ -48,6 +52,8 @@ export default function RatingsPage() {
     useEffect(() => {
         if (rating && userId) {
             setDonoRating(rating.user_id === userId);
+    
+            setDonoLoja(rating.store.user_id === userId)
         }
     }, [rating, userId]);
 
@@ -219,12 +225,15 @@ export default function RatingsPage() {
                                     alt="Foto do usuário"
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                     />
-                                    <div className="flex gap-2 items-center">
+                                    <div className="flex gap-3 items-center relative">
                                         <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                        {(donoLoja == donoComment) && (
+                                            <p className="absolute top-7 text-sm text-laranja font-sans opacity-80 leading-tight">Dono da loja</p>
+                                        )}
                                         <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                     </div>
                                 </div>
-                                <p className="text-md text-gray-700 font-sans mt-3">{c.content}</p>
+                                <p className="text-md text-gray-700 font-sans mt-4">{c.content}</p>
                             </div>
                         );})}
                     </div>
