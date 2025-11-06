@@ -1,5 +1,8 @@
-export function timeDiff(dateString: string) {
+import { isStringObject } from "util/types";
+
+export function timeDiff(dateString: string | undefined) {
     const now = new Date();
+    if (!dateString) return "";
     const commentDate = new Date(dateString);
     const diff = now.getTime() - commentDate.getTime(); 
 
