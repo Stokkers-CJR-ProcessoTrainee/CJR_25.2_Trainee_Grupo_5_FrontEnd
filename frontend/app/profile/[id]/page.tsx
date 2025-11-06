@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
 import { ToastContainer } from "react-toastify";
+import Carrossel from "@/components/Carrossel";
 
 type Usuario = {
   id: number;
@@ -168,12 +169,13 @@ export default function UserPage() {
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
         <h3 className="text-xl font-sans font-bold mb-4">Produtos</h3>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 overflow-x-auto scrollbar-hide">
+        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+          <Carrossel>
           {produtos.length > 0 ? (
             produtos.map((produto) => (
               <div
                 key={produto.id}
-                className="min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                className="relative min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
               >
                 <div className="flex justify-center items-center flex-1">
                 <img
@@ -206,6 +208,7 @@ export default function UserPage() {
           ) : (
             <p className="text-gray-500 font-sans">Este usuário ainda não possui produtos.</p>
           )}
+          </Carrossel>
         </div>
       </div>
 
@@ -226,7 +229,8 @@ export default function UserPage() {
 
         </div>
 
-        <div className="flex bg-gray-200 rounded-3xl p-5 font-sans gap-6 overflow-x-auto scrollbar-hide">
+        <div className="flex bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+          <Carrossel>
           {lojas.length > 0 ? (
             lojas.map((loja) => (
               <div
@@ -246,6 +250,7 @@ export default function UserPage() {
           ) : (
             <p className="text-gray-500 font-sans">Este usuário ainda não possui lojas.</p>
           )}
+          </Carrossel>
         </div>
       </div>
 
@@ -255,7 +260,8 @@ export default function UserPage() {
 
         {/* Avaliações de lojas */}
         <h4 className="text-lg font-semibold mt-10 mb-2">Lojas</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 overflow-x-auto scrollbar-hide">
+        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+          <Carrossel>
           {avaliacoes?.store_ratings?.length ? (
             avaliacoes.store_ratings.map((a) => (
               <div
@@ -294,11 +300,13 @@ export default function UserPage() {
           ) : (
             <p className="text-gray-500 font-sans">Este usuário ainda não avaliou nenhuma loja.</p>
           )}
+          </Carrossel>
         </div>
 
         {/* Avaliações de produtos */}
         <h4 className="text-lg font-semibold mb-2 mt-6">Produtos</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 overflow-x-auto scrollbar-hide">
+        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+          <Carrossel>
           {avaliacoes?.product_ratings?.length ? (
             avaliacoes.product_ratings.map((a) => (
               <div
@@ -337,6 +345,7 @@ export default function UserPage() {
           ) : (
             <p className="text-gray-500 font-sans">Este usuário ainda não avaliou nenhum produto.</p>
           )}
+          </Carrossel>
         </div>
       </div>
 

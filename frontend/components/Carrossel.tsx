@@ -46,7 +46,7 @@ export default function Carrossel({ children }: CarrosselProps) {
   return (
     <div
       ref={carrosselRef}
-      className="flex overflow-x-auto gap-6 px-6 pb-4 scrollbar-hide scroll-snap-x select-none"
+      className="flex overflow-x-auto gap-6 scrollbar-hide scroll-snap-x select-none"
       style={{
         scrollSnapType: 'x mandatory',
         cursor: 'default',
