@@ -25,7 +25,7 @@ export default function RatingsPage() {
 
     const [logado, setLogado] = useState(false);
     const [donoRating, setDonoRating] = useState(false);
-    const [donoComment, setDonoComment] = useState(false);
+    const [donoComment, setDonoComment] = useState(true);
 
     const [comentarios, setComentarios] = useState<any[]>([]);
     const [newComentario, setNewComentario] = useState('');
@@ -41,9 +41,12 @@ export default function RatingsPage() {
         if (token) setLogado(true);
 
         const payload = JSON.parse(atob(token.split('.')[1]));
-        const userId_rating = rating?.user_id;
-        if (userId_rating == payload.sub) {
+        const userId = rating?.user_id;
+        if (userId == payload.sub) {
             setDonoRating(true);
+        }
+        if (userId == null) {
+            setDonoComment(true);
         }
 
     }, [rating]);
@@ -173,7 +176,12 @@ export default function RatingsPage() {
 
                     <div className="flex flex-col gap-8 pl-12">
                         {comentarios.map((c, i) => (
-                            <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150">
+                            <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
+                                    {donoComment &&
+                                        <button className="absolute right-7 text-white cursor-pointer hover:text-laranja transition">
+                                            <FaPen size={24} />
+                                        </button>
+                                    }
                                 <div className="flex gap-3 items-center">
                                     <img
                                     src="/user-placeholder.png"
