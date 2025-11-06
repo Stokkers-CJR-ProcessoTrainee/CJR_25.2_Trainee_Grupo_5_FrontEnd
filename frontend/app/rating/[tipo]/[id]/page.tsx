@@ -226,7 +226,7 @@ export default function RatingsPage() {
             mostrar={mostrar}
             fechar={() => setMostrar(false)}
             tipo={"store"}
-            id = {1}
+            id = {rating?.id}
             />
             <ToastContainer/>
         </main>
