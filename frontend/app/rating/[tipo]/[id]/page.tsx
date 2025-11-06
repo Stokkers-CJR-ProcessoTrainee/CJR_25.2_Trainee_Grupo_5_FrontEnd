@@ -5,7 +5,7 @@ import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { FaArrowLeft, FaPaperPlane, FaPen,} from "react-icons/fa";
+import { FaArrowLeft, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
 interface Rating {
@@ -34,6 +34,7 @@ export default function RatingsPage() {
     const [rating, setRating] = useState<Rating | null>(null);
 
     const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
+    const [comentarioDeletar,setComentarioDeletar] = useState<any | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -112,6 +113,10 @@ export default function RatingsPage() {
         }
     }
 
+    const handleDelete = async () => {
+        
+    }
+
     return (
         <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-gray-50">
             <Navbar />
@@ -177,10 +182,10 @@ export default function RatingsPage() {
                     <div className="w-1 bg-gray-400 rounded-full"></div>
 
                     <div className="flex flex-col gap-8 pl-12">
-                        {comentarios.map((c, i) => {
+                        {comentarios.map((c) => {
                             const donoComment = c.user_id === userId;
                             return (
-                            <div key={i} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
+                            <div key={c.id} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
                                     {donoComment && (
                                         <button 
                                         onClick={() => setComentarioEditar(c)}
@@ -188,6 +193,13 @@ export default function RatingsPage() {
                                             <FaPen size={20} />
                                         </button>
                                     )}
+                                    {donoComment && (
+                                        <button 
+                                        onClick={() => setComentarioDeletar(c)}
+                                        className="absolute right-7 bottom-4 text-laranja2 cursor-pointer hover:text-red-600 transition">
+                                            <FaTrash size={20} />
+                                        </button>
+                                    )}                                   
                                 <div className="flex gap-3 items-center">
                                     <img
                                     src="/user-placeholder.png"
@@ -231,10 +243,11 @@ export default function RatingsPage() {
             rating_id={rating?.id}
             comentario={comentarioEditar}
             onUpdate={(updated) => {
-                setComentarios((prev) =>
-                prev.map((c) => (c.id === updated.id ? updated : c))
-                );
-            }}/>
+            setComentarios((prev) =>
+                prev.map((c) => (c.id === updated.id ? { ...c, ...updated } : c))
+            );
+            }}
+            />
             <ToastContainer/>
         </main>
     );
