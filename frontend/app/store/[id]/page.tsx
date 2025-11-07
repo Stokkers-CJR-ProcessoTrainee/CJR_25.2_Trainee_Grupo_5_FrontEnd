@@ -30,8 +30,13 @@ export default function StorePage() {
 
         async function fetchStore() {
             try {
-                const res = await getStoreById(id);
-                setStore(res);
+            const res = await getStoreById(id);
+            if (!res) {
+                setStore(null); // Loja não existe
+                return;
+            }
+            setStore(res);
+                
 
                 const token = localStorage.getItem("token");
                 if(token) {
@@ -46,6 +51,7 @@ export default function StorePage() {
 
             } catch(err) {
                 console.error("Erro ao carregar loja:", err);
+                setStore(null);
             }
         }
 
@@ -65,6 +71,8 @@ export default function StorePage() {
         }
     }, [id]);
 
+     if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
+
     const totalPages = Math.ceil(produtos.length / ItemsPerPage);
     const startIndex = (currentPage - 1) * ItemsPerPage;
     const endIndex = startIndex + ItemsPerPage;
@@ -75,6 +83,7 @@ export default function StorePage() {
 
             <Navbar />
 
+            
             <div className="relative overflow-hidden w-auto h-150">
                 {store?.banner_url && (
                     <img
@@ -92,7 +101,7 @@ export default function StorePage() {
                 >
                     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="22.5" cy="22.5" r="22.5" fill="#FF6700"/>
-                    <path d="M33.177 15.7122C33.7745 15.1148 34.1102 14.3046 34.1103 13.4597C34.1105 12.6148 33.7749 11.8044 33.1775 11.2069C32.5802 10.6094 31.7699 10.2737 30.925 10.2736C30.0801 10.2735 29.2698 10.609 28.6723 11.2064L13.5895 26.2926C13.3271 26.5542 13.133 26.8763 13.0244 27.2306L11.5315 32.1489C11.5023 32.2467 11.5001 32.3505 11.5251 32.4494C11.5501 32.5483 11.6014 32.6385 11.6736 32.7106C11.7458 32.7827 11.8362 32.8339 11.9351 32.8587C12.034 32.8836 12.1379 32.8812 12.2355 32.8519L17.155 31.3601C17.509 31.2524 17.8311 31.0596 18.093 30.7984L33.177 15.7122Z" stroke="white" strokeWidth="2.26027" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M33.177 15.7122C33.7745 15.1148 34.1102 14.3046 34.1103 13.4597C34.1105 12.6148 33.7749 11.8044 33.1775 11.2069C32.5802 10.6094 31.7699 10.2737 30.925 10.2736C30.0801 10.2735 29.2698 10.609 28.6723 11.2064L13.5895 26.2926C13.3271 26.5542 13.133 26.8763 13.0244 27.2306L11.5315 32.1489C11.5023 32.2467 11.5001 32.3505 11.5251 32.4494C11.5501 32.5483 11.6014 32.6385 11.6736 32.7106C11.7458 32.7827 11.8362 32.8339 11.9351 32.8587C12.034 32.8836 12.1379 32.8812 12.2355 32.8519L17.155 31.3601C17.509 31.2524 17.8311 31.0596 18.093 30.7984L33.177 15.7122Z" stroke="white" strokeWidth="2.26027" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
                 </div>

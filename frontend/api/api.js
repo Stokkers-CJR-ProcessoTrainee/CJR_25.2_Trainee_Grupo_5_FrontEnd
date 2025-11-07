@@ -103,13 +103,15 @@ export async function updateStore(id, data) {
 }
 
 export async function deleteStore(id) {
-  const token = localStorage.getitem("token");
+  const token = localStorage.getItem("token");
 
   const res = await api.delete(`/stores/${id}`, {
     headers: {
       "Authorization": `Bearer ${token}`
     }
   })
+
+  return res.data;
 }
 
   export async function addProductComment(ratingId, data) {
