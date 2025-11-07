@@ -161,7 +161,7 @@ export default function RatingsPage() {
                         <img
                         src={rating?.user.profile_picture_url}
                         alt="Foto do usuário"
-                        className="w-18 h-18 rounded-full border-2 border-white object-cover"
+                        className="w-18 h-18 rounded-full border-2 border-laranja object-cover"
                         />
 
                         <div className="flex flex-row items-center gap-4">
@@ -237,7 +237,7 @@ export default function RatingsPage() {
                                     <img
                                     src={c.user.profile_picture_url}
                                     alt="Foto do usuário"
-                                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                                    className="w-10 h-10 rounded-full border-2 border-laranja object-cover"
                                     />
                                     <div className="flex gap-2 items-center relative">
                                         {(donoLoja == donoComment) && (
