@@ -1,4 +1,5 @@
 'use client';
+import { useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 
@@ -31,7 +32,7 @@ const comentarios = [
         rating: 3,
     },
     {
-        id: 3,
+        id: 4,
         usuario: {
         nome: "luis",
         imagem_url: "/default-avatar.png",
@@ -40,7 +41,7 @@ const comentarios = [
         rating: 3,
     },
     {
-        id: 3,
+        id: 5,
         usuario: {
         nome: "caio poggers",
         imagem_url: "/default-avatar.png",
@@ -49,7 +50,7 @@ const comentarios = [
         rating: 3,
     },
     {
-        id: 3,
+        id: 6,
         usuario: {
         nome: "teste",
         imagem_url: "/default-avatar.png",
@@ -86,7 +87,7 @@ const produtos = [
         rating: 4.9,
     },
     {
-        id: 3,
+        id: 4,
         name: "Celular Iphone",
         price: 500,
         stock: 0,
@@ -94,7 +95,7 @@ const produtos = [
         rating: 4.9,
     },
     {
-        id: 3,
+        id: 5,
         name: "Celular Iphone",
         price: 500,
         stock: 0,
@@ -102,7 +103,7 @@ const produtos = [
         rating: 4.9,
     },
     {
-        id: 3,
+        id: 6,
         name: "Celular Iphone",
         price: 500,
         stock: 0,
@@ -110,7 +111,7 @@ const produtos = [
         rating: 4.9,
     },
     {
-        id: 3,
+        id: 7,
         name: "Celular Iphone",
         price: 500,
         stock: 0,
@@ -118,7 +119,79 @@ const produtos = [
         rating: 4.9,
     },
     {
-        id: 3,
+        id: 8,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 9,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 10,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 11,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 12,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 13,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 14,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 15,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 16,
+        name: "Celular Iphone",
+        price: 500,
+        stock: 0,
+        product_images: [{ image_url: "/default-avatar.png" }],
+        rating: 4.9,
+    },
+    {
+        id: 17,
         name: "Celular Iphone",
         price: 500,
         stock: 0,
@@ -129,6 +202,14 @@ const produtos = [
 
 
 export default function storePage() {
+    const[currentPage, setCurrentPage] = useState(1)
+    const ItemsPerPage = 15;
+
+    const totalPages = Math.ceil(produtos.length / ItemsPerPage);
+    const startIndex = (currentPage - 1) * ItemsPerPage;
+    const endIndex = startIndex + ItemsPerPage;
+    const currentProducts = produtos.slice(startIndex, endIndex);
+
     return (
         <main className="min-h-screen bg-amber-50 pb-16">
 
@@ -227,7 +308,7 @@ export default function storePage() {
                         produtos.map((produto) => (
                           <div
                             key={produto.id}
-                            className="relative min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                            className="relative min-w-[170px] bg-white rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
                           >
                             <div className="flex justify-center items-center flex-1">
                             <img
@@ -237,7 +318,7 @@ export default function storePage() {
                             />
                             </div>
             
-                            <div className="flex flex-col items-start">
+                            <div className="flex flex-col font-sans items-start">
                               <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
                               <p className="text-gray-800 font-semibold">R${produto.price}</p>
                               {produto.stock > 0 ? (
@@ -256,8 +337,81 @@ export default function storePage() {
                     </div>
                 </div>
 
-            <div className="bg-gray-300 mt-10 p-30">
-                div todos os produtos
+            <div className="mt-10 pb-10">
+                <div className="w-full max-w-5xl mx-auto px-4">
+
+                <div className="flex gap-1">
+                    <h2 className="text-2xl font-bold font-sans text-gray-800 text-start mb-8">
+                        Produtos
+                    </h2>
+                    <p className="mt-3.5 font-sans font-bold text-xs">
+                        de nome da loja
+                    </p>
+                </div>
+
+                {currentProducts.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 justify-items-center">
+                    {currentProducts.map((produto) => (
+                    <div
+                        key={produto.id}
+                        className="relative min-w-[170px] bg-white rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                    >
+                        <div className="flex justify-center">
+                        <img
+                            src={produto.product_images?.[0]?.image_url}
+                            alt={produto.name}
+                            className="h-24 object-contain"
+                        />
+                        </div>
+
+                        <div className="flex flex-col font-sans items-start">
+                        <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
+                        <p className="text-gray-800 font-semibold">R${produto.price}</p>
+                        {produto.stock > 0 ? (
+                            <p className="text-green-600 font-bold text-sm">Disponível</p>
+                        ) : (
+                            <p className="text-red-600 font-bold text-sm">Indisponível</p>
+                        )}
+                        </div>
+                    </div>
+                    ))}
+                </div>
+                ) : (
+                <p className="text-gray-500 text-center font-sans mt-10">
+                    Nenhum produto cadastrado ainda.
+                </p>
+                )}
+                </div>
+            </div>
+
+            <div className="flex justify-center items-center gap-2 mt-2">
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 bg-gray-200 rounded-lg disabled:opacity-50 enabled:hover:cursor-pointer"
+                >
+                    &lt;
+                </button>
+
+                {Array.from({ length: totalPages }).map((_, i) => (
+                    <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 hover:cursor-pointer py-1 rounded-lg ${
+                        currentPage === i + 1 ? "bg-laranja text-white" : "bg-gray-200"
+                    }`}
+                    >
+                    {i + 1}
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 bg-gray-200 rounded-lg disabled:opacity-50 enabled:hover:cursor-pointer"
+                >
+                    &gt;
+                </button>
             </div>
         </main>
     )
