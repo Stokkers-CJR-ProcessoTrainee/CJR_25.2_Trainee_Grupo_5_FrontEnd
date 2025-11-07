@@ -3,69 +3,14 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductsByStore, getStoreById } from "@/api/api";
+import { getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 
-const comentarios = [
-    {
-        id: 1,
-        usuario: {
-        nome: "marcus vinicius",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Produto excelente! Chegou rápido e bem embalado.",
-        rating: 5,
-    },
-    {
-        id: 2,
-        usuario: {
-        nome: "felipe avelar",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Gostei bastante, mas poderia ter mais opções de cores.",
-        rating: 4,
-    },
-    {
-        id: 3,
-        usuario: {
-        nome: "tutu",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Não funcionou direito no começo, mas o suporte resolveu.",
-        rating: 3,
-    },
-    {
-        id: 4,
-        usuario: {
-        nome: "luis",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Não funcionou direito no começo, mas o suporte resolveu.",
-        rating: 3,
-    },
-    {
-        id: 5,
-        usuario: {
-        nome: "caio poggers",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Não funcionou direito no começo, mas o suporte resolveu.",
-        rating: 3,
-    },
-    {
-        id: 6,
-        usuario: {
-        nome: "teste",
-        imagem_url: "/default-avatar.png",
-        },
-        texto: "Não funcionou direito no começo, mas o suporte resolveu.",
-        rating: 3,
-    },
-];
 
-export default function storePage() {
+export default function StorePage() {
     const { id } = useParams();
     const[produtos, setProdutos] = useState<any[]>([]);
     const[store, setStore] = useState<any>(null);
+    const[ratings, setRatings] = useState<any[]>([]);
     const[currentPage, setCurrentPage] = useState(1)
     const ItemsPerPage = 15;
 
@@ -89,9 +34,19 @@ export default function storePage() {
             }
         }
 
+        async function fetchRatings() {
+            try {
+                const res = await getStoreRatingByStore(id);
+                setRatings(res);
+            } catch (err) {
+                console.error("Erro ao carregar avaliações:", err);
+            }
+        }
+
         if (id) {
             fetchProducts();
             fetchStore();
+            fetchRatings();
         }
     }, [id]);
 
@@ -126,26 +81,26 @@ export default function storePage() {
 
                 <div className="px-40 mt-5 py-10">
                 <Carrossel>
-                    {comentarios.length > 0 ? (
-                        comentarios.map((comentario) => (
+                    {ratings.length > 0 ? (
+                        ratings.map((r) => (
                         <div
-                            key={comentario.id}
+                            key={r.id}
                             className="bg-amber-50 font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px]"
                             >
                             {/* imagem do usuário */}
                             <img
-                                src={comentario.usuario.imagem_url}
-                                alt={comentario.usuario.nome}
+                                src={r.user.profile_picture_url}
+                                alt={r.user.username}
                                 className="w-24 h-24 rounded-full object-cover shrink-0"
                             />
 
                             {/* conteúdo do comentário */}
                             <div className="flex flex-col justify-between w-full">
                                 <div className="flex justify-between items-center">
-                                <p className="font-semibold text-lg text-gray-900">{comentario.usuario.nome}</p>
+                                <p className="font-semibold text-lg text-gray-900">{r.user.username}</p>
                                 {/* estrelas */}
                                 <div className="flex gap-1">
-                                    {Array.from({ length: comentario.rating }).map((_, i) => (
+                                    {Array.from({ length: r.rating }).map((_, i) => (
                                         <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
                                             <path
                                             d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
@@ -154,7 +109,7 @@ export default function storePage() {
                                         </svg>
                                     ))}
 
-                                    {Array.from({ length: 5 - comentario.rating }).map((_, i) => (
+                                    {Array.from({ length: 5 - r.rating }).map((_, i) => (
                                         <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
                                             <path
                                             d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
@@ -168,7 +123,7 @@ export default function storePage() {
                                 </div>
 
                                 <p className="text-gray-800 text-[15px] leading-snug mt-2">
-                                {comentario.texto}
+                                {r.comment}
                                 </p>
 
                                 <div className="flex justify-end">
@@ -182,7 +137,7 @@ export default function storePage() {
                         ))
                     ) : (
                         <p className="text-gray-500 font-sans">
-                        Nenhum comentário disponível.
+                        Nenhuma avaliação disponível.
                         </p>
                     )}
                 </Carrossel>
