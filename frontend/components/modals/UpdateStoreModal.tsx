@@ -160,7 +160,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                        <path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" stroke-width="2" stroke-dasharray="30 30"/>
                     </svg>
 
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
+                    <p className="absolute text-center font-bold font-sans text-laranja leading-tight text-xs mt-15 max-w-100">
                         {sticker_url 
                             ? sticker_url.name 
                             : store.sticker_url 
@@ -184,7 +184,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                        <path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" stroke-width="2" stroke-dasharray="30 30"/>
                     </svg>
 
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
+                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15 max-w-100">
                         {logo_url 
                             ? logo_url.name 
                             : store.logo_url 
@@ -209,7 +209,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                        <path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" stroke-width="2" stroke-dasharray="30 30"/>
                     </svg>
 
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
+                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15 max-w-100">
                         {banner_url 
                             ? banner_url.name 
                             : store.banner_url 
