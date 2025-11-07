@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
 import { updateStore, deleteStore } from "@/api/api";
+import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 interface UpdateStoreModalProps {
@@ -144,8 +145,8 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                         onChange={(e) => setDescription(e.target.value)}
                     />
 
-                    <div className="absolute flex justify-center mt-83 ml-28 font-sans text-xs hover:brightness-90">
-                        <button className="bg-laranja text-white px-15 py-1 rounded-2xl hover:cursor-pointer transition">
+                    <div className="absolute flex justify-center mt-83 ml-26 font-sans text-xs hover:brightness-90">
+                        <button className="px-15 py-1 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
                             Salvar alterações
                         </button>
                     </div>
@@ -230,8 +231,8 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                     <button 
                     type="button"
                     onClick={handleDelete}
-                    className="bg-red-600 text-white text-xs font-sans px-10 py-0.5 rounded-2xl mt-11 hover:brightness-90 hover:cursor-pointer transition-all">
-                        Deletar
+                    className="text-xs px-10 py-0.5 mt-11 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
+                        <FaTrash /> Deletar Loja
                     </button>
                 </div>
                 
