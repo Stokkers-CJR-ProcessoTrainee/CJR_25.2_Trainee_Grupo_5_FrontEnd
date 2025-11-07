@@ -5,7 +5,7 @@ import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { FaArrowLeft, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
+import { FaArrowLeft, FaGem, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
 interface Rating {
@@ -191,7 +191,7 @@ export default function RatingsPage() {
 
                 </div>
 
-                <p className="mt-8 text-2xl font-sans tracking-wider opacity-95 ml-52 max-w-8xl">
+                <p className="mt-8 text-3xl font-sans tracking-wider opacity-95 ml-52 max-w-8xl">
                     {rating?.comment}
                 </p>
             
@@ -205,7 +205,7 @@ export default function RatingsPage() {
                         {comentarios.map((c) => {
                             const donoComment = c.user_id === userId;
                             return (
-                            <div key={c.id} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
+                            <div key={c.id} className="bg-card shadow-md rounded-2xl p-7 w-150 relative">
                                     {donoComment && (
                                         <button 
                                         onClick={() => setComentarioEditar(c)}
@@ -226,11 +226,19 @@ export default function RatingsPage() {
                                     alt="Foto do usuário"
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                     />
-                                    <div className="flex gap-3 items-center relative">
-                                        <p className="text-xl text-black-600 tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                    <div className="flex gap-2 items-center relative">
                                         {(donoLoja == donoComment) && (
-                                            <p className="absolute top-7 text-sm text-laranja font-sans opacity-80 leading-tight">Dono da loja</p>
+                                            <div className="relative group inline-block">
+                                                <span className="text-laranja">
+                                                    <FaGem size={16} />
+                                                </span>
+                                                <div className="absolute bottom-full font-sans tracking-wider left-7 -translate-x-1/2 mb-2 hidden group-hover:block
+                                                                text-laranja text-xs rounded border py-1 px-2 whitespace-nowrap shadow-lg">
+                                                    Dono da loja
+                                                </div>
+                                            </div>
                                         )}
+                                        <p className="text-xl text-black-600 tracking-wider font-sans font-semibold">{c.user?.username}</p>
                                         {(c.createdAt == c.updatedAt) ?
                                             <p className="text-sm text-black font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                         : 
