@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import ResetPasswordModal from "@/components/modals/ResetPasswordModal";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,6 +14,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const [resetPassModal, setResetPassModal] = useState(false);
+
+  const [showAtual, setShowAtual] = useState(false);
 
   const handleLogin = async (e:FormEvent) => {
     e.preventDefault();
@@ -58,7 +61,7 @@ export default function LoginPage() {
 
   return (
     <main
-      className="bg-background min-h-screen flex items-center justify-center"
+      className="bg-back min-h-screen flex items-center justify-center"
     >
       <div className="flex flex-row items-center justify-center w-full max-w-6xl mx-auto gap-15">
         
@@ -88,7 +91,7 @@ export default function LoginPage() {
             onSubmit={handleLogin}
           >
             <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
+              className="bg-background rounded-full p-2 pl-4 focus:border-laranja focus:outline-none border border-gray-300"
               type="text"
               name="Email"
               id="email"
@@ -97,15 +100,22 @@ export default function LoginPage() {
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
-              type="password"
-              name="Senha"
-              id="pass"
-              placeholder="Senha"
+            <div className="relative">
+              <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            />
+              type={showAtual ? "text" : "password"}
+              placeholder="Senha"
+              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              />
+              <button
+              type="button"
+              onClick={() => setShowAtual(!showAtual)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showAtual ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>       
             <button
               disabled={loading}
               type="submit"
