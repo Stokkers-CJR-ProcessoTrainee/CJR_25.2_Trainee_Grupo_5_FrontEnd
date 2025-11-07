@@ -113,12 +113,12 @@ export default function UserPage() {
 
   return (
 
-    <main className="min-h-screen bg-gray-100 pb-16">
+    <main className="min-h-screen bg-back pb-16">
 
       <Navbar />
 
       {/* Banner */}
-      <div className="w-full h-70 bg-gray-300 relative flex items-end px-16"></div>
+      <div className="w-full h-70 bg-cinza relative flex items-end px-16"></div>
 
       {/* Perfil */}
 
