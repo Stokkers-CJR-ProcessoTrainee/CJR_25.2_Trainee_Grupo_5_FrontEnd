@@ -138,22 +138,22 @@ export default function RatingsPage() {
     }
 
     return (
-        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-gray-50">
+        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-backBege">
             <Navbar />
 
-            <div className="bg-laranja w-full h-115 text-white shadow-md relative flex flex-col justify-center px-8">
+            <div className="bg-cinza w-full h-115 text-black shadow-md relative flex flex-col justify-center px-8">
             
                 <div className="flex items-center justify-between mx-40">
 
                     {donoRating &&
-                        <button className="absolute top-[28%] right-[11%] text-white cursor-pointer hover:text-gray-300 transition">
+                        <button className="absolute top-[28%] right-[11%] text-laranja cursor-pointer hover:text-white transition">
                             <FaPen size={28} />
                         </button>
                     }
 
                     <div className="flex items-center gap-4">
 
-                        <button className="hover:opacity-80 transition hover:cursor-pointer">
+                        <button className="hover:opacity-80 hover:text-red-600 transition hover:cursor-pointer">
                             <FaArrowLeft size={28} />
                         </button>
 
@@ -179,11 +179,11 @@ export default function RatingsPage() {
                             viewBox="0 0 29 28"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            className={star <= (rating?.rating ?? 0) ? "opacity-100" : "opacity-40"}
+                            className={star <= (rating?.rating ?? 0) ? "opacity-100" : "opacity-30"}
                             >
                             <path
                                 d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-                                fill="#FFEB3A"
+                                fill="#FFE600"
                             />
                             </svg>
                         ))}
@@ -227,14 +227,14 @@ export default function RatingsPage() {
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                     />
                                     <div className="flex gap-3 items-center relative">
-                                        <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                        <p className="text-xl text-black-600 tracking-wider font-sans font-semibold">{c.user?.username}</p>
                                         {(donoLoja == donoComment) && (
                                             <p className="absolute top-7 text-sm text-laranja font-sans opacity-80 leading-tight">Dono da loja</p>
                                         )}
                                         {(c.createdAt == c.updatedAt) ?
-                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
+                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                         : 
-                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
+                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
                                         }
                                     </div>
                                 </div>
