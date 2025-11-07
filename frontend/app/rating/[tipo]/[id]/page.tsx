@@ -235,7 +235,7 @@ export default function RatingsPage() {
                                     )}                                   
                                 <div className="flex gap-3 items-center">
                                     <img
-                                    src="/user-placeholder.png"
+                                    src={c.user.profile_picture_url}
                                     alt="Foto do usuário"
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                     />
