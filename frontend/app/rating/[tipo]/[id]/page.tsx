@@ -159,7 +159,7 @@ export default function RatingsPage() {
                         </button>
 
                         <img
-                        src="/user-placeholder.png"
+                        src={rating?.user.profile_picture_url}
                         alt="Foto do usuário"
                         className="w-18 h-18 rounded-full border-2 border-white object-cover"
                         />
