@@ -20,6 +20,7 @@ export default function Navbar() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         setLogado(false);
+        window.location.reload();
     }
 
     return (

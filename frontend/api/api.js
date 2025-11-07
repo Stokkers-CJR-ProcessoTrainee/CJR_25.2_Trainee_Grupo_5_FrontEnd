@@ -111,3 +111,94 @@ export async function deleteStore(id) {
     }
   })
 }
+
+  export async function addProductComment(ratingId, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/comments/product-rating/${ratingId}`, data, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function addStoreComment(ratingId, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/comments/store-rating/${ratingId}`, data, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getStoreComment(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/comments/store-rating/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getProductComment(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/comments/product-rating/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getStoreRating(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/store-ratings/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getProductRating(ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.get(`/product-ratings/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function updateStoreComment(id,data,ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/comments/store-rating/${ratingId}/${id}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function updateProductComment(id,data,ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/comments/product-rating/${ratingId}/${id}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function deleteStoreComment(id,ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/comments/store-rating/${ratingId}/${id}`,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+  export async function deleteProductComment(id,ratingId) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/comments/product-rating/${ratingId}/${id}`,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getStoreById(id) {
+  const res = await api.get(`/stores/${id}`);
+  return res.data
+}
+
+export async function getProductsByStore(storeId) {
+  const res = await api.get(`/products/store/${storeId}`);
+  return res.data
+}
+
