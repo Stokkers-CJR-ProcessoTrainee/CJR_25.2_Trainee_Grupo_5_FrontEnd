@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductsByStore } from "@/api/api";
+import { getProductsByStore, getStoreById } from "@/api/api";
 
 const comentarios = [
     {
@@ -65,6 +65,7 @@ const comentarios = [
 export default function storePage() {
     const { id } = useParams();
     const[produtos, setProdutos] = useState<any[]>([]);
+    const[store, setStore] = useState<any>(null);
     const[currentPage, setCurrentPage] = useState(1)
     const ItemsPerPage = 15;
 
@@ -78,7 +79,20 @@ export default function storePage() {
                 console.error("Erro ao carregar produtos:", err);
             }
         }
-        if (id) fetchProducts();
+
+        async function fetchStore() {
+            try {
+                const res = await getStoreById(id);
+                setStore(res);
+            } catch(err) {
+                console.error("Erro ao carregar loja:", err);
+            }
+        }
+
+        if (id) {
+            fetchProducts();
+            fetchStore();
+        }
     }, [id]);
 
     const totalPages = Math.ceil(produtos.length / ItemsPerPage);
@@ -91,8 +105,14 @@ export default function storePage() {
 
             <Navbar />
 
-            <div className="bg-gray-400 p-60">
-                
+            <div className="overflow-hidden">
+                {store?.banner_url && (
+                    <img
+                    src={store.banner_url}
+                    alt="Banner da loja"
+                    className="w-full h-full object-cover"
+                    />
+                )}
             </div>
 
             <div className="bg-gray-100 flex flex-col">
@@ -220,9 +240,11 @@ export default function storePage() {
                     <h2 className="text-2xl font-bold font-sans text-gray-800 text-start mb-8">
                         Produtos
                     </h2>
-                    <p className="mt-3.5 font-sans font-bold text-xs">
-                        de nome da loja
-                    </p>
+                    {store && (
+                        <p className="mt-3.5 font-sans font-bold text-xs">
+                            de {store.name}
+                        </p>
+                    )}
                 </div>
 
                 {currentProducts.length > 0 ? (
