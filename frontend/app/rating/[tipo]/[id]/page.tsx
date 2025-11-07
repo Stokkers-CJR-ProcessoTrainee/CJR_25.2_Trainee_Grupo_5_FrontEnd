@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { FaArrowLeft, FaGem, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
+import {motion, AnimatePresence} from "framer-motion";
 
 interface Rating {
   id: number;
@@ -202,10 +203,22 @@ export default function RatingsPage() {
                     <div className="w-1 bg-gray-400 rounded-full"></div>
 
                     <div className="flex flex-col gap-8 pl-12">
+                        <AnimatePresence>
                         {comentarios.map((c) => {
                             const donoComment = c.user_id === userId;
                             return (
-                            <div key={c.id} className="bg-card shadow-md rounded-2xl p-7 w-150 relative">
+                            <motion.div 
+                            key={c.id} 
+                            className="bg-card shadow-md rounded-2xl p-7 w-150 relative"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 120, damping: 10 } }}
+                            exit={{
+                            scale: 0,
+                            opacity: 0,
+                            rotate: Math.random() * 40 - 20,
+                            transition: { duration: 0.6 }
+                            }}
+                            >
                                     {donoComment && (
                                         <button 
                                         onClick={() => setComentarioEditar(c)}
@@ -247,8 +260,9 @@ export default function RatingsPage() {
                                     </div>
                                 </div>
                                 <p className="text-md text-gray-700 font-sans mt-4">{c.content}</p>
-                            </div>
+                            </motion.div>
                         );})}
+                        </AnimatePresence>
                     </div>
                 </div>
 
