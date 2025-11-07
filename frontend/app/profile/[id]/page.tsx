@@ -7,6 +7,7 @@ import EditUserModal from "@/components/modals/EditUserModal";
 import { ToastContainer } from "react-toastify";
 import CreateStoreModel from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
+import { useRouter } from "next/navigation";
 
 type Usuario = {
   id: number;
@@ -65,6 +66,8 @@ export default function UserPage() {
   const [mostrar, setMostrar] = useState(false);
 
   const [abrir, setAbrir] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!id) return;
@@ -235,7 +238,8 @@ export default function UserPage() {
             lojas.map((loja) => (
               <div
                 key={loja.id}
-                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 font-semibold"
+                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
+                onClick={() => router.push(`/store/${loja.id}`)}
               >
                 <div className="text-2xl flex flex-col items-center justify-center">{loja.name}</div>
                 <div>
