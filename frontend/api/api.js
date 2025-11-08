@@ -76,7 +76,45 @@ export async function deleteUser() {
   return res.data;
 }
 
-export async function addProductComment(ratingId, data) {
+export async function createStore(data) {
+    const token = localStorage.getItem("token");
+
+    const res = await api.post("/stores", data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.data;
+}
+
+export async function updateStore(id, data) {
+    const token = localStorage.getItem("token");
+
+    const res = await api.put(`/stores/${id}`, data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+
+    return res.data;
+}
+
+export async function deleteStore(id) {
+  const token = localStorage.getItem("token");
+
+  const res = await api.delete(`/stores/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  return res.data;
+}
+
+  export async function addProductComment(ratingId, data) {
   const token = localStorage.getItem('token');
   const res = await api.post(`/comments/product-rating/${ratingId}`, data, {
     headers: {Authorization: `Bearer ${token}`}
@@ -154,4 +192,19 @@ export async function deleteStoreComment(id,ratingId) {
     headers: {Authorization: `Bearer ${token}`}
   }); 
   return res.data;
+}
+
+export async function getStoreById(id) {
+  const res = await api.get(`/stores/${id}`);
+  return res.data
+}
+
+export async function getProductsByStore(storeId) {
+  const res = await api.get(`/products/store/${storeId}`);
+  return res.data
+}
+
+export async function getStoreRatingByStore(storeId) {
+  const res = await api.get(`/store-ratings/store/${storeId}`);
+  return res.data
 }

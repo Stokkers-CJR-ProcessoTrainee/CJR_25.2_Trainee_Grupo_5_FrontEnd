@@ -5,8 +5,11 @@ import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
 import { ToastContainer } from "react-toastify";
+import CreateStoreModel from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
+import { useRouter } from "next/navigation";
 import CardProdutos from "@/components/CardProdutos";
+
 
 type Usuario = {
   id: number;
@@ -66,6 +69,8 @@ export default function UserPage() {
 
   const [abrir, setAbrir] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (!id) return;
 
@@ -117,12 +122,12 @@ export default function UserPage() {
 
   return (
 
-    <main className="min-h-screen bg-back pb-16">
+    <main className="min-h-screen bg-gray-100 pb-16">
 
       <Navbar />
 
       {/* Banner */}
-      <div className="w-full h-70 bg-cinza relative flex items-end px-16"></div>
+      <div className="w-full h-70 bg-gray-300 relative flex items-end px-16"></div>
 
       {/* Perfil */}
 
@@ -131,7 +136,9 @@ export default function UserPage() {
           
           {usuario ? (
             <img
-              src={usuario.profile_picture_url}
+              src={usuario.profile_picture_url && usuario.profile_picture_url.trim() !== "" 
+                  ? usuario.profile_picture_url 
+                  : "/default-avatar.png"}
               alt="Foto de Perfil"
               className="w-40 h-40 rounded-full object-cover"
               onError={(e) => { e.currentTarget.src = "/default-avatar.png"; }}
@@ -190,7 +197,6 @@ export default function UserPage() {
           className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition"
           onClick={() => setAbrir(true)}
           >
-          
             +
           </div>
           )}
@@ -203,7 +209,8 @@ export default function UserPage() {
             lojas.map((loja) => (
               <div
                 key={loja.id}
-                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 font-semibold"
+                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
+                onClick={() => router.push(`/store/${loja.id}`)}
               >
                 <div className="text-2xl flex flex-col items-center justify-center">{loja.name}</div>
                 <div>
@@ -320,6 +327,11 @@ export default function UserPage() {
       <EditUserModal
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
+      />    
+
+      <CreateStoreModel
+      abrir={abrir}
+      fechar={() => setAbrir(false)}
       />        
       
       <ToastContainer/>
