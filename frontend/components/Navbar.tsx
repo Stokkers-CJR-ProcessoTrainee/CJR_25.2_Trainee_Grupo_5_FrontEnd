@@ -1,10 +1,16 @@
+import { getUserById } from "@/api/api";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaBoxOpen, FaSignOutAlt, FaStore, FaUser } from "react-icons/fa";
 
+interface User {
+    profile_picture_url: string,
+}
+
 export default function Navbar() {
     const [logado, setLogado] = useState(false);
     const [userId, setUserId] = useState<number | null>(null);
+    const [user,setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -12,9 +18,21 @@ export default function Navbar() {
             setLogado(false);
             return;
         }
+
         const payload = JSON.parse(atob(token.split('.')[1]));
-        setUserId(payload.sub);
-        setLogado(!!token);
+        const id = payload.sub;
+        setUserId(id);
+        setLogado(true);
+
+        async function fetchUser() {
+            try {
+                const user = await getUserById(id);
+                setUser(user);
+            } catch (error) {
+                console.error("Erro ao buscar usuário:", error);
+            }
+        }
+        fetchUser();
     }, []);
 
     const handleLogout = () => {
@@ -63,16 +81,20 @@ export default function Navbar() {
             </div>
             ) : (
                 <div className="flex space-x-6">
-                    <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <Link href="/" className="mt-1 text-laranja text-2xl hover:text-gray-100 transition-colors">
                         <FaBoxOpen />
                     </Link>
-                    <Link href="/" className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
+                    <Link href="/" className="mt-1 text-laranja text-2xl hover:text-gray-100 transition-colors">
                         <FaStore />
                     </Link>
                     <Link href={`/profile/${userId}`} className="text-laranja text-2xl hover:text-laranja/80 transition-colors">
-                        <FaUser /> 
+                        <img 
+                        src={user?.profile_picture_url} 
+                        alt="Foto de perfil" 
+                        className="w-8 h-8 rounded-full border-transparent border-2 hover:border-white"
+                        />
                     </Link>
-                    <button onClick={handleLogout} className="text-laranja text-2xl hover:text-red-500 transition-colors cursor-pointer">
+                    <button onClick={handleLogout} className="mt-1 text-laranja text-2xl hover:text-red-600 transition-colors cursor-pointer">
                         <FaSignOutAlt />
                     </button>
                 </div>
