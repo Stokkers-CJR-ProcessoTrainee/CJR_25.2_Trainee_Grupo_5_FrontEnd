@@ -130,7 +130,7 @@ export default function UserPage() {
           
           {usuario ? (
             <img
-              src={usuario.profile_picture_url}
+              src={usuario.profile_picture_url || "/default-profile.png"}
               alt="Foto de Perfil"
               className="w-40 h-40 rounded-full object-cover"
               onError={(e) => { e.currentTarget.src = "/default-avatar.png"; }}

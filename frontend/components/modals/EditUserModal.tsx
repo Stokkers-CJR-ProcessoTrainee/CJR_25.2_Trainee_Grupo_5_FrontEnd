@@ -77,7 +77,7 @@ export default function EditUserModal({mostrar, fechar, foto}: EditUserModalProp
 
                     <div className="relative w-24 h-24 mx-auto mb-6">
                         <img
-                            src={foto}
+                            src={foto || "/default-profile.png"}
                             alt="Foto"
                             className="w-24 h-24 rounded-full object-cover border-2 border-laranja"
                         />
