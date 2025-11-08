@@ -14,6 +14,7 @@ export default function StorePage() {
     const[ratings, setRatings] = useState<any[]>([]);
     const[Dono, setDono] = useState(false);
     const[abrir, setAbrir] = useState(false);
+    const[mediaRating, setMediaRating] = useState(0)
     const[currentPage, setCurrentPage] = useState(1)
     const ItemsPerPage = 15;
 
@@ -59,6 +60,14 @@ export default function StorePage() {
             try {
                 const res = await getStoreRatingByStore(id);
                 setRatings(res);
+
+                if(res.length > 0) {
+                    const media = res.reduce((acc: number, r:any) => acc + r.rating, 0)
+                    setMediaRating(media);
+                } else {
+                    setMediaRating(0);
+                }
+
             } catch (err) {
                 console.error("Erro ao carregar avaliações:", err);
             }
@@ -82,15 +91,18 @@ export default function StorePage() {
         <main className="min-h-screen bg-amber-50 pb-16">
 
             <Navbar />
-
             
-            <div className="relative overflow-hidden w-auto h-150">
-                {store?.banner_url && (
+            <div className="relative overflow-hidden w-auto h-100">
+                {store?.banner_url ? (
                     <img
                     src={store.banner_url}
                     alt="Banner da loja"
                     className="w-full h-full object-cover"
                     />
+                ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <p className="text-gray-500 font-sans font-semibold">Sem banner</p>
+                    </div>      
                 )}
 
             {Dono && (
@@ -117,7 +129,7 @@ export default function StorePage() {
                 </p>
 
                 <p className="text-center text-5xl font-sans font-semibold text-laranja mt-2"> 
-                    4.8
+                    {mediaRating.toFixed(1)}
                 </p>
 
                 <div className="px-40 mt-5 py-10">

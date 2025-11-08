@@ -120,7 +120,7 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
                     />
 
                     <div className="absolute flex justify-center mt-84 ml-32 font-sans text-xs hover:brightness-90">
-                        <button className="bg-laranja text-white px-15 py-1 rounded-2xl hover:cursor-pointer transition">
+                        <button className="px-15 py-1 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
                             Adicionar
                         </button>
                     </div>
@@ -161,7 +161,6 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
 
                     <input
                         type="file"
-                        accept=".svg"
                         className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer"
                         onChange={(e) => setLogo(e.target.files?.[0] || null)}
                     />
@@ -182,7 +181,6 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
 
                     <input
                         type="file"
-                        accept=".svg"
                         className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer"
                         onChange={(e) => setBanner(e.target.files?.[0] || null)}
                     />
