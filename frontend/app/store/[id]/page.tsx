@@ -63,7 +63,6 @@ export default function StorePage() {
 
                 if(res.length > 0) {
                     const media = (res.reduce((acc: number, r:any) => acc + r.rating, 0)) / res.length;
-                    
                     setMediaRating(media);
                 } else {
                     setMediaRating(0);
@@ -102,7 +101,7 @@ export default function StorePage() {
                     />
                 ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <p className="text-gray-500 font-sans font-semibold">Sem banner</p>
+                         <div className="absolute inset-0 bg-linear-to-b from-black/30 to-transparent pointer-events-none"></div>
                     </div>      
                 )}
 
