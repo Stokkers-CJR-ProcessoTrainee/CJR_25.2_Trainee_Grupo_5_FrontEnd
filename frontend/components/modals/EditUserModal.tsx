@@ -7,9 +7,10 @@ import EditUserPass from "./UpdatePassModal";
 interface EditUserModalProps {
     mostrar: boolean;
     fechar: () => void;
+    foto: string | undefined | null;
 }
 
-export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
+export default function EditUserModal({mostrar, fechar, foto}: EditUserModalProps) {
     const [name, setName] = useState('');
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
@@ -76,10 +77,11 @@ export default function EditUserModal({mostrar, fechar}: EditUserModalProps) {
 
                     <div className="relative w-24 h-24 mx-auto mb-6">
                         <img
+                            src={foto}
                             alt="Foto"
                             className="w-24 h-24 rounded-full object-cover border-2 border-laranja"
                         />
-                        <button className="absolute bottom-0 right-0 bg-laranja p-2 rounded-full text-white hover:brightness-90 cursor-pointer transition">
+                        <button className="absolute bottom-0 right-0 bg-laranja p-2 rounded-full border text-white hover:brightness-90 cursor-pointer transition">
                             <FaPen />
                         </button>
                     </div>

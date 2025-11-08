@@ -350,6 +350,7 @@ export default function UserPage() {
       <EditUserModal
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
+      foto={usuario.profile_picture_url}
       />        
       
       <ToastContainer/>
