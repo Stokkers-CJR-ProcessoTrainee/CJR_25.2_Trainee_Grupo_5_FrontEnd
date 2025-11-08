@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
 import { getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
+import CardProdutos from "@/components/CardProdutos";
 
 
 export default function StorePage() {
@@ -219,29 +220,7 @@ export default function StorePage() {
                     <Carrossel>
                       {produtos.length > 0 ? (
                         produtos.map((produto) => (
-                          <div
-                            key={produto.id}
-                            className="relative min-w-[170px] bg-white rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
-                          >
-                            <div className="flex justify-center items-center flex-1">
-                            <img
-                              src={produto.product_images?.[0]?.image_url}
-                              alt={produto.name}
-                              className="h-24"
-                            />
-                            </div>
-            
-                            <div className="flex flex-col font-sans items-start">
-                              <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
-                              <p className="text-gray-800 font-semibold">R${produto.price}</p>
-                              {produto.stock > 0 ? (
-                                <p className="text-green-600 font-bold text-sm">Disponível</p>
-                              ) : (
-                                <p className="text-red-600 font-bold text-sm">Indisponível</p>
-                              )}
-                            </div>
-                            
-                          </div>
+                          <CardProdutos key={produto.id} produto={produto} />
                         ))
                       ) : (
                         <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos.</p>
@@ -267,28 +246,7 @@ export default function StorePage() {
                 {currentProducts.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 justify-items-center">
                     {currentProducts.map((produto) => (
-                    <div
-                        key={produto.id}
-                        className="relative min-w-[170px] bg-white rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
-                    >
-                        <div className="flex justify-center">
-                        <img
-                            src={produto.product_images?.[0]?.image_url}
-                            alt={produto.name}
-                            className="h-24 object-contain"
-                        />
-                        </div>
-
-                        <div className="flex flex-col font-sans items-start">
-                        <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
-                        <p className="text-gray-800 font-semibold">R${produto.price}</p>
-                        {produto.stock > 0 ? (
-                            <p className="text-green-600 font-bold text-sm">Disponível</p>
-                        ) : (
-                            <p className="text-red-600 font-bold text-sm">Indisponível</p>
-                        )}
-                        </div>
-                    </div>
+                        <CardProdutos key={produto.id} produto={produto} />
                     ))}
                 </div>
                 ) : (
