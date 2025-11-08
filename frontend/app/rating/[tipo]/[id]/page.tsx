@@ -5,8 +5,9 @@ import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { FaArrowLeft, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
+import { FaArrowLeft, FaGem, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
+import {motion, AnimatePresence} from "framer-motion";
 
 interface Rating {
   id: number;
@@ -138,29 +139,29 @@ export default function RatingsPage() {
     }
 
     return (
-        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-gray-50">
+        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-backBege">
             <Navbar />
 
-            <div className="bg-laranja w-full h-115 text-white shadow-md relative flex flex-col justify-center px-8">
+            <div className="bg-cinza w-full h-115 text-black shadow-md relative flex flex-col justify-center px-8">
             
                 <div className="flex items-center justify-between mx-40">
 
                     {donoRating &&
-                        <button className="absolute top-[28%] right-[11%] text-white cursor-pointer hover:text-gray-300 transition">
+                        <button className="absolute top-[28%] right-[11%] text-laranja cursor-pointer hover:text-white transition">
                             <FaPen size={28} />
                         </button>
                     }
 
                     <div className="flex items-center gap-4">
 
-                        <button className="hover:opacity-80 transition hover:cursor-pointer">
+                        <button className="hover:opacity-80 hover:text-red-600 transition hover:cursor-pointer">
                             <FaArrowLeft size={28} />
                         </button>
 
                         <img
-                        src="/user-placeholder.png"
+                        src={rating?.user.profile_picture_url}
                         alt="Foto do usuário"
-                        className="w-18 h-18 rounded-full border-2 border-white object-cover"
+                        className="w-18 h-18 rounded-full border-2 border-laranja object-cover"
                         />
 
                         <div className="flex flex-row items-center gap-4">
@@ -179,11 +180,11 @@ export default function RatingsPage() {
                             viewBox="0 0 29 28"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            className={star <= (rating?.rating ?? 0) ? "opacity-100" : "opacity-40"}
+                            className={star <= (rating?.rating ?? 0) ? "opacity-100" : "opacity-30"}
                             >
                             <path
                                 d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-                                fill="#FFEB3A"
+                                fill="#FFE600"
                             />
                             </svg>
                         ))}
@@ -191,7 +192,7 @@ export default function RatingsPage() {
 
                 </div>
 
-                <p className="mt-8 text-2xl font-sans tracking-wider opacity-95 ml-52 max-w-8xl">
+                <p className="mt-8 text-3xl font-sans tracking-wider opacity-95 ml-52 max-w-8xl">
                     {rating?.comment}
                 </p>
             
@@ -202,10 +203,22 @@ export default function RatingsPage() {
                     <div className="w-1 bg-gray-400 rounded-full"></div>
 
                     <div className="flex flex-col gap-8 pl-12">
+                        <AnimatePresence>
                         {comentarios.map((c) => {
                             const donoComment = c.user_id === userId;
                             return (
-                            <div key={c.id} className="bg-card shadow-md rounded-2xl p-6 w-150 relative">
+                            <motion.div 
+                            key={c.id} 
+                            className="bg-card shadow-md rounded-2xl p-7 w-150 relative"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 120, damping: 10 } }}
+                            exit={{
+                            scale: 0,
+                            opacity: 0,
+                            rotate: Math.random() * 40 - 20,
+                            transition: { duration: 0.6 }
+                            }}
+                            >
                                     {donoComment && (
                                         <button 
                                         onClick={() => setComentarioEditar(c)}
@@ -222,25 +235,34 @@ export default function RatingsPage() {
                                     )}                                   
                                 <div className="flex gap-3 items-center">
                                     <img
-                                    src="/user-placeholder.png"
+                                    src={c.user.profile_picture_url}
                                     alt="Foto do usuário"
-                                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                                    className="w-10 h-10 rounded-full border-2 border-laranja object-cover"
                                     />
-                                    <div className="flex gap-3 items-center relative">
-                                        <p className="text-xl text-laranja tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                    <div className="flex gap-2 items-center relative">
                                         {(donoLoja == donoComment) && (
-                                            <p className="absolute top-7 text-sm text-laranja font-sans opacity-80 leading-tight">Dono da loja</p>
+                                            <div className="relative group inline-block">
+                                                <span className="text-laranja">
+                                                    <FaGem size={16} />
+                                                </span>
+                                                <div className="absolute bottom-full font-sans tracking-wider left-7 -translate-x-1/2 mb-2 hidden group-hover:block
+                                                                text-laranja text-xs rounded border py-1 px-2 whitespace-nowrap shadow-lg">
+                                                    Dono da loja
+                                                </div>
+                                            </div>
                                         )}
+                                        <p className="text-xl text-black-600 tracking-wider font-sans font-semibold">{c.user?.username}</p>
                                         {(c.createdAt == c.updatedAt) ?
-                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
+                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                         : 
-                                            <p className="text-sm text-laranja font-sans font-semibold opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
+                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
                                         }
                                     </div>
                                 </div>
                                 <p className="text-md text-gray-700 font-sans mt-4">{c.content}</p>
-                            </div>
+                            </motion.div>
                         );})}
+                        </AnimatePresence>
                     </div>
                 </div>
 

@@ -120,12 +120,12 @@ export default function UserPage() {
 
   return (
 
-    <main className="min-h-screen bg-gray-100 pb-16">
+    <main className="min-h-screen bg-back pb-16">
 
       <Navbar />
 
       {/* Banner */}
-      <div className="w-full h-70 bg-gray-300 relative flex items-end px-16"></div>
+      <div className="w-full h-70 bg-cinza relative flex items-end px-16"></div>
 
       {/* Perfil */}
 
@@ -134,9 +134,7 @@ export default function UserPage() {
           
           {usuario ? (
             <img
-              src={usuario.profile_picture_url && usuario.profile_picture_url.trim() !== "" 
-                  ? usuario.profile_picture_url 
-                  : "/default-avatar.png"}
+              src={usuario.profile_picture_url}
               alt="Foto de Perfil"
               className="w-40 h-40 rounded-full object-cover"
               onError={(e) => { e.currentTarget.src = "/default-avatar.png"; }}
