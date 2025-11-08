@@ -189,9 +189,11 @@ export default function StorePage() {
                             </div>
                         ))
                     ) : (
-                        <p className="text-gray-500 font-sans">
-                        Nenhuma avaliação disponível.
-                        </p>
+                        <div className="w-full h-10 flex items-center justify-center">
+    <p className="text-gray-500 opacity-60 font-sans text-center">
+        Esta loja não foi avaliada ainda.
+    </p>
+</div>
                     )}
                 </Carrossel>
                 </div>
@@ -235,7 +237,7 @@ export default function StorePage() {
                           </div>
                         ))
                       ) : (
-                        <p className="text-gray-500 text-start font-sans">Este usuário ainda não possui produtos.</p>
+                        <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos.</p>
                       )}
                     </Carrossel>
                     </div>
@@ -283,7 +285,7 @@ export default function StorePage() {
                     ))}
                 </div>
                 ) : (
-                <p className="text-gray-500 text-start font-sans -mt-4">
+                <p className="text-gray-500 opacity-60 text-start font-sans -mt-4">
                     Nenhum produto cadastrado ainda.
                 </p>
                 )}
@@ -328,8 +330,6 @@ export default function StorePage() {
             />
             )}
              
-
-
         </main>
     )
 }

@@ -12,8 +12,6 @@ interface UpdateStoreModalProps {
 }
 
 export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: UpdateStoreModalProps) {
-    if (!abrir || !store) return null;
-
     const[name, setName] = useState('');
     const[description, setDescription] = useState('');
     const[sticker_url, setSticker] = useState<File | null>(null);
@@ -24,7 +22,9 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
     useEffect(() => {
         setName(store.name || '');
         setDescription(store.description || '');
-    }, [store]); 
+    }, [store]);
+    
+    if (!abrir || !store) return null;
 
     const UploadFile = async (file: File) => {
         const formData = new FormData();
