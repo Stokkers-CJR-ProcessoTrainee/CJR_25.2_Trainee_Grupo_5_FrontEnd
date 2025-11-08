@@ -117,14 +117,21 @@ export default function StorePage() {
                     </svg>
                 </button>
                 </div>
+                
             )}
                 
             </div>
 
         
 
-            <div className="bg-gray-100 flex flex-col">
-                <p className="text-laranja ml-6 text-center font-sans font-semibold text-3xl mt-10">
+            <div className="relative bg-gray-100 flex flex-col">
+                <img
+                    src={store.sticker_url}
+                    alt={`${store.name} sticker`}
+                    className="absolute top-0 left-1/2 w-46 h-46 rounded-full object-cover -translate-x-1/2 -translate-y-1/2"
+                />
+                
+                <p className="text-laranja text-center font-sans font-semibold text-3xl mt-30">
                     Reviews e Comentários 
                 </p>
 
