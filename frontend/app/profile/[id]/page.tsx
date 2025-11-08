@@ -6,6 +6,7 @@ import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from 
 import EditUserModal from "@/components/modals/EditUserModal";
 import { ToastContainer } from "react-toastify";
 import Carrossel from "@/components/Carrossel";
+import CardProdutos from "@/components/CardProdutos";
 
 type Usuario = {
   id: number;
@@ -51,7 +52,7 @@ type Avaliacao = {
 
 export default function UserPage() {
   const { id } = useParams();
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [usuario, setUsuario] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [produtos, setProdutos] = useState<Produto[]>([]); 
   const [lojas, setlojas] = useState<Loja[]>([]);
@@ -163,7 +164,6 @@ export default function UserPage() {
       )}
       </div>
         
-
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
         <h3 className="text-xl font-sans font-bold mb-4">Produtos</h3>
@@ -171,37 +171,7 @@ export default function UserPage() {
           <Carrossel>
           {produtos.length > 0 ? (
             produtos.map((produto) => (
-              <div
-                key={produto.id}
-                className="relative min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
-              >
-                <div className="flex justify-center items-center flex-1">
-                <img
-                  src={produto.product_images?.[0]?.image_url}
-                  alt={produto.name}
-                  className="h-24"
-                />
-                </div>
-
-                <div className="flex flex-col items-start">
-                  <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
-                  <p className="text-gray-800 font-semibold">R${produto.price}</p>
-                  {produto.stock > 0 ? (
-                    <p className="text-green-600 font-bold text-sm">Disponível</p>
-                  ) : (
-                    <p className="text-red-600 font-bold text-sm">Indisponível</p>
-                  )}
-                </div>
-                
-                {/* Sticker do produto */}
-                <div className="absolute h-12 w-12 mb-32 ml-22 rounded-full bg-blue-500">
-                  <img
-                    src={produto.store.sticker_url}
-                    alt={`${produto.store.name} sticker`}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                </div>
-              </div>
+              <CardProdutos key={produto.id} produto={produto} />
             ))
           ) : (
             <p className="text-gray-500 font-sans">Este usuário ainda não possui produtos.</p>
