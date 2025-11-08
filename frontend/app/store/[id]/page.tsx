@@ -62,7 +62,8 @@ export default function StorePage() {
                 setRatings(res);
 
                 if(res.length > 0) {
-                    const media = res.reduce((acc: number, r:any) => acc + r.rating, 0)
+                    const media = (res.reduce((acc: number, r:any) => acc + r.rating, 0)) / res.length;
+                    
                     setMediaRating(media);
                 } else {
                     setMediaRating(0);
@@ -292,6 +293,7 @@ export default function StorePage() {
                 </div>
             </div>
 
+            {currentProducts.length > 0 && (
             <div className="flex justify-center items-center gap-2 mt-2">
                 <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -321,6 +323,7 @@ export default function StorePage() {
                     &gt;
                 </button>
             </div>
+            )}
 
             {store && (
             <UpdateStoreModal
