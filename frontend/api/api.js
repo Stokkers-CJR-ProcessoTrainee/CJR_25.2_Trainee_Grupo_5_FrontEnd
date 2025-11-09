@@ -85,3 +85,18 @@ export async function getProductsByCategory(categoryId) {
   const res = await api.get(`/products/category/${categoryId}`);
   return res.data;
 }
+
+export async function getStores() {
+  const res = await api.get('/stores');
+  return res.data;
+}
+
+export async function getProductImages(productId) {
+  const res = await api.get(`/products-images/product/${productId}`);
+  return res.data;
+}
+
+export async function getCategoryById(categoryId) {
+  const res = await api.get(`/categories/${Number(categoryId)}`);
+  return res.data;
+}
