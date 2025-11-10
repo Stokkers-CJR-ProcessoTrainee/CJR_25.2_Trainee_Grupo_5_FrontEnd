@@ -75,3 +75,8 @@ export async function deleteUser() {
   }); 
   return res.data;
 }
+
+export async function getProductsById(id) {
+  const res = await api.get(`/products/${id}`);
+  return res.data;
+}
