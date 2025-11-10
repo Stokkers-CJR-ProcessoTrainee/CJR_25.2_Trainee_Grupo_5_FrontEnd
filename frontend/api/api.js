@@ -208,3 +208,19 @@ export async function getStoreRatingByStore(storeId) {
   const res = await api.get(`/store-ratings/store/${storeId}`);
   return res.data
 }
+
+export const createStoreRating = (storeId, data) => {
+  return api.post(`/store-ratings/store/${storeId}`, data);
+};
+
+export const updateStoreRating = (ratingId, data) => {
+  return api.patch(`/store-ratings/${ratingId}`, data);
+};
+
+export const createProductRating = (productId, data) => {
+  return api.post(`/product-ratings/product/${productId}`, data);
+};
+
+export const updateProductRating = (ratingId, data) => {
+  return api.patch(`/product-ratings/${ratingId}`, data);
+};
