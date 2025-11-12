@@ -13,7 +13,7 @@ export async function login(email, password) {
 }
 
 export async function register(name, username, email, password_hash) {
-  const res = await api.post('user/register', {name, username, email, password_hash});
+  const res = await api.post('user/register', { name, username, email, password_hash });
   return res.data;
 }
 
@@ -70,9 +70,14 @@ export async function updatePassword(data) {
 
 export async function deleteUser() {
   const token = localStorage.getItem('token');
-  const res = await api.delete('/user/delete',{
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
+  const res = await api.delete('/user/delete', {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+export async function getProductsById(id) {
+  const res = await api.get(`/products/${id}`);
   return res.data;
 }
 
