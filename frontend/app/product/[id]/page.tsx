@@ -1,6 +1,6 @@
 'use client';
 
-import { getProductsById } from "@/api/api";
+import { getProductsById, getProductsByStore } from "@/api/api";
 import Navbar from "@/components/Navbar";
 import Carrossel from "@/components/Carrossel";
 import { useParams } from "next/navigation";
@@ -14,27 +14,39 @@ interface Products {
   description?: string,
   price: number,
   stock: number,
-  store: { banner_url: string, user_id: number },
+  store: { sticker_url: string, user_id: number },
   category: { name: string },
-  product_images: { order: number, image_url: string }[]
+  product_images: { order: number, image_url: string }[],
   product_ratings: { rating: number }[]
+}
+
+interface Product {
+  id: number,
+  store_id: number,
+  category_id: number,
+  name: string,
+  description: string,
+  price: number,
+  stock: number
 }
 
 export default function ProductPage() {
   const [products, setProducts] = useState<Products | null>(null);
   const { id } = useParams();
-  const [mean, setMean] = useState(0)
-  const [reviews, setReviews] = useState(0)
-  const [image_number, setImage] = useState(1)
-  const [isOwner, setOwner] = useState(false)
+  const [mean, setMean] = useState(0);
+  const [reviews, setReviews] = useState(0);
+  const [image_number, setImage] = useState(1);
+  const [isOwner, setOwner] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   useEffect(() => {
 
     async function fetchProduct() {
       try {
         const product = await getProductsById(Number(id));
-
+        const allProducts = await getProductsByStore(product?.store_id);
         setProducts(product);
+        setAllProducts(allProducts);
 
         if (product) {
           const ratings = product?.product_ratings || [];
@@ -83,12 +95,20 @@ export default function ProductPage() {
           {/* fotos */}
           <div className="flex flex-row w-4/8 h-150 p-4 gap-4">
             <div className="flex flex-col gap-4 h-full flex-1">
-              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(0)}> <img src={products?.product_images?.[0]?.image_url} alt="" /> </div>
-              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(1)}> <img src={products?.product_images?.[1]?.image_url} alt="" /> </div>
-              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(2)}> <img src={products?.product_images?.[2]?.image_url} alt="" /> </div>
-              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(3)}> <img src={products?.product_images?.[3]?.image_url} alt="" /> </div>
+              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(0)}> <img src={products?.product_images?.[0]?.image_url} alt="" className="rounded-2xl" /> </div>
+              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(1)}> <img src={products?.product_images?.[1]?.image_url} alt="" className="rounded-2xl" /> </div>
+              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(2)}> <img src={products?.product_images?.[2]?.image_url} alt="" className="rounded-2xl" /> </div>
+              <div className="hover:brightness-90 hover:cursor-pointer transition w-full flex-1" onClick={() => setImage(3)}> <img src={products?.product_images?.[3]?.image_url} alt="" className="rounded-2xl" /> </div>
             </div>
-            <div className="h-full w-142">  <img src={products?.product_images?.[image_number]?.image_url} alt="" /> </div>
+            <div className="relative h-full w-142">  <img src={products?.product_images?.[image_number]?.image_url} alt="" className="rounded-2xl" />
+              <div className="absolute h-20 w-20 bottom-119 right-3 rounded-full">
+                <img
+                  src={products?.store?.sticker_url}
+                  alt=""
+                  className="w-20 h-20 rounded-full object-cover"
+                />
+              </div>
+            </div>
           </div>
 
           {/* infos */}
@@ -108,7 +128,7 @@ export default function ProductPage() {
             </div>
             <div className="font-sans font-bold text-5xl h-16 w-40"> R${products?.price} </div>
             <div className="flex-1 w-full">
-              <h1 className="font-sans text-xl font-bold"> Descricao </h1>
+              <h1 className="font-sans text-xl font-bold mb-5"> Descricao </h1>
               <p className="font-sans"> {products?.description} </p>
             </div>
           </div>
@@ -117,7 +137,17 @@ export default function ProductPage() {
         {/* outros produtos */}
         <div className="flex flex-col p-4 gap-4 bg-background h-96">
           <div className="font-sans text-3xl font-bold bg-blue-400 h-12 w-70"> Da mesma loja </div>
-          <div className="bg-blue-400 flex-1 w-full"></div>
+          <div className="bg-blue-400 flex-1 w-full">
+            <Carrossel>
+              {allProducts.length > 0 ? (
+                allProducts.map((p) => (
+                  <h1 key={p?.name}>{p?.name}</h1>
+                ))
+              ) : (
+                <p> produtos nao encontrados </p>
+              )}
+            </Carrossel>
+          </div>
         </div>
       </div>
 
