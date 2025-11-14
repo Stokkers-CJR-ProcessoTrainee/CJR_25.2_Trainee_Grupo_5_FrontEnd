@@ -8,7 +8,7 @@ interface RatingModalProps {
   comment: string;
   setComment: (comment: string) => void;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (rating: number, comment: string) => void;
   onDelete?: () => void; // aparece apenas no update
 }
 
@@ -23,6 +23,12 @@ export default function RateModal({
   onConfirm,
   onDelete
 }: RatingModalProps) {
+
+  const handleConfirm = () => {
+    console.log("RateModal: handleConfirm chamado", { rating, comment });
+    onConfirm(rating, comment);
+  };
+
   if (!open) return null;
 
   return (
@@ -78,7 +84,7 @@ export default function RateModal({
           )}
 
           <button
-            onClick={onConfirm}
+            onClick={handleConfirm}
             className="bg-orange-500 text-white py-2 rounded-full font-medium
             hover:brightness-110 transition"
           >
