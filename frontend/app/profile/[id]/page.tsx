@@ -136,9 +136,7 @@ export default function UserPage() {
           
           {usuario ? (
             <img
-              src={usuario.profile_picture_url && usuario.profile_picture_url.trim() !== "" 
-                  ? usuario.profile_picture_url 
-                  : "/default-avatar.png"}
+              src={usuario.profile_picture_url || "/default-profile.png"}
               alt="Foto de Perfil"
               className="w-40 h-40 rounded-full object-cover"
               onError={(e) => { e.currentTarget.src = "/default-avatar.png"; }}
@@ -327,11 +325,7 @@ export default function UserPage() {
       <EditUserModal
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
-      />    
-
-      <CreateStoreModel
-      abrir={abrir}
-      fechar={() => setAbrir(false)}
+      foto={usuario.profile_picture_url}
       />        
       
       <ToastContainer/>
