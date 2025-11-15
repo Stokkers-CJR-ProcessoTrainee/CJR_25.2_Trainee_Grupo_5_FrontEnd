@@ -42,13 +42,17 @@ export default function VerMaisPage() {
         <Navbar />
 
         <h1 className="text-2xl font-bold px-10 mt-8 mb-4">
-            Ver mais – {tipo}
+            Ver mais {tipo}
         </h1>
 
-        <div className="grid py-5 grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 px-20">
-            {tipo === "produtos" &&
-            dados.map((p) => <CardProdutos key={p.id} produto={p} />)}
+        <div className="w-full flex justify-center">
+            <div className="
+                grid gap-6 px-20 py-5 justify-center grid-cols-[repeat(auto-fill,minmax(170px,1fr))] max-w-[1200px]">
+                {tipo === "produtos" &&
+                dados.map((p) => <CardProdutos key={p.id} produto={p} />)}
+            </div>
         </div>
+        
     </div>
     );
 }
