@@ -4,6 +4,7 @@ import { getCategories, getProductsByCategory, getProductImages, getStores } fro
 import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar";
+import CardProdutos from "@/components/CardProdutos";
 import { Store, Products, Category, ProductImage } from "./Types"
 
 export default function Home() {
@@ -11,7 +12,6 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [productsByCategory, setProductsByCategory] = useState<Record<number, Products[]>>({});
   const [stores, setStores] = useState<Store[]>([]);
-  const [productImagesByProductByCategory, setProductImagesByProductByCategory] = useState<Record<number, Record<number, ProductImage[]>>>({});
 
 
   async function fetchCategories() {
@@ -49,19 +49,6 @@ export default function Home() {
 
     const allStores = await fetchStores();
     setStores(allStores); 
-
-    const imagesMap: Record<number, Record<number, ProductImage[]>> = {};
-
-    for (const cat of featuredCategories) {
-      imagesMap[cat.id] = {};
-
-      for (const product of mapped[cat.id]) {
-        const images = await getProductImages(product.id);
-        imagesMap[cat.id][product.id] = images;
-      }
-    }
-
-    setProductImagesByProductByCategory(imagesMap);
   }
     loadData();
   }, []); 
@@ -119,22 +106,8 @@ export default function Home() {
               <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 m-5">
                 <Carrossel>
                 {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
-                  productsByCategory[cat.id]?.map((product) => (
-                    <div
-                      key={product.id}
-                      className="inline-block mr-4 p-4 bg-gray-200 rounded-lg hover:shadow-lg transition flex flex-col items-center justify-center w-40"
-                    >
-                      <Image
-                        src={
-                          productImagesByProductByCategory[cat.id]?.[product.id]?.[0]?.image_url 
-                          ?? "/images/placeholder.png"
-                        }
-                        alt={product.name}
-                        width={100}
-                        height={100}
-                      />
-                      {product.name}
-                    </div>
+                  productsByCategory[cat.id]?.map((produto) => (
+                    <CardProdutos key={produto.id} produto={produto} />
                   ))
                 ) : (
                   <p>Produtos não encontrados.</p>

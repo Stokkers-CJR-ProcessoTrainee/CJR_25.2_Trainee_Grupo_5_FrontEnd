@@ -6,11 +6,10 @@ export type Category = {
 export type Products = {
   id: number;
   name: string;
-  description?: string | null;
   price: number;
   stock: number;
-  category_id: number;
-  store_id: number;
+  product_images?: { id: number; image_url: string; order: number }[];
+  store: { id: number; name: string; sticker_url: string };
 };
 
 export type Store = {
