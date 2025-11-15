@@ -172,7 +172,7 @@ export default function UserPage() {
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
         <h3 className="text-xl font-sans font-bold mb-4">Produtos</h3>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {produtos.length > 0 ? (
             produtos.map((produto) => (
@@ -201,7 +201,7 @@ export default function UserPage() {
 
         </div>
 
-        <div className="flex bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex rounded-3xl font-sans gap-6">
           <Carrossel>
           {lojas.length > 0 ? (
             lojas.map((loja) => (
@@ -233,7 +233,7 @@ export default function UserPage() {
 
         {/* Avaliações de lojas */}
         <h4 className="text-lg font-semibold mt-10 mb-2">Lojas</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {avaliacoes?.store_ratings?.length ? (
             avaliacoes.store_ratings.map((a) => (
@@ -278,7 +278,7 @@ export default function UserPage() {
 
         {/* Avaliações de produtos */}
         <h4 className="text-lg font-semibold mb-2 mt-6">Produtos</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {avaliacoes?.product_ratings?.length ? (
             avaliacoes.product_ratings.map((a) => (
