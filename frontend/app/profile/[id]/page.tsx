@@ -120,7 +120,8 @@ export default function UserPage() {
   if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
   if (!usuario) return <p className="text-center mt-20 text-laranja">Usuário não encontrado.</p>;
 
-  return (
+
+  return ( 
 
     <main className="min-h-screen bg-gray-100 pb-16">
 
@@ -337,7 +338,13 @@ export default function UserPage() {
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
       foto={usuario.profile_picture_url}
-      />        
+      />      
+
+      <CreateStoreModel
+        abrir={abrir}
+        fechar={() => setAbrir(false)}
+      />
+  
       
       <ToastContainer/>
       
