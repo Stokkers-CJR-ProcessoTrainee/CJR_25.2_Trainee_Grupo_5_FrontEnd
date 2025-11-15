@@ -29,21 +29,6 @@ export default function VerMaisPage() {
             setDados(res);
         }
 
-        if (tipo === "lojas") {
-            const res = await getStoresByUser(Number(userId));
-            setDados(res);
-        }
-
-        if (tipo === "avaliacoes_store") {
-            const res = await getUserRatings(Number(userId));
-            setDados(res.store_ratings || []);
-        }
-
-        if (tipo === "avaliacoes_prod") {
-            const res = await getUserRatings(Number(userId));
-            setDados(res.product_ratings || []);
-        }
-
         setLoading(false);
         }
 
@@ -60,22 +45,9 @@ export default function VerMaisPage() {
             Ver mais – {tipo}
         </h1>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-10">
+        <div className="grid py-5 grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 px-20">
             {tipo === "produtos" &&
             dados.map((p) => <CardProdutos key={p.id} produto={p} />)}
-
-            {tipo === "lojas" &&
-            dados.map((l) => (
-                <div key={l.id} className="bg-white shadow rounded-xl p-4">
-                {l.name}
-                </div>
-            ))}
-
-            {tipo === "avaliacoes_store" &&
-            dados.map((a) => <div key={a.id}>{a.comment}</div>)}
-
-            {tipo === "avaliacoes_prod" &&
-            dados.map((a) => <div key={a.id}>{a.comment}</div>)}
         </div>
     </div>
     );
