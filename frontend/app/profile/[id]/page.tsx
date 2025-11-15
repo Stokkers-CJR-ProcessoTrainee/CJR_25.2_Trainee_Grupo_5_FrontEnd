@@ -345,7 +345,6 @@ export default function UserPage() {
         fechar={() => setAbrir(false)}
       />
   
-      
       <ToastContainer/>
       
     </main>

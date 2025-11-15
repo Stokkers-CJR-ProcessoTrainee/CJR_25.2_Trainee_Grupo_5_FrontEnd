@@ -208,3 +208,8 @@ export async function getStoreRatingByStore(storeId) {
   const res = await api.get(`/store-ratings/store/${storeId}`);
   return res.data
 }
+
+export async function getProductByCategory(categoryId) {
+  const res = await api.get (`/products/category/${categoryId}`);
+  return res.data
+}
