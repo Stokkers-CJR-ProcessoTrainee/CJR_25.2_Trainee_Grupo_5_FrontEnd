@@ -3,6 +3,7 @@ import {register} from "../../api/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function RegisterPage() {
@@ -13,6 +14,8 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [password_confirm, setPasswordConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [showAtual, setShowAtual] = useState(false);
 
   const handleRegister = async (e:FormEvent) => {
     e.preventDefault();
@@ -43,7 +46,7 @@ export default function RegisterPage() {
 
   return (
     <main
-      className="bg-background min-h-screen flex items-center justify-center"
+      className="bg-back min-h-screen flex items-center justify-center"
     >
       <div className="flex flex-row items-center justify-center w-full max-w-6xl mx-auto gap-10">
         
@@ -86,22 +89,38 @@ export default function RegisterPage() {
               autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
-              type="password"
-              name="pass"
-              placeholder="Senha"
+            <div className="relative">
+              <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
-              type="password"
-              name="pass_confirm"
-              placeholder="Confirme a senha"
+              type={showAtual ? "text" : "password"}
+              placeholder="Senha"
+              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              />
+              <button
+              type="button"
+              onClick={() => setShowAtual(!showAtual)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showAtual ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>  
+            <div className="relative">
+              <input
               value={password_confirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-            />
+              type={showAtual ? "text" : "password"}
+              placeholder="Confirmar Senha"
+              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              />
+              <button
+              type="button"
+              onClick={() => setShowAtual(!showAtual)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showAtual ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div> 
             <button
               type="submit"
               disabled={loading}

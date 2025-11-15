@@ -10,38 +10,43 @@ export default function Carrossel({ children }: CarrosselProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [dragged, setDragged] = useState(false); 
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!carrosselRef.current) return;
     setIsDragging(true);
     setStartX(e.pageX - carrosselRef.current.offsetLeft);
     setScrollLeft(carrosselRef.current.scrollLeft);
+    setDragged(false);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !carrosselRef.current) return;
-    e.preventDefault(); 
+    e.preventDefault();
     const x = e.pageX - carrosselRef.current.offsetLeft;
     const walk = x - startX;
+
+    if (Math.abs(walk) > 5) setDragged(true);
+
     carrosselRef.current.scrollLeft = scrollLeft - walk;
   };
 
   const handleMouseUp = () => setIsDragging(false);
 
-  const handleDragStart = (e: React.DragEvent) => {
-    e.preventDefault();
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (dragged) {
+      e.stopPropagation(); 
+      e.preventDefault();
+    }
   };
 
-  useEffect(() => {
-    const handleMouseUp = () => {
-      if (isDragging) setIsDragging(false);
-    };
+  const handleDragStart = (e: React.DragEvent) => e.preventDefault();
 
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isDragging]);
+  useEffect(() => {
+    const handleMouseUpWindow = () => setIsDragging(false);
+    window.addEventListener('mouseup', handleMouseUpWindow);
+    return () => window.removeEventListener('mouseup', handleMouseUpWindow);
+  }, []);
 
   return (
     <div
@@ -49,13 +54,14 @@ export default function Carrossel({ children }: CarrosselProps) {
       className="flex overflow-x-auto gap-6 scrollbar-hide scroll-snap-x select-none"
       style={{
         scrollSnapType: 'x mandatory',
-        cursor: 'default',
-        userSelect: 'none', 
+        cursor:'default',
+        userSelect: 'none',
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      onDragStart={handleDragStart} 
+      onClickCapture={handleClickCapture}
+      onDragStart={handleDragStart}
     >
       {children}
     </div>
