@@ -71,11 +71,9 @@ export default function UserPage() {
 
   const router = useRouter();
 
-  useEffect(() => {
+  const fetchAllPageData = async () => {
     if (!id) return;
 
-  async function fetchUserData() {
-    setLoading(true);
     try {
       const userData = await getUserById(Number(id));
       setUsuario(userData);
@@ -84,7 +82,7 @@ export default function UserPage() {
       setProdutos(produtosData);
 
       const lojasData = await getStoresByUser(Number(id));
-      setlojas(lojasData);
+      setlojas(lojasData); 
 
       const avaliacoesData = await getUserRatings(Number(id));
       setAvaliacoes({
@@ -92,9 +90,8 @@ export default function UserPage() {
         product_ratings: avaliacoesData.product_ratings || [],
       });
 
-
       const token = localStorage.getItem("token");
-      if (token) {
+      if (token && userData) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           setDono(payload.sub == userData.id)
@@ -109,17 +106,28 @@ export default function UserPage() {
       setUsuario(null);
       setProdutos([]);
       setlojas([]);
-    } finally {
-      setLoading(false);
     }
-  }
+  };
 
-  fetchUserData();
-}, [id]);
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchInitialData = async () => {
+      setLoading(true);
+      await fetchAllPageData(); 
+      setLoading(false);
+    };
+
+    fetchInitialData();
+  }, [id]);
+
+  const handleStoreCreated = async () => {
+    setAbrir(false);   
+    await fetchAllPageData();    
+  };
 
   if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
   if (!usuario) return <p className="text-center mt-20 text-laranja">Usuário não encontrado.</p>;
-
 
   return ( 
 
@@ -343,6 +351,7 @@ export default function UserPage() {
       <CreateStoreModel
         abrir={abrir}
         fechar={() => setAbrir(false)}
+        onSuccess={handleStoreCreated}
       />
   
       <ToastContainer/>
