@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
+import { getProductRating, getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
-
 
 export default function StorePage() {
     const { id } = useParams();
@@ -25,6 +24,7 @@ export default function StorePage() {
             try {
                 const res = await getProductsByStore(id);
                 setProdutos(res);
+
             } catch(err) {
                 console.error("Erro ao carregar produtos:", err);
             }
@@ -81,12 +81,14 @@ export default function StorePage() {
         }
     }, [id]);
 
-     if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
+    if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
     const totalPages = Math.ceil(produtos.length / ItemsPerPage);
     const startIndex = (currentPage - 1) * ItemsPerPage;
     const endIndex = startIndex + ItemsPerPage;
     const currentProducts = produtos.slice(startIndex, endIndex);
+    const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r:any) => r.rating), 0))) : 0;
+    const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r:any) => r.rating === maxRating));
 
     return (
         <main className="min-h-screen bg-amber-50 pb-16">
@@ -218,12 +220,12 @@ export default function StorePage() {
                 
                 <div className="flex relative rounded-3xl font-sans gap-6">
                     <Carrossel>
-                      {produtos.length > 0 ? (
-                        produtos.map((produto) => (
+                      {TopProdutos.length > 0 ? (
+                        TopProdutos.map((produto) => (
                           <CardProdutos key={produto.id} produto={produto} />
                         ))
                       ) : (
-                        <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos.</p>
+                        <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos avaliados.</p>
                       )}
                     </Carrossel>
                     </div>
