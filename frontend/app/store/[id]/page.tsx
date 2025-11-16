@@ -198,10 +198,10 @@ export default function StorePage() {
                         ))
                     ) : (
                         <div className="w-full h-10 flex items-center justify-center">
-    <p className="text-gray-500 opacity-60 font-sans text-center">
-        Esta loja não foi avaliada ainda.
-    </p>
-</div>
+                            <p className="text-gray-500 opacity-60 font-sans text-center">
+                                Esta loja não foi avaliada ainda.
+                            </p>
+                        </div>
                     )}
                 </Carrossel>
                 </div>
