@@ -120,7 +120,20 @@ export default function StorePage() {
                     </svg>
                 </button>
                 </div>
-                
+            )}
+
+            {Dono && (
+                <div className="absolute z-10 top-42 right-10">
+                <button
+                className="hover:cursor-pointer"
+                >
+                    <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22.5" cy="22.5" r="22.5" fill="#FF6700"/>
+                    <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
+                    <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+                    </svg>
+                </button>
+                </div>
             )}
                 
             </div>
