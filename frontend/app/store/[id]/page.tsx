@@ -95,7 +95,7 @@ export default function StorePage() {
 
             <Navbar />
             
-            <div className="relative overflow-hidden w-auto h-100">
+            <div className="relative overflow-hidden w-full h-[400px] max-w-[1920px] mx-auto">
                 {store?.banner_url ? (
                     <img
                     src={store.banner_url}
