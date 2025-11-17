@@ -11,7 +11,10 @@
   --color-background: #f5f5f5;
   --color-card: #e0e0e0;
   --color-laranja: #ff6700;
-
+  --color-laranja2: #d85f00;
+  --color-cinza: #e0e0e0;
+  --color-back: #fbfbf8;
+  
   --font-mono: var(--font-geist-mono);
   --font-sans: "Outfit", ui-sans-serif, system-ui;
 }
