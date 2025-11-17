@@ -76,6 +76,31 @@ export async function deleteUser() {
   return res.data;
 }
 
+export async function getCategories() {
+  const res = await api.get('/categories');
+  return res.data;
+}
+
+export async function getProductsByCategory(categoryId) {
+  const res = await api.get(`/products/category/${categoryId}`);
+  return res.data;
+}
+
+export async function getStores() {
+  const res = await api.get('/stores');
+  return res.data;
+}
+
+export async function getProductImages(productId) {
+  const res = await api.get(`/products-images/product/${productId}`);
+  return res.data;
+}
+
+export async function getCategoryById(categoryId) {
+  const res = await api.get(`/categories/${Number(categoryId)}`);
+  return res.data;
+}
+
 export async function createStore(data) {
     const token = localStorage.getItem("token");
 
