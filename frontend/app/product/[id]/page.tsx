@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Carrossel from "@/components/Carrossel";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CardProdutos from "@/components/CardProdutos";
 
 interface Products {
   id: number,
@@ -20,15 +21,17 @@ interface Products {
   product_ratings: { rating: number }[]
 }
 
-interface Product {
-  id: number,
-  store_id: number,
+type Produto = {
+  id: number;
+  name: string;
   category_id: number,
-  name: string,
+  store_id: number,
   description: string,
-  price: number,
-  stock: number
-}
+  price: number;
+  stock: number;
+  product_images?: { id: number; image_url: string; order: number }[];
+  store: { id: number; name: string; sticker_url: string };
+};
 
 export default function ProductPage() {
   const [products, setProducts] = useState<Products | null>(null);
@@ -37,7 +40,7 @@ export default function ProductPage() {
   const [reviews, setReviews] = useState(0);
   const [image_number, setImage] = useState(1);
   const [isOwner, setOwner] = useState(false);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Produto[]>([]);
 
   useEffect(() => {
 
@@ -136,12 +139,12 @@ export default function ProductPage() {
 
         {/* outros produtos */}
         <div className="flex flex-col p-4 gap-4 bg-background h-96">
-          <div className="font-sans text-3xl font-bold bg-blue-400 h-12 w-70"> Da mesma loja </div>
-          <div className="bg-blue-400 flex-1 w-full">
+          <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
+          <div className=" flex-1 w-full">
             <Carrossel>
               {allProducts.length > 0 ? (
                 allProducts.map((p) => (
-                  <h1 key={p?.name}>{p?.name}</h1>
+                  <CardProdutos key={p.id} produto={p} />
                 ))
               ) : (
                 <p> produtos nao encontrados </p>
