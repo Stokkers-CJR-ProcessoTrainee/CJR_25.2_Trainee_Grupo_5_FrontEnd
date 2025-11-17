@@ -1,19 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import Navbar from "@/components/Navbar";
 import Carrossel from "@/components/Carrossel";
 import CardProdutos from "@/components/CardProdutos";
 import { useEffect, useState } from "react";
 import { getProductsByCategory, getAllParentCategories } from "@/api/api";
-
-
-
-
-
-
-
-
-
 
 type Produto = {
   id: number;
@@ -51,7 +43,11 @@ export default function CategoriesPage() {
 
         const allProductLists = await Promise.all(productPromises);
 
-        setCategoryProducts(allProductLists);
+        const shuffledLists = allProductLists.map((productList) =>
+          [...productList].sort(() => 0.5 - Math.random())
+        );
+
+        setCategoryProducts(shuffledLists);
 
       } catch (error) {
         console.error("Failed to fetch page data:", error);
@@ -102,7 +98,13 @@ export default function CategoriesPage() {
                 <Carrossel>
                   {productList.length > 0 ? (
                     productList.map((p) => (
-                      <CardProdutos key={p.id} produto={p} />
+                      <Link
+                        key={p.id}
+                        href={`/product/${p.id}`}
+                        className="block h-full" // block ensures the link wraps the whole card
+                      >
+                        <CardProdutos key={p.id} produto={p} />
+                      </Link>
                     ))
                   ) : (
                     <p> Categoria sem produtos </p>

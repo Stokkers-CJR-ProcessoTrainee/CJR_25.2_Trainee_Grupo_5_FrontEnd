@@ -223,3 +223,27 @@ export async function getAllParentCategories() {
   const res = await api.get('/categories/parents');
   return res.data;
 }
+
+export async function createProduct(storeId, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/products/store/${storeId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+export async function deleteProduct(id) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/products/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+export async function updateProduct(id, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/products/${id}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+};
