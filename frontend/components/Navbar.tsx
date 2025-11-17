@@ -1,13 +1,16 @@
 import { getUserById } from "@/api/api";
+import { useTheme } from "@/context/ThemeProvider";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaBoxOpen, FaSignOutAlt, FaStore, FaUser } from "react-icons/fa";
+import { FaBoxOpen, FaMoon, FaSignOutAlt, FaStore, FaSun, FaUser } from "react-icons/fa";
 
 interface User {
     profile_picture_url: string,
 }
 
 export default function Navbar() {
+    const { theme, toggleTheme } = useTheme();
+
     const [logado, setLogado] = useState(false);
     const [userId, setUserId] = useState<number | null>(null);
     const [user,setUser] = useState<User | null>(null);
@@ -48,7 +51,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/home" className="flex items-center">
             <span className="text-4xl font-extrabold font-sans text-laranja tracking-tight">
-                Stok<span className="text-gray-800">kers</span>
+                Stok<span className="text-balck">kers</span>
             </span>
             </Link>
 
@@ -99,7 +102,13 @@ export default function Navbar() {
                     </button>
                 </div>
             )}
-
+            <button 
+            onClick={toggleTheme}
+            className="p-2 rounded-full text-laranja hover:text-white cursor-pointer  transition absolute left-[2%]"
+            aria-label="Toggle Dark Mode"
+            >
+                {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
+            </button>
         </div>
         </nav>
     );
