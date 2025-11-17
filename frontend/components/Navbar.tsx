@@ -104,7 +104,7 @@ export default function Navbar() {
             )}
             <button 
             onClick={toggleTheme}
-            className="p-2 rounded-full text-laranja hover:text-white cursor-pointer  transition absolute left-[2%]"
+            className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition absolute left-[2%]"
             aria-label="Toggle Dark Mode"
             >
                 {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}

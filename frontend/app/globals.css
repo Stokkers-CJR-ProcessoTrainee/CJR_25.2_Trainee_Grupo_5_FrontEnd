@@ -8,6 +8,7 @@
   --color-card: #e0e0e0;
   --color-laranja2: #d85f00;
   --color-balck: #131313;
+  --color-themeBut: #6f5d9e;
 
   --font-mono: var(--font-geist-mono);
   --font-sans: "Outfit", ui-sans-serif, system-ui;
@@ -18,6 +19,7 @@
   --color-laranja: #ffa500; 
   --color-card: #282828;
   --color-balck: #ffffff;
+  --color-themeBut: #ffa500;
 }
 
 @theme inline {
@@ -26,6 +28,7 @@
   --color-card: var(--color-card);
   --color-laranja2: var(--color-laranja2);
   --color-balck: var(--color-balck);
+  --color-themeBut: var(--color-themeBut);
   
   --font-mono: var(--font-mono);
   --font-sans: var(--font-sans);
