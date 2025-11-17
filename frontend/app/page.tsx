@@ -6,6 +6,9 @@ import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
 import { Store, Products, Category, ProductImage } from "./Types"
+import CardCategorias from "@/components/CardCategorias";
+import CardLojas from "@/components/CardLojas";
+import Link from "next/dist/client/link";
 
 export default function Home() {
 
@@ -79,19 +82,10 @@ export default function Home() {
               <Carrossel>
                 {categories.length > 0 ? (
                   categories.map((cat: any) => (
-                 <div
-                   key={cat.id}
-                   className="p-4 bg-gray-200 rounded-lg hover:shadow-lg transition flex flex-col items-center justify-center"
-                 >
-                   <Image
-                   src="/images/placeholder.png"
-                   alt="Categoria 1"
-                   width={100}
-                   height={100}
-                   />
-                   {cat.name} 
-                 </div>
-                )) 
+                    <Link key={cat.id} href={`/categorie/${cat.id}`}>
+                      <CardCategorias   key={cat.id} name={cat.name}/>
+                    </Link>
+                 ))
                 ): (<p> Categorias não encontradas.</p>)
               }
               </Carrossel>
@@ -107,7 +101,9 @@ export default function Home() {
                 <Carrossel>
                 {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
                   productsByCategory[cat.id]?.map((produto) => (
-                    <CardProdutos key={produto.id} produto={produto} />
+                    <Link key={produto.id} href={`/product/${produto.id}`}>
+                      <CardProdutos key={produto.id} produto={produto} />
+                    </Link>
                   ))
                 ) : (
                   <p>Produtos não encontrados.</p>
@@ -121,13 +117,14 @@ export default function Home() {
           { <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 m-5">
             <Carrossel>
             {stores.length > 0 ? (
-              stores.map((cat: any) => (
-                <div
-                  key={cat.id}
-                  className="p-4 bg-gray-200 rounded-lg hover:shadow-lg transition"
-                >
-                  {cat.name}
-                </div>
+              stores.map((store: any) => (
+                <Link key={store.id} href={`/store/${store.id}`}>
+                  <CardLojas key={store.id}
+                    name={store.name}
+                    category={store.categoryName}
+                    logoUrl={store.logo_url}
+                  />
+                </Link>
               ))
               ) : 
               (<p> Lojas não encontradas.</p>) 
