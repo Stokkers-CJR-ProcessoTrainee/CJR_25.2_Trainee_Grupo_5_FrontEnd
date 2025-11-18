@@ -285,3 +285,8 @@ export async function deleteStoreRating(ratingId){
   }); 
   return res.data;
 }
+
+export async function getChildCategories(parentCategoryId) {
+  const res = await api.get(`/categories/children/${parentCategoryId}`);
+  return res.data;
+}

@@ -82,7 +82,7 @@ export default function Home() {
               <Carrossel>
                 {categories.length > 0 ? (
                   categories.map((cat: any) => (
-                    <Link key={cat.id} href={`/categorie/${cat.id}`}>
+                    <Link key={cat.id} href={`/category/${cat.id}`}>
                       <CardCategorias   key={cat.id} name={cat.name}/>
                     </Link>
                  ))
