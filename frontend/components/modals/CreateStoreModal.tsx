@@ -5,9 +5,10 @@ import { createStore } from "@/api/api";
 interface CreateStoreModalProps {
     abrir: boolean;
     fechar: () => void;
+    onSuccess: () => void;
 }
 
-export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProps) {
+export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateStoreModalProps) {
     if (!abrir) return null;
 
     const[name, setName] = useState('');
@@ -70,7 +71,9 @@ export default function CreateStoreModel({ abrir, fechar }: CreateStoreModalProp
             await createStore(payload);
 
             alert("Loja adicionada com sucesso!")
-            fechar();
+
+            onSuccess();
+
         }   catch (err) {
             console.error(err);
             alert("Erro ao adicionar loja");

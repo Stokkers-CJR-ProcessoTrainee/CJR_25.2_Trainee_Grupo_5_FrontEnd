@@ -234,6 +234,11 @@ export async function getStoreRatingByStore(storeId) {
   return res.data
 }
 
+export async function getProductByCategory(categoryId) {
+  const res = await api.get (`/products/category/${categoryId}`);
+  return res.data
+}
+
 export async function createStoreRating(storeId, data){
   const token = localStorage.getItem('token');
   const res = await api.post(`/store-ratings/store/${storeId}`, data,{

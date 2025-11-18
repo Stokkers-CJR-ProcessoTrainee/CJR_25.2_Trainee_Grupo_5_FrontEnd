@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
+import { getProductRating, getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
-
 
 export default function StorePage() {
     const { id } = useParams();
@@ -25,6 +24,7 @@ export default function StorePage() {
             try {
                 const res = await getProductsByStore(id);
                 setProdutos(res);
+
             } catch(err) {
                 console.error("Erro ao carregar produtos:", err);
             }
@@ -81,19 +81,21 @@ export default function StorePage() {
         }
     }, [id]);
 
-     if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
+    if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
     const totalPages = Math.ceil(produtos.length / ItemsPerPage);
     const startIndex = (currentPage - 1) * ItemsPerPage;
     const endIndex = startIndex + ItemsPerPage;
     const currentProducts = produtos.slice(startIndex, endIndex);
+    const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r:any) => r.rating), 0))) : 0;
+    const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r:any) => r.rating === maxRating));
 
     return (
         <main className="min-h-screen bg-amber-50 pb-16">
 
             <Navbar />
             
-            <div className="relative overflow-hidden w-auto h-100">
+            <div className="relative overflow-hidden w-full h-[400px] max-w-[1920px] mx-auto">
                 {store?.banner_url ? (
                     <img
                     src={store.banner_url}
@@ -118,7 +120,20 @@ export default function StorePage() {
                     </svg>
                 </button>
                 </div>
-                
+            )}
+
+            {Dono && (
+                <div className="absolute z-10 top-42 right-10">
+                <button
+                className="hover:cursor-pointer"
+                >
+                    <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22.5" cy="22.5" r="22.5" fill="#FF6700"/>
+                    <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
+                    <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+                    </svg>
+                </button>
+                </div>
             )}
                 
             </div>
@@ -197,11 +212,11 @@ export default function StorePage() {
                             </div>
                         ))
                     ) : (
-                        <div className="w-full h-10 flex items-center justify-center">
-    <p className="text-gray-500 opacity-60 font-sans text-center">
-        Esta loja não foi avaliada ainda.
-    </p>
-</div>
+                        <div className="w-full h-10 flex -mt-3 items-center justify-center">
+                            <p className="text-gray-500 opacity-60 font-sans text-center">
+                                Esta loja não foi avaliada ainda.
+                            </p>
+                        </div>
                     )}
                 </Carrossel>
                 </div>
@@ -218,12 +233,12 @@ export default function StorePage() {
                 
                 <div className="flex relative rounded-3xl font-sans gap-6">
                     <Carrossel>
-                      {produtos.length > 0 ? (
-                        produtos.map((produto) => (
+                      {TopProdutos.length > 0 ? (
+                        TopProdutos.map((produto) => (
                           <CardProdutos key={produto.id} produto={produto} />
                         ))
                       ) : (
-                        <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos.</p>
+                        <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos avaliados.</p>
                       )}
                     </Carrossel>
                     </div>

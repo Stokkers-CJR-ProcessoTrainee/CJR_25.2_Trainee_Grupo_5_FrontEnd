@@ -71,11 +71,9 @@ export default function UserPage() {
 
   const router = useRouter();
 
-  useEffect(() => {
+  const fetchAllPageData = async () => {
     if (!id) return;
 
-  async function fetchUserData() {
-    setLoading(true);
     try {
       const userData = await getUserById(Number(id));
       setUsuario(userData);
@@ -84,7 +82,7 @@ export default function UserPage() {
       setProdutos(produtosData);
 
       const lojasData = await getStoresByUser(Number(id));
-      setlojas(lojasData);
+      setlojas(lojasData); 
 
       const avaliacoesData = await getUserRatings(Number(id));
       setAvaliacoes({
@@ -92,9 +90,8 @@ export default function UserPage() {
         product_ratings: avaliacoesData.product_ratings || [],
       });
 
-
       const token = localStorage.getItem("token");
-      if (token) {
+      if (token && userData) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           setDono(payload.sub == userData.id)
@@ -109,18 +106,30 @@ export default function UserPage() {
       setUsuario(null);
       setProdutos([]);
       setlojas([]);
-    } finally {
-      setLoading(false);
     }
-  }
+  };
 
-  fetchUserData();
-}, [id]);
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchInitialData = async () => {
+      setLoading(true);
+      await fetchAllPageData(); 
+      setLoading(false);
+    };
+
+    fetchInitialData();
+  }, [id]);
+
+  const handleStoreCreated = async () => {
+    setAbrir(false);   
+    await fetchAllPageData();    
+  };
 
   if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
   if (!usuario) return <p className="text-center mt-20 text-laranja">Usuário não encontrado.</p>;
 
-  return (
+  return ( 
 
     <main className="min-h-screen bg-gray-100 pb-16">
 
@@ -171,8 +180,19 @@ export default function UserPage() {
         
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-[200px] px-4">
-        <h3 className="text-xl font-sans font-bold mb-4">Produtos</h3>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex items-center justify-between w-full mb-4">
+          <h3 className="text-xl font-sans font-bold">Produtos</h3>
+
+          <div
+            className="px-3 py-1 flex items-center justify-center text-laranja font-bold text-sx rounded-full hover:brightness-90 hover:cursor-pointer transition"
+            onClick={() => router.push(`/ver-mais?tipo=produtos-usuario&userId=${usuario.id}`)}
+          >
+            Ver mais
+          </div>
+        </div>
+
+        
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {produtos.length > 0 ? (
             produtos.map((produto) => (
@@ -201,7 +221,7 @@ export default function UserPage() {
 
         </div>
 
-        <div className="flex bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex rounded-3xl font-sans gap-6">
           <Carrossel>
           {lojas.length > 0 ? (
             lojas.map((loja) => (
@@ -233,7 +253,7 @@ export default function UserPage() {
 
         {/* Avaliações de lojas */}
         <h4 className="text-lg font-semibold mt-10 mb-2">Lojas</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {avaliacoes?.store_ratings?.length ? (
             avaliacoes.store_ratings.map((a) => (
@@ -278,7 +298,7 @@ export default function UserPage() {
 
         {/* Avaliações de produtos */}
         <h4 className="text-lg font-semibold mb-2 mt-6">Produtos</h4>
-        <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6">
+        <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
           {avaliacoes?.product_ratings?.length ? (
             avaliacoes.product_ratings.map((a) => (
@@ -326,8 +346,14 @@ export default function UserPage() {
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
       foto={usuario.profile_picture_url}
-      />        
-      
+      />      
+
+      <CreateStoreModel
+        abrir={abrir}
+        fechar={() => setAbrir(false)}
+        onSuccess={handleStoreCreated}
+      />
+  
       <ToastContainer/>
       
     </main>
