@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
+import { getProductRating, getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
-
 
 export default function StorePage() {
   const { id } = useParams();
@@ -93,7 +92,9 @@ export default function StorePage() {
   const startIndex = (currentPage - 1) * ItemsPerPage;
   const endIndex = startIndex + ItemsPerPage;
   const currentProducts = produtos.slice(startIndex, endIndex);
-
+  const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r:any) => r.rating), 0))) : 0;
+  const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r:any) => r.rating === maxRating));
+  
   return (
     <main className="min-h-screen bg-amber-50 pb-16">
 
@@ -166,6 +167,8 @@ export default function StorePage() {
                     alt={r.user.username}
                     className="w-24 h-24 rounded-full object-cover shrink-0"
                   />
+                  
+                  -------------
 
                   {/* conteúdo do comentário */}
                   <div className="flex flex-col justify-between w-full">
@@ -189,9 +192,9 @@ export default function StorePage() {
                               fill="#FFFFFF"
                             />
                           </svg>
-                        ))}
+                         ))}
 
-
+                                    
                       </div>
                     </div>
 
@@ -204,43 +207,45 @@ export default function StorePage() {
                         ver mais
                       </div>
                     </div>
-
+                                
                   </div>
                 </div>
               ))
-            ) : (
-              <div className="w-full h-10 flex items-center justify-center">
-                <p className="text-gray-500 opacity-60 font-sans text-center">
-                  Esta loja não foi avaliada ainda.
-                </p>
-              </div>
-            )}
+             ) : (
+                <div className="w-full h-10 flex -mt-3 items-center justify-center">
+                  <p className="text-gray-500 opacity-60 font-sans text-center">
+                    Esta loja não foi avaliada ainda.
+                  </p>
+                </div>
+                  )
+            }
           </Carrossel>
         </div>
+        
       </div>
 
       {/* Produtos */}
       <div className="w-full max-w-5xl font-sans mx-auto mt-3 px-4">
         <div className="flex text-center gap-1">
           <h3 className="text-xl font-sans font-bold mb-4">
-            Produtos
+            Produtos 
           </h3>
           <h3 className="text-xs mt-2.5 font-sans font-bold">melhor avaliados</h3>
         </div>
-
+                
         <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
-            {produtos.length > 0 ? (
-              produtos.map((produto) => (
+            {TopProdutos.length > 0 ? (
+              TopProdutos.map((produto) => (
                 <CardProdutos key={produto.id} produto={produto} />
               ))
-            ) : (
-              <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos.</p>
-            )}
+             ) : (
+              <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos avaliados.</p>
+             )}
           </Carrossel>
         </div>
       </div>
-
+      
       <div className="mt-10 pb-10">
         <div className="w-full max-w-5xl mx-auto px-4">
 
@@ -315,12 +320,7 @@ export default function StorePage() {
           onUpdated={fetchProducts}
         />
       )}
-
-
-
-
-
-
+      
     </main>
   )
 }

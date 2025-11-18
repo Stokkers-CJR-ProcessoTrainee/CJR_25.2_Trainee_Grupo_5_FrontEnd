@@ -81,6 +81,31 @@ export async function getProductsById(id) {
   return res.data;
 }
 
+export async function getCategories() {
+  const res = await api.get('/categories');
+  return res.data;
+}
+
+export async function getProductsByCategory(categoryId) {
+  const res = await api.get(`/products/category/${categoryId}`);
+  return res.data;
+}
+
+export async function getStores() {
+  const res = await api.get('/stores');
+  return res.data;
+}
+
+export async function getProductImages(productId) {
+  const res = await api.get(`/products-images/product/${productId}`);
+  return res.data;
+}
+
+export async function getCategoryById(categoryId) {
+  const res = await api.get(`/categories/${Number(categoryId)}`);
+  return res.data;
+}
+
 export async function createStore(data) {
   const token = localStorage.getItem("token");
 
@@ -214,11 +239,6 @@ export async function getStoreRatingByStore(storeId) {
   return res.data
 }
 
-export async function getProductsByCategory(categoryId) {
-  const res = await api.get(`/products/category/${categoryId}`);
-  return res.data
-}
-
 export async function getAllParentCategories() {
   const res = await api.get('/categories/parents');
   return res.data;
@@ -247,3 +267,65 @@ export async function updateProduct(id, data) {
   });
   return res.data;
 };
+
+export async function getProductByCategory(categoryId) {
+  const res = await api.get (`/products/category/${categoryId}`);
+  return res.data
+}
+
+export async function createStoreRating(storeId, data){
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/store-ratings/store/${storeId}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  });
+  return res.data; 
+};
+
+export async function updateStoreRating(ratingId, data){
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/store-ratings/${ratingId}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+};
+
+export async function createProductRating(productId, data){
+  const token = localStorage.getItem('token');
+  const res = await api.post(`/product-ratings/product/${productId}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+};
+
+export async function updateProductRating(ratingId, data){
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/product-ratings/${ratingId}`, data,{
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data
+};
+
+export async function getProductById(productId) {
+  return api.get(`/products/${productId}`);
+}
+
+export async function deleteProductRating(ratingId){
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/product-ratings/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function deleteStoreRating(ratingId){
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/store-ratings/${ratingId}`, {
+    headers: {Authorization: `Bearer ${token}`}
+  }); 
+  return res.data;
+}
+
+export async function getChildCategories(parentCategoryId) {
+  const res = await api.get(`/categories/children/${parentCategoryId}`);
+  return res.data;
+}
