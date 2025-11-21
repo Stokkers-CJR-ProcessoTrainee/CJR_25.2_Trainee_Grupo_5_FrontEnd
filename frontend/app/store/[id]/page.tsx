@@ -102,16 +102,31 @@ export default function StorePage() {
 
       <div className="relative overflow-hidden w-auto h-100">
         {store?.banner_url ? (
+          <>
           <img
             src={store.banner_url}
             alt="Banner da loja"
             className="w-full h-full object-cover"
           />
+            <div className="absolute inset-0 bg-black/30"></div>
+          </>
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
             <div className="absolute inset-0 bg-linear-to-b from-black/30 to-transparent pointer-events-none"></div>
           </div>
         )}
+
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+          <h2 className="text-white text-6xl font-bold font-sans drop-shadow-lg tracking-wider text-center">
+            {store?.name}
+          </h2>
+        </div>
+
+        <div className="absolute bottom-4 right-6 z-10">
+          <p className="text-white text-sm font-sans font-light italic drop-shadow-md opacity-90">
+            by {store?.owner?.name || "Nome do Dono"}
+          </p>
+        </div>
 
         {Dono && (
           <div className="flex flex-col gap-4 absolute z-10 top-28 right-10">
@@ -168,8 +183,6 @@ export default function StorePage() {
                     className="w-24 h-24 rounded-full object-cover shrink-0"
                   />
                   
-                  -------------
-
                   {/* conteúdo do comentário */}
                   <div className="flex flex-col justify-between w-full">
                     <div className="flex justify-between items-center">
