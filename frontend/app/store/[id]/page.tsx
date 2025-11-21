@@ -8,9 +8,11 @@ import { getProductRating, getProductsByStore, getStoreById, getStoreRatingBySto
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
+import { useRouter } from "next/navigation";
 
 export default function StorePage() {
   const { id } = useParams();
+  const router = useRouter();
   const [produtos, setProdutos] = useState<any[]>([]);
   const [store, setStore] = useState<any>(null);
   const [ratings, setRatings] = useState<any[]>([]);
@@ -220,9 +222,12 @@ export default function StorePage() {
                     </p>
 
                     <div className="flex justify-end">
-                      <div className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer">
+                      <button 
+                      className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                      onClick={() => router.push(`/rating/store/${r.id}`)}
+                      >
                         ver mais
-                      </div>
+                      </button>
                     </div>
                                 
                   </div>
