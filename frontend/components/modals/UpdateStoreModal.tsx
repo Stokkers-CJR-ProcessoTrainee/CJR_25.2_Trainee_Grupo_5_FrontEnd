@@ -80,12 +80,12 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
 
             await updateStore(store.id, payload);
 
-            alert("Loja atualizada com sucesso!");
+            toast.success("Loja atualizada com sucesso!");
             if (onUpdated) onUpdated();
             fechar();
         }   catch (err) {
             console.error(err);
-            alert("Erro ao atualizar loja");
+            toast.error("Erro ao atualizar loja");
         } finally {
             setLoading(false);
         }

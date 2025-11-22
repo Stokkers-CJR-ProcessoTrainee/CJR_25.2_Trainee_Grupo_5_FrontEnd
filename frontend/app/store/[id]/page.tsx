@@ -9,6 +9,7 @@ import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify"
 
 export default function StorePage() {
   const { id } = useParams();
@@ -33,11 +34,7 @@ export default function StorePage() {
     }
   }
 
-  useEffect(() => {
-    console.log("ID da loja:", id);
-
-
-    async function fetchStore() {
+  async function fetchStore() {
       try {
         const res = await getStoreById(id);
         if (!res) {
@@ -61,8 +58,11 @@ export default function StorePage() {
       } catch (err) {
         console.error("Erro ao carregar loja:", err);
         setStore(null);
-      }
     }
+  }
+
+  useEffect(() => {
+    console.log("ID da loja:", id);
 
     async function fetchRatings() {
       try {
@@ -332,6 +332,7 @@ export default function StorePage() {
           abrir={abrir}
           fechar={() => setAbrir(false)}
           store={store}
+          onUpdated={fetchStore}
         />
       )}
 
