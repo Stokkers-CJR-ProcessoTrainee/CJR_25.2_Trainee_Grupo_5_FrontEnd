@@ -1,0 +1,202 @@
+'use client';
+
+import Link from 'next/link';
+import { getProductsById, getProductsByStore } from "@/api/api";
+import Navbar from "@/components/Navbar";
+import Carrossel from "@/components/Carrossel";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import CardProdutos from "@/components/CardProdutos";
+import EditProductModal from "@/components/modals/EditProductModal";
+import CarrosselVertical from "@/components/CarrosselVertical";
+import ZoomableImage from "@/components/ZoomableImage";
+
+interface Products {
+  id: number,
+  store_id: number,
+  category_id: number,
+  name: string,
+  description?: string,
+  price: number,
+  stock: number,
+  store: { sticker_url: string, user_id: number },
+  category: { name: string },
+  product_images: { order: number, image_url: string }[],
+  product_ratings: { rating: number }[]
+}
+
+type Produto = {
+  id: number;
+  name: string;
+  category_id: number,
+  store_id: number,
+  description: string,
+  price: number;
+  stock: number;
+  product_images?: { id: number; image_url: string; order: number }[];
+  store: { id: number; name: string; sticker_url: string };
+};
+
+export default function ProductPage() {
+  const [products, setProducts] = useState<Products | null>(null);
+  const { id } = useParams();
+  const [mean, setMean] = useState(0);
+  const [reviews, setReviews] = useState(0);
+  const [image_number, setImage] = useState(1);
+  const [isOwner, setOwner] = useState(false);
+  const [allProducts, setAllProducts] = useState<Produto[]>([]);
+  const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
+
+
+  async function fetchProduct() {
+    try {
+      const product = await getProductsById(Number(id));
+      const allProducts = await getProductsByStore(product?.store_id);
+      const filteredProducts = allProducts.filter((item: any) => item.id !== product.id);
+      const shuffledProducts = filteredProducts.sort(() => 0.5 - Math.random());
+      setProducts(product);
+      setAllProducts(shuffledProducts);
+
+      if (product) {
+        const ratings = product?.product_ratings || [];
+
+        if (ratings.length > 0) {
+          const sum = ratings.reduce((acc: number, r: any) => acc + r.rating, 0);
+          const mean = sum / ratings.length;
+
+          setMean(mean);
+          setReviews(ratings.length);
+        }
+      }
+
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setOwner(payload.sub == product?.store?.user_id)
+        } catch (err) {
+          console.error("Token Inválido");
+          setOwner(false);
+        }
+      }
+
+    } catch (err) { console.log(err) }
+
+  }
+
+  useEffect(() => {
+
+    fetchProduct();
+
+  }, [id]);
+
+  return (
+    <main>
+
+      <Navbar />
+
+      <div className="mt-18">
+
+        {/* Container 1 */}
+        <div className="flex flex-row p-4 gap-4 bg-background">
+
+          {/*Espaco temporario*/}
+          <div className="w-1/8"></div>
+
+          {/* fotos */}
+          <div className="flex flex-row w-4/8 h-150 p-4 gap-4">
+            <div className="flex flex-col gap-4 h-full w-4/16">
+
+              <CarrosselVertical className="h-full">
+                {products?.product_images?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="hover:brightness-90 hover:cursor-pointer transition w-full shrink-0 snap-start"
+                    onClick={() => setImage(index)}
+                  >
+                    <img
+                      src={item?.image_url}
+                      alt={`Product thumbnail ${index}`}
+                      className={`rounded-2xl w-full object-cover ${image_number === index ? 'border-3 border-laranja' : 'border-2 border-transparent'
+                        }`}
+                    />
+                  </div>
+                ))}
+              </CarrosselVertical>
+
+            </div>
+            <div className="relative h-full w-3/4">  <ZoomableImage src={products?.product_images?.[image_number]?.image_url} alt="" className="rounded-2xl" />
+              <div className="absolute h-20 w-20 bottom-119 right-3 rounded-full">
+                <Link
+                  key={products?.store_id}
+                  href={`/store/${products?.store_id}`}
+                  className="block h-full"
+                >
+                  <img
+                    src={products?.store?.sticker_url}
+                    alt=""
+                    className="w-20 h-20 rounded-full object-cover"
+                  />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* infos */}
+          <div className="flex flex-col p-4 gap-4 w-3/8 h-150">
+            <div className="flex flex-row gap-4 w-full h-12">
+              <div className="font-sans font-bold capitalize text-3xl w-full h-full"> {products?.name} </div>
+              <div className=" h-full aspect-square p-1">
+                {isOwner && (
+                  <div className="w-10 h-10 text-center bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition p-2" onClick={() => setIsEditProductModalOpen(true)}> ✏️ </div>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-row gap-4 w-full h-8">
+              <div className="font-sans w-1/2 h-full flex-1"> ⭐ {mean} | {reviews} reviews </div>
+              <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.category?.name} </div>
+              <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.stock} disponiveis </div>
+            </div>
+            <div className="font-sans font-bold text-5xl h-16 w-40"> R${products?.price} </div>
+            <div className="flex-1 w-full">
+              <h1 className="font-sans text-xl font-bold mb-5"> Descricao </h1>
+              <p className="font-sans"> {products?.description} </p>
+            </div>
+          </div>
+        </div>
+
+        {/* outros produtos */}
+        <div className="flex flex-col p-4 gap-4 bg-background h-96">
+          <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
+          <div className=" flex-1 w-full">
+            <Carrossel>
+              {allProducts.length > 0 ? (
+                allProducts.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/product/${p.id}`}
+                    className="block h-full" // block ensures the link wraps the whole card
+                  >
+                    <CardProdutos key={p.id} produto={p} />
+                  </Link>
+                ))
+              ) : (
+                <p> produtos nao encontrados </p>
+              )}
+            </Carrossel>
+          </div>
+        </div>
+      </div>
+
+      {isEditProductModalOpen && (
+        <EditProductModal
+          open={isEditProductModalOpen}
+          close={() => setIsEditProductModalOpen(false)}
+          product={products as any}
+          onUpdated={fetchProduct}
+        />
+      )}
+
+    </main>
+  );
+}
