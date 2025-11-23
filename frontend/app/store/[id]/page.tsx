@@ -113,7 +113,7 @@ export default function StorePage() {
           <div className="w-full h-full bg-gray-900 flex items-center justify-center"></div>
         )}
 
-        <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent pointer-events-none"></div>
 
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <h2 className="text-white text-6xl font-bold font-sans tracking-wider text-center">
