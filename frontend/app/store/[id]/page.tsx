@@ -102,24 +102,21 @@ export default function StorePage() {
 
       <Navbar />
 
-      <div className="relative overflow-hidden w-auto h-100">
+      <div className="relative bg-cinza2 overflow-hidden w-auto h-110">
         {store?.banner_url ? (
-          <>
           <img
             src={store.banner_url}
             alt="Banner da loja"
             className="w-full h-full object-cover"
           />
-            <div className="absolute inset-0 bg-black/30"></div>
-          </>
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <div className="absolute inset-0 bg-linear-to-b from-black/30 to-transparent pointer-events-none"></div>
-          </div>
+          <div className="w-full h-full bg-gray-900 flex items-center justify-center"></div>
         )}
 
+        <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
+
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <h2 className="text-white text-6xl font-bold font-sans drop-shadow-lg tracking-wider text-center">
+          <h2 className="text-white text-6xl font-bold font-sans tracking-wider text-center">
             {store?.name}
           </h2>
         </div>
