@@ -4,8 +4,8 @@ import { updateStore, deleteStore } from "@/api/api";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const DEFAULT_STICKER_URL = "/foto-loja.png"; 
-const DEFAULT_LOGO_URL = "/foto-loja.png";
+const DEFAULT_STICKER_URL = "/foto-loja.svg"; 
+const DEFAULT_LOGO_URL = "/foto-loja.svg";
 const DEFAULT_BANNER_URL = "/banner-loja.svg";
 
 interface UpdateStoreModalProps {
@@ -87,7 +87,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
     };
 
     const stickerStatus = getImageState(stickerFile, store.sticker_url, isStickerRemoved, "Anexe a foto de perfil de sua loja", "Perfil Atual", 'sticker');
-    const logoStatus = getImageState(logoFile, store.logo_url, isLogoRemoved, "Anexe a logo em SVG deu sua loja", "Logo Atual", 'logo');
+    const logoStatus = getImageState(logoFile, store.logo_url, isLogoRemoved, "Anexe a logo em SVG de sua loja", "Logo Atual", 'logo');
     const bannerStatus = getImageState(bannerFile, store.banner_url, isBannerRemoved, "Anexe o banner de sua loja", "Banner Atual", 'banner');
 
     const handleForceDelete = (type: 'sticker' | 'logo' | 'banner') => {
