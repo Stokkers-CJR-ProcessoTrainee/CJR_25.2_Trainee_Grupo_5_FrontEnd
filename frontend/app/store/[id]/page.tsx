@@ -102,7 +102,7 @@ export default function StorePage() {
 
       <Navbar />
 
-      <div className="relative bg-cinza2 overflow-hidden w-auto h-110">
+      <div className="relative bg-cinza overflow-hidden w-auto h-110">
         {store?.banner_url ? (
           <img
             src={store.banner_url}
