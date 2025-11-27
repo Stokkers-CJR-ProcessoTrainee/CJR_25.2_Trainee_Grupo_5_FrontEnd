@@ -17,6 +17,7 @@ export default function StoreRatingsPage() {
   const [abrir, setAbrir] = useState(false);
   const [mediaRating, setMediaRating] = useState(0);
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
   async function fetchStore() {
@@ -33,10 +34,14 @@ export default function StoreRatingsPage() {
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             setDono(payload.sub == res.user_id);
+            setIsLogged(true);
           } catch (err) {
             console.error("Token inválido", err);
             setDono(false)
+            setIsLogged(false);
           }
+        } else {
+          setIsLogged(false);
         }
       } catch (err) {
         console.error("Erro ao carregar loja:", err);
