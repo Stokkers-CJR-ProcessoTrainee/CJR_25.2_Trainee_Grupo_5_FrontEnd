@@ -17,6 +17,7 @@ export default function StoreRatingsPage() {
   const [abrir, setAbrir] = useState(false);
   const [mediaRating, setMediaRating] = useState(0);
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
   async function fetchStore() {
       try {
@@ -43,8 +44,7 @@ export default function StoreRatingsPage() {
     }
   }
 
-  useEffect(() => {
-    async function fetchRatings() {
+  async function fetchRatings() {
       try {
         const res = await getStoreRatingByStore(id);
         setRatings(res);
@@ -61,6 +61,7 @@ export default function StoreRatingsPage() {
       }
     }
 
+  useEffect(() => {
     if (id) {
       fetchStore();
       fetchRatings();
