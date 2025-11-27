@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { 
     getProductByCategory,
     getProductsByUser, 
-    getStoresByUser, 
-    getUserRatings 
 } from "@/api/api";
 
 export default function VerMaisPage() {
@@ -19,6 +17,8 @@ export default function VerMaisPage() {
 
     const [dados, setDados] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ItemsPerPage = 30;
 
     useEffect(() => {
         if (!tipo) return;
@@ -42,7 +42,16 @@ export default function VerMaisPage() {
         carregar();
     }, [tipo, userId, categoryId]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [tipo, userId, categoryId])
+
     if (loading) return <p>Carregando...</p>;
+
+    const totalPages = Math.ceil(dados.length / ItemsPerPage);
+    const startIndex = (currentPage - 1) * ItemsPerPage;
+    const endIndex = startIndex + ItemsPerPage;
+    const currentItems = dados.slice(startIndex, endIndex);
 
     return (
         <div className="min-h-screen bg-gray-100 pb-20">
@@ -55,15 +64,44 @@ export default function VerMaisPage() {
         <div className="w-full flex justify-center">
             <div className="grid gap-6 px-20 py-5 justify-center grid-cols-[repeat(auto-fill,minmax(170px,1fr))] max-w-[1200px]">
 
-                {tipo === "produtos-usuario" &&
-                    dados.map((p) => <CardProdutos key={p.id} produto={p} />)}
-                
-                {tipo === "categoria" &&
-                    dados.map((p) => <CardProdutos key={p.id} produto={p} />)}
+                {currentItems.map((p) => (
+                    <CardProdutos key={p.id} produto={p} />
+                ))}
 
             </div>
         </div>
-        
+
+        {dados.length > 0 && (
+            <div className="flex justify-center items-center gap-2 mt-8">
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 bg-gray-200 rounded-lg disabled:opacity-50 enabled:hover:cursor-pointer"
+                    >
+                        &lt;
+                    </button>
+
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`px-3 hover:cursor-pointer py-1 rounded-lg ${
+                                currentPage === i + 1 ? "bg-laranja text-white" : "bg-gray-200"
+                            }`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 bg-gray-200 rounded-lg disabled:opacity-50 enabled:hover:cursor-pointer"
+                    >
+                        &gt;
+                    </button>
+                </div>
+        )}
     </div>
     );
 }
