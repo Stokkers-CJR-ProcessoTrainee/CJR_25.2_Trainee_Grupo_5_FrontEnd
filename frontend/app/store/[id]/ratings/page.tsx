@@ -246,6 +246,7 @@ export default function StoreRatingsPage() {
         open={isRatingModalOpen}
         onClose={() => setIsRatingModalOpen(false)}
         storeId={Number(id)}
+        onSuccess={fetchRatings}
       />
       
     </main>
