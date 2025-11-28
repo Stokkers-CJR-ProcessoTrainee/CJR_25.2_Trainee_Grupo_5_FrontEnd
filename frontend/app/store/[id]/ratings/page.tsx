@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CreateProductModal from "@/components/modals/CreateProductModal"; // 1. Restaurado
+import { CreateStoreRatingModal } from "@/components/modals/RateModal/RateStore";
 
 export default function StoreRatingsPage() {
   const { id } = useParams();
@@ -240,6 +241,12 @@ export default function StoreRatingsPage() {
           }}
         />
       )}
+
+      <CreateStoreRatingModal
+        open={isRatingModalOpen}
+        onClose={() => setIsRatingModalOpen(false)}
+        storeId={Number(id)}
+      />
       
     </main>
   )
