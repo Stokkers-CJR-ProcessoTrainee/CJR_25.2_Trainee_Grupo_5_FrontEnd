@@ -147,6 +147,16 @@ export default function StoreRatingsPage() {
           {mediaRating.toFixed(1)}
         </p>
 
+        {!Dono && isLogged && (
+          <button
+            onClick={() => setIsRatingModalOpen(true)}
+            className="mb-8 px-20 py-2.5 border-2 border-laranja text-laranja font-sans font-bold text-lg rounded-full hover:cursor-pointer flex items-center gap-2 hover:bg-laranja hover:text-white transition-all"
+          >
+            Adicionar Review
+          </button>
+        )}
+
+
         {/* --- LISTA DE CARDS --- */}
         <div className="flex flex-col gap-6 pb-10 items-center w-full px-4">
           {ratings.length > 0 ? (
