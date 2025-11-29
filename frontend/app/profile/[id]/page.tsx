@@ -357,6 +357,7 @@ export default function UserPage() {
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
       foto={usuario.profile_picture_url}
+      onSuccess={fetchAllPageData}
       />      
 
       <CreateStoreModel
