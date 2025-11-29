@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import CreateStoreModel from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
 import { useRouter } from "next/navigation";
@@ -122,7 +122,8 @@ export default function UserPage() {
   }, [id]);
 
   const handleStoreCreated = async () => {
-    setAbrir(false);   
+    setAbrir(false);  
+    toast.success('Loja criada com sucesso!'); 
     await fetchAllPageData();    
   };
 
