@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import CreateStoreModel from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
 import { useRouter } from "next/navigation";
@@ -84,6 +84,12 @@ export default function UserPage() {
       const lojasData = await getStoresByUser(Number(id));
       setlojas(lojasData); 
 
+      if (lojasData && Array.isArray(lojasData)) {
+        lojasData.sort((a: Loja, b: Loja) => b.id - a.id);
+      }
+
+      setlojas(lojasData);
+
       const avaliacoesData = await getUserRatings(Number(id));
       setAvaliacoes({
         store_ratings: avaliacoesData.store_ratings || [],
@@ -122,7 +128,8 @@ export default function UserPage() {
   }, [id]);
 
   const handleStoreCreated = async () => {
-    setAbrir(false);   
+    setAbrir(false);  
+    toast.success('Loja criada com sucesso!'); 
     await fetchAllPageData();    
   };
 
@@ -212,10 +219,14 @@ export default function UserPage() {
 
           {Dono && (
           <div 
-          className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition"
+          className="hover:brightness-90 hover:cursor-pointer transition"
           onClick={() => setAbrir(true)}
           >
-            +
+            <svg width="30" height="30" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22.5" cy="22.5" r="22.5" fill="#FF9933"/>
+            <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
+            <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+            </svg>
           </div>
           )}
 
@@ -227,7 +238,7 @@ export default function UserPage() {
             lojas.map((loja) => (
               <div
                 key={loja.id}
-                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
+                className="shrink-0 min-w-[400px] gap-2 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
                 onClick={() => router.push(`/store/${loja.id}`)}
               >
                 <div className="text-2xl flex flex-col items-center justify-center">{loja.name}</div>
@@ -346,6 +357,7 @@ export default function UserPage() {
       mostrar={mostrar}
       fechar={() => setMostrar(false)}
       foto={usuario.profile_picture_url}
+      onSuccess={fetchAllPageData}
       />      
 
       <CreateStoreModel
