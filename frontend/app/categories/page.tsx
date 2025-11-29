@@ -93,7 +93,13 @@ export default function CategoriesPage() {
               <div key={category.id} className="flex flex-col gap-10">
                 <div className="flex flex-row">
                   <div className="flex flex-row gap-2 flex-1"> <div className="font-sans text-3xl font-bold"> {productList.length} Produtos </div> <div className="font-bold pt-3"> em </div> <div className="text-laranja font-bold pt-3"> {category.name} </div> </div>
-                  <div className="w-25 text-laranja font-bold font-sans pt-3 hover:brightness-90 hover:cursor-pointer transition"> ver mais </div>
+                  <Link
+                    key={category.id}
+                    href={`/category/${category.id}`}
+                    className="block h-full"
+                  >
+                    <div className="w-25 text-laranja font-bold font-sans pt-3 hover:brightness-90 hover:cursor-pointer transition"> ver mais </div>
+                  </Link>
                 </div>
                 <Carrossel>
                   {productList.length > 0 ? (
@@ -101,7 +107,7 @@ export default function CategoriesPage() {
                       <Link
                         key={p.id}
                         href={`/product/${p.id}`}
-                        className="block h-full" // block ensures the link wraps the whole card
+                        className="block h-full"
                       >
                         <CardProdutos key={p.id} produto={p} />
                       </Link>
