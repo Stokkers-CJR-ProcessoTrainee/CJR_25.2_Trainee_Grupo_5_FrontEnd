@@ -227,7 +227,7 @@ export default function UserPage() {
             lojas.map((loja) => (
               <div
                 key={loja.id}
-                className="min-w-[400px] gap-10 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
+                className="shrink-0 min-w-[400px] gap-2 bg-white shadow rounded-4xl p-4 h-40 flex items-center justify-center text-gray-800 hover:cursor-pointer font-semibold"
                 onClick={() => router.push(`/store/${loja.id}`)}
               >
                 <div className="text-2xl flex flex-col items-center justify-center">{loja.name}</div>
