@@ -42,7 +42,7 @@ export default function ProductPage() {
   const { id } = useParams();
   const [mean, setMean] = useState(0);
   const [reviews, setReviews] = useState(0);
-  const [image_number, setImage] = useState(1);
+  const [image_number, setImage] = useState(0);
   const [isOwner, setOwner] = useState(false);
   const [allProducts, setAllProducts] = useState<Produto[]>([]);
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
