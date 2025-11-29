@@ -84,6 +84,12 @@ export default function UserPage() {
       const lojasData = await getStoresByUser(Number(id));
       setlojas(lojasData); 
 
+      if (lojasData && Array.isArray(lojasData)) {
+        lojasData.sort((a: Loja, b: Loja) => b.id - a.id);
+      }
+
+      setlojas(lojasData);
+
       const avaliacoesData = await getUserRatings(Number(id));
       setAvaliacoes({
         store_ratings: avaliacoesData.store_ratings || [],
