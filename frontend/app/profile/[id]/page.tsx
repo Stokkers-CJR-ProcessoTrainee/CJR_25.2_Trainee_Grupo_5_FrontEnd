@@ -219,10 +219,14 @@ export default function UserPage() {
 
           {Dono && (
           <div 
-          className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition"
+          className="hover:brightness-90 hover:cursor-pointer transition"
           onClick={() => setAbrir(true)}
           >
-            +
+            <svg width="30" height="30" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22.5" cy="22.5" r="22.5" fill="#FF9933"/>
+            <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
+            <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+            </svg>
           </div>
           )}
 
