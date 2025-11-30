@@ -172,6 +172,23 @@ export default function StorePage() {
         </p>
 
         <div className="px-40 mt-5 py-10">
+          
+          {ratings.length > 0 ? (
+            <div 
+              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              onClick={() => router.push(`/store/${id}/ratings`)}
+              >
+              Avaliações
+            </div>
+          ) : (
+            <div 
+              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              onClick={() => router.push(`/store/${id}/ratings`)}
+              >
+              Avaliar
+            </div>
+          )}
+   
           <Carrossel>
             {ratings.length > 0 ? (
               ratings.map((r) => (
