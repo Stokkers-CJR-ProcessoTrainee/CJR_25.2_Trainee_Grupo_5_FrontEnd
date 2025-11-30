@@ -12,7 +12,7 @@ import Link from "next/link";
 
 import { Store, Products, Category } from "./Types";
 
-import { FiSearch } from "react-icons/fi";
+import { FaSearch } from "react-icons/fa";
 
 export default function Home() {
 
@@ -25,18 +25,15 @@ export default function Home() {
   const [showResults, setShowResults] = useState(false);
 
   async function fetchCategories() {
-    const categories = await getCategories();
-    return categories;
+    return await getCategories();
   }
 
   async function fetchProductsbyCategory(categoryId: number) {
-    const products = await getProductsByCategory(categoryId);
-    return products;
+    return await getProductsByCategory(categoryId);
   }
 
   async function fetchStores() {
-    const stores = await getStores();
-    return stores;
+    return await getStores();
   }
 
   useEffect(() => {
@@ -63,6 +60,7 @@ export default function Home() {
     loadData();
   }, []);
 
+  // 🔎 Lógica de busca (mantida)
   function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
@@ -99,6 +97,7 @@ export default function Home() {
     <main>
       <Navbar/>
 
+      {/* HERO */}
       <div className="flex justify-center items-center bg-laranja p-10 pt-25 gap-10"> 
         <div className="text-white font-sans font-extrabold text-4xl tracking-wider mb-6 text-end h-32 w-196">
           <h1>Prepare-se para se despedir da desordem com o STOKKERS!</h1>
@@ -116,24 +115,48 @@ export default function Home() {
 
       <div className="bg-back p-30">
 
-        <div className="relative flex justify-end mr-10 mt-5">
-          <div className="w-140 relative">
+        {/* 🔍 NOVA BARRA DE PESQUISA — IGUAL A CATEGORY PAGE */}
+        <div className="flex justify-end w-full mb-6 mt-20 relative pr-10">
+          <div className="w-full max-w-xl relative">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 
             <input
               type="text"
-              className="w-full px-4 py-2 bg-card text-text rounded-full border border-transparent focus:border-laranja focus:outline-none"
-              placeholder="Procurar por..."
+              placeholder="Buscar..."
               value={searchTerm}
               onChange={handleSearchInput}
               onFocus={() => searchResults.length > 0 && setShowResults(true)}
+              className="
+                w-full
+                bg-card
+                border border-transparent
+                rounded-full
+                py-3 pl-12 pr-4
+                text-sm
+                shadow
+                focus:border-laranja
+                outline-none
+                transition
+                text-text
+              "
             />
 
-            <button className="absolute right-3 top-2.5 text-gray-500">
-              <FiSearch size={20} />
-            </button>
-
             {showResults && searchResults.length > 0 && (
-              <div className="absolute mt-2 w-full bg-card shadow-xl rounded-xl text-text max-h-60 overflow-y-auto z-10 border border-transparent">
+              <div
+                className="
+                  absolute
+                  w-full
+                  bg-card
+                  border
+                  border-transparent
+                  rounded-xl
+                  shadow-lg
+                  mt-2
+                  max-h-80
+                  overflow-y-auto
+                  z-50
+                "
+              >
                 {searchResults.map((result, index) => (
                   <Link
                     key={index}
@@ -146,17 +169,24 @@ export default function Home() {
                     }
                     onClick={() => setShowResults(false)}
                   >
-                    <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                      <p className="text-xs text-gray-500">{result.type}</p>
-                      <p className="font-medium">{result.item.name}</p>
+                    <div
+                      className="
+                        px-4 py-3
+                        hover:bg-gray-50
+                        cursor-pointer
+                        transition
+                      "
+                    >
+                      <p className="text-xs text-laranja">{result.type}</p>
+                      <p className="text-text text-sm font-medium">{result.item.name}</p>
                     </div>
                   </Link>
                 ))}
               </div>
             )}
-
           </div>
         </div>
+
 
         <h2 className="text-text font-sans text-4xl ml">Categorias</h2>
         <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5"> 

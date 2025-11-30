@@ -132,9 +132,9 @@ export default function CategoryPage() {
                 className="
                   absolute
                   w-full
-                  bg-white
+                  bg-card
                   border
-                  border-gray-200
+                  border-transparent
                   rounded-xl
                   shadow-lg
                   mt-2
@@ -161,7 +161,7 @@ export default function CategoryPage() {
                         alt={p.name}
                         className="w-10 h-10 rounded-md object-cover"
                       />
-                      <span className="text-gray-700 text-sm">{p.name}</span>
+                      <span className="text-text text-sm">{p.name}</span>
                     </div>
                   ))
                 ) : (
