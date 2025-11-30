@@ -72,13 +72,13 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="p-30">
-          <form className="flex justify-end mr-10 mt-5 gap-2">
+      <div className="bg-back p-30">
+          <form className=" flex justify-end mr-10 mt-5 gap-2">
             <input type="text" placeholder="Procurar" />
             <button type="submit">Enviar</button>
           </form>
-          <h2 className="text-laranja font-sans text-4xl ml">Categorias</h2>
-          { <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 m-5"> 
+          <h2 className="text-text font-sans text-4xl ml">Categorias</h2>
+          { <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5"> 
               <Carrossel>
                 {categories.length > 0 ? (
                   categories.map((cat: any) => (
@@ -93,11 +93,11 @@ export default function Home() {
           }
           {categories.slice(0, 3).map((cat) => (
             <div key={cat.id}>
-              <h2 className="text-laranja font-sans text-4xl ml">
+              <h2 className="text-text font-sans text-4xl ml">
                 Produtos <span className="text-sm">em {cat.name}</span>
               </h2>
                     
-              <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 m-5">
+              <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5">
                 <Carrossel>
                 {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
                   productsByCategory[cat.id]?.map((produto) => (
@@ -113,8 +113,8 @@ export default function Home() {
               </div>
             </div>
           ))}
-          <h2 className="text-laranja font-sans text-4xl ml">Lojas</h2>
-          { <div className="flex relative bg-gray-200 rounded-3xl p-5 font-sans gap-6 m-5">
+          <h2 className="text-text font-sans text-4xl ml">Lojas</h2>
+          { <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5">
             <Carrossel>
             {stores.length > 0 ? (
               stores.map((store: any) => (
