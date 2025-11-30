@@ -77,7 +77,7 @@ export default function StoreRatingsPage() {
   if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
   return (
-    <main className="min-h-screen bg-gray-100 pb-16">
+    <main className="min-h-screen bg-cinza pb-16">
 
       <Navbar />
 
@@ -133,7 +133,7 @@ export default function StoreRatingsPage() {
         )}
       </div>
 
-      <div className="relative bg-gray-100 flex flex-col items-center">
+      <div className="relative bg-cinza flex flex-col items-center">
         <img
           src={store.sticker_url}
           alt={`${store.name} sticker`}
