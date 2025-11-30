@@ -272,7 +272,8 @@ export default function UserPage() {
             avaliacoes.store_ratings.map((a) => (
               <div
                 key={`store-${a.id}`}
-                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between"
+                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between hover:cursor-pointer"
+                onClick={() => router.push(`/rating/store/${a.id}`)}
               >
                 {/* Conteúdo do card da loja */}
                 <div className="flex justify-between">
@@ -317,7 +318,7 @@ export default function UserPage() {
             avaliacoes.product_ratings.map((a) => (
               <div
                 key={`product-${a.id}`}
-                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between"
+                className="min-w-[400px] bg-white shadow rounded-4xl p-4 py-8 flex flex-col justify-between hover:cursor-pointer"
               >
                 {/* Conteúdo do card do produto */}
                 <div className="flex justify-between">
