@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
 import { getProductsByCategory, getChildCategories } from "@/api/api";
 import { Category, Products } from "@/app/Types";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaChevronDown } from "react-icons/fa";
 
 export default function CategoryPage() {
   const { id } = useParams();
@@ -19,6 +19,7 @@ export default function CategoryPage() {
   const [products, setProducts] = useState<Products[]>([]);
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState("default");
+  const [openOrder, setOpenOrder] = useState(false);
 
   const categoryHeroTexts: Record<number, string> = {
     1: "O universo da tecnologia em um só lugar",
@@ -57,7 +58,6 @@ export default function CategoryPage() {
         const allProducts = [...(ownProducts || []), ...(childProducts || [])];
         setProducts(allProducts);
       } catch (err: any) {
-        console.error(err);
         setError(err?.message || "Erro ao carregar categoria");
       } finally {
         setLoading(false);
@@ -72,11 +72,14 @@ export default function CategoryPage() {
   const ordered = [...filtered].sort((a, b) => {
     if (order === "price-asc") return a.price - b.price;
     if (order === "price-desc") return b.price - a.price;
+    if (order === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
+    if (order === "recent")
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     return 0;
   });
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-back">
       <Navbar />
 
       <section className="w-full bg-laranja flex items-center justify-center px-20 min-h-[400px] mt-16">
@@ -103,7 +106,8 @@ export default function CategoryPage() {
 
       <div className="bg-back px-10 py-6">
 
-        <div className="flex justify-end w-full mb-6 mt-20 relative">
+        <div className="flex items-center justify-between w-full px-40 mt-20 mb-10">
+
           <div className="w-full max-w-xl relative">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 
@@ -172,10 +176,77 @@ export default function CategoryPage() {
               </div>
             )}
           </div>
+
+          <div className="relative">
+            <button
+              onClick={() => setOpenOrder((prev) => !prev)}
+              className="
+                bg-card p-3 rounded-full shadow px-6 text-sm
+                flex items-center gap-2
+                hover:bg-gray-100 transition
+                text-text
+              "
+            >
+              Ordenar por
+              <FaChevronDown
+                size={12}
+                className={openOrder ? "rotate-180 transition" : "transition"}
+              />
+            </button>
+
+            {openOrder && (
+              <div
+                className="
+                  absolute right-0 mt-2 
+                  bg-card shadow-xl rounded-xl
+                  w-48 z-50
+                  text-laranja
+                  overflow-hidden
+                  animate-fadeIn
+                "
+              >
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setOrder("price-asc");
+                    setOpenOrder(false);
+                  }}
+                >
+                  Menor preço
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setOrder("price-desc");
+                    setOpenOrder(false);
+                  }}
+                >
+                  Maior preço
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setOrder("rating");
+                    setOpenOrder(false);
+                  }}
+                >
+                  Maior avaliação
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  onClick={() => {
+                    setOrder("recent");
+                    setOpenOrder(false);
+                  }}
+                >
+                  Mais recente
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="flex items-center justify-between m-40 mt-10 mb-8 gap-4">
-
+        <div className="flex items-center gap-4 px-40 mb-10">
           {childCategories.map((cat) => (
             <button
               key={cat.id}
@@ -185,16 +256,6 @@ export default function CategoryPage() {
               {cat.name}
             </button>
           ))}
-
-          <select
-            className="bg-white p-3 rounded-full shadow text-sm transition"
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-          >
-            <option value="default">Ordenar por</option>
-            <option value="price-asc">Menor preço</option>
-            <option value="price-desc">Maior preço</option>
-          </select>
         </div>
 
         <div className="grid grid-cols-5 gap-20 md:grid-cols-5 sm:grid-cols-3 m-20 p-5">
