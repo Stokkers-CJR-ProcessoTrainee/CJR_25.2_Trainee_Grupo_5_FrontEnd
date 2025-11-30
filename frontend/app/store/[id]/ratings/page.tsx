@@ -20,6 +20,7 @@ export default function StoreRatingsPage() {
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [currentUserId, SetCurrentId] = useState<any>(null);
 
   async function fetchStore() {
       try {
@@ -34,6 +35,7 @@ export default function StoreRatingsPage() {
         if (token) {
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
+            SetCurrentId(payload.sub);
             setDono(payload.sub == res.user_id);
             setIsLogged(true);
           } catch (err) {
@@ -73,6 +75,10 @@ export default function StoreRatingsPage() {
       fetchRatings();
     }
   }, [id]);
+
+  const UserAvaliou = ratings.some((r:any) => 
+    r.user_id == currentUserId || r.user?.id == currentUserId
+  );
 
   if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
@@ -148,7 +154,7 @@ export default function StoreRatingsPage() {
           {mediaRating.toFixed(1)}
         </p>
 
-        {!Dono && isLogged && (
+        {!Dono && isLogged && !UserAvaliou &&(
           <button
             onClick={() => setIsRatingModalOpen(true)}
             className="mb-8 px-20 py-2.5 border-2 border-laranja text-laranja font-sans font-bold text-lg rounded-full hover:cursor-pointer flex items-center gap-2 hover:bg-laranja hover:text-white transition-all"
@@ -159,7 +165,7 @@ export default function StoreRatingsPage() {
 
 
         {/* --- LISTA DE CARDS --- */}
-        <div className="flex flex-col gap-6 pb-10 items-center w-full px-4">
+        <div className="flex flex-col mt-3 gap-10 pb-10 items-center w-full px-4">
           {ratings.length > 0 ? (
             ratings.map((r) => (
               <div

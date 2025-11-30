@@ -18,7 +18,7 @@ export default function VerMaisPage() {
     const [dados, setDados] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const ItemsPerPage = 30;
+    const ItemsPerPage = 25;
 
     useEffect(() => {
         if (!tipo) return;

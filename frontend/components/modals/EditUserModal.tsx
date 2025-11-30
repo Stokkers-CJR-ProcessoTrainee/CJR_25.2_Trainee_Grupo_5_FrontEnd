@@ -1,9 +1,10 @@
 'use client';
 import { deleteUser, updateData } from "@/api/api";
-import { FormEvent, useState, ChangeEvent } from "react";
+import { FormEvent, useState, ChangeEvent, use } from "react";
 import { FaCrown, FaEnvelope, FaLock, FaPen, FaTimes, FaTrash, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 import EditUserPass from "./UpdatePassModal";
+import { useRouter } from "next/navigation";
 
 interface EditUserModalProps {
     mostrar: boolean;
@@ -13,6 +14,7 @@ interface EditUserModalProps {
 }
 
 export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUserModalProps) {
+    const router = useRouter();
     const [name, setName] = useState('');
     const [user, setUser] = useState('');
     const [email, setEmail] = useState('');
@@ -103,6 +105,7 @@ export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUs
             await deleteUser();
             toast.warning('Usuário deletado com sucesso!');
             localStorage.removeItem('token');
+            router.push('/');
         } catch (err:any) {
             toast.error("Erro ao deletar");
         }
