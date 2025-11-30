@@ -51,7 +51,7 @@ export default function Home() {
       );
 
       const mapped: Record<number, Products[]> = {};
-      featuredCategories.forEach((cat: Products, i: any) => {
+      featuredCategories.forEach((cat: Category, i: number) => {
         mapped[cat.id] = productsArray[i];
       });
 
