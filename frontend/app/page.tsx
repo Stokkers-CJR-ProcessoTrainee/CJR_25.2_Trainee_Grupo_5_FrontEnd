@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import { getCategories, getProductsByCategory, getStores } from "@/api/api";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Store, Products, Category } from "./Types";
 
 import { FaSearch } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
 
@@ -23,6 +24,8 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
+
+  const router = useRouter();
 
   async function fetchCategories() {
     return await getCategories();
@@ -189,7 +192,7 @@ export default function Home() {
 
 
         <h2 className="text-text font-sans text-4xl ml">Categorias</h2>
-        <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5"> 
+        <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5"> 
           <Carrossel>
             {categories.length > 0 ? (
               categories.map((cat: any) => (
@@ -209,7 +212,18 @@ export default function Home() {
               Produtos <span className="text-sm">em {cat.name}</span>
             </h2>
 
-            <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5">
+          {productsByCategory[cat.id]?.length > 0 && (
+            <div 
+              className="w-fit ml-auto flex justify-end font-sans text-laranja -mt-8 font-bold hover:cursor-pointer"
+              onClick={() => router.push(`/ver-mais?tipo=categoria&categoryId=${cat.id}`)}
+              >
+              Ver mais
+            </div>
+            )}
+            
+
+            <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5">
+              
               <Carrossel>
                 {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
                   productsByCategory[cat.id]?.map((produto) => (
@@ -226,7 +240,7 @@ export default function Home() {
         ))}
 
         <h2 className="text-text font-sans text-4xl ml">Lojas</h2>
-        <div className="flex relative bg-back rounded-3xl p-5 font-sans gap-6 m-5">
+        <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5">
           <Carrossel>
             {stores.length > 0 ? (
               stores.map((store: any) => (
