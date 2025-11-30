@@ -1,8 +1,9 @@
 'use client';
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { updateStore, deleteStore } from "@/api/api";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const DEFAULT_STICKER_URL = "/foto-loja.svg"; 
 const DEFAULT_LOGO_URL = "/foto-loja.svg";
@@ -16,6 +17,7 @@ interface UpdateStoreModalProps {
 }
 
 export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: UpdateStoreModalProps) {
+    const router = useRouter();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
@@ -141,7 +143,12 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
 
     const handleDeleteStore = async () => {
         if (!confirm("Deletar loja?")) return;
-        try { await deleteStore(store.id); toast.success("Deletada!"); if(onUpdated) onUpdated(); fechar(); } 
+        try { 
+            await deleteStore(store.id); 
+            toast.success("Deletada!"); 
+            fechar();
+            router.back();
+        } 
         catch { toast.error("Erro ao deletar"); }
     }
 
