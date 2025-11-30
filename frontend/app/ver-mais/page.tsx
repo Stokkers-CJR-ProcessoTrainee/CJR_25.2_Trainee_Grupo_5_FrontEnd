@@ -54,7 +54,7 @@ export default function VerMaisPage() {
     const currentItems = dados.slice(startIndex, endIndex);
 
     return (
-        <div className="min-h-screen bg-gray-100 pb-20">
+        <div className="min-h-screen bg-back pb-20">
         <Navbar />
 
         <h1 className="text-2xl font-bold px-10 mt-8 mb-4">
