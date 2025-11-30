@@ -114,16 +114,16 @@ export default function CategoryPage() {
               onChange={(e) => setSearch(e.target.value)}
               className="
                 w-full
-                bg-white
-                border border-gray-300
+                bg-card
+                border border-transparent
                 rounded-full
                 py-3 pl-12 pr-4
                 text-sm
                 shadow
-                focus:ring-2 focus:ring-laranja/40
                 focus:border-laranja
                 outline-none
                 transition
+                text-text
               "
             />
 
