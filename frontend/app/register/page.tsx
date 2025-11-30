@@ -52,7 +52,7 @@ export default function RegisterPage() {
         
         {/* Card */}
         <div
-          className="bg-card flex-1 flex flex-col p-10 rounded-2xl shadow-lg max-w-md text-center"
+          className="bg-cinza flex-1 flex flex-col p-10 rounded-2xl shadow-lg max-w-md text-center"
         >
           <h1
             className="text-laranja font-sans font-extrabold text-4xl tracking-wider mb-6"
@@ -64,7 +64,7 @@ export default function RegisterPage() {
             onSubmit={handleRegister}
             className="flex flex-col gap-3 my-2 text-gray-800 mb-3">
             <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
+              className="bg-back text-text rounded-full p-2 pl-4 border border-transparent focus:border-laranja focus:outline-none"
               type="text"
               name="nome"
               placeholder="Nome Completo"
@@ -73,7 +73,7 @@ export default function RegisterPage() {
               onChange={(e) => setName(e.target.value)}
             />
             <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
+              className="bg-back text-text rounded-full p-2 pl-4 border border-transparent focus:border-laranja focus:outline-none "
               type="text"
               name="user"
               placeholder="Username"
@@ -81,7 +81,7 @@ export default function RegisterPage() {
               onChange={(e) => setUsername(e.target.value)}              
             />
             <input
-              className="bg-background rounded-full p-2 pl-4 border border-gray-300"
+              className="bg-back text-text rounded-full p-2 pl-4 border border-transparent focus:border-laranja focus:outline-none"
               type="email"
               name="email"
               placeholder="Email"
@@ -95,7 +95,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               type={showAtual ? "text" : "password"}
               placeholder="Senha"
-              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              className="bg-back text-text rounded-full p-2 pl-4 pr-10 border border-transparent w-full focus:border-laranja focus:outline-none"
               />
               <button
               type="button"
@@ -111,7 +111,7 @@ export default function RegisterPage() {
               onChange={(e) => setPasswordConfirm(e.target.value)}
               type={showAtual ? "text" : "password"}
               placeholder="Confirmar Senha"
-              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              className="bg-back text-text rounded-full p-2 pl-4 pr-10 border border-transparent w-full focus:border-laranja focus:outline-none"
               />
               <button
               type="button"
