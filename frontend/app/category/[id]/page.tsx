@@ -21,6 +21,9 @@ export default function CategoryPage() {
   const [order, setOrder] = useState("default");
   const [openOrder, setOpenOrder] = useState(false);
 
+  const [openFilters, setOpenFilters] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
+
   const categoryHeroTexts: Record<number, string> = {
     1: "O universo da tecnologia em um só lugar",
     2: "Entre no mundo dos games",
@@ -65,11 +68,16 @@ export default function CategoryPage() {
     })();
   }, [categoryId]);
 
-  const filtered = products.filter((p) =>
+  const searchFiltered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const ordered = [...filtered].sort((a, b) => {
+  const categoryFiltered =
+    selectedFilters.length === 0
+      ? searchFiltered
+      : searchFiltered.filter((p) => selectedFilters.includes(p.category.id));
+
+  const ordered = [...categoryFiltered].sort((a, b) => {
     if (order === "price-asc") return a.price - b.price;
     if (order === "price-desc") return b.price - a.price;
     if (order === "rating") return (b.rating ?? 0) - (a.rating ?? 0);
@@ -77,6 +85,12 @@ export default function CategoryPage() {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     return 0;
   });
+
+  function toggleFilter(id: number) {
+    setSelectedFilters((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  }
 
   return (
     <main className="min-h-screen bg-back">
@@ -147,8 +161,8 @@ export default function CategoryPage() {
                   z-50
                 "
               >
-                {filtered.length > 0 ? (
-                  filtered.map((p) => (
+                {searchFiltered.length > 0 ? (
+                  searchFiltered.map((p) => (
                     <div
                       key={p.id}
                       className="
@@ -177,72 +191,128 @@ export default function CategoryPage() {
             )}
           </div>
 
-          <div className="relative">
-            <button
-              onClick={() => setOpenOrder((prev) => !prev)}
-              className="
-                bg-card p-3 rounded-full shadow px-6 text-sm
-                flex items-center gap-2
-                hover:bg-gray-100 transition
-                text-text
-              "
-            >
-              Ordenar por
-              <FaChevronDown
-                size={12}
-                className={openOrder ? "rotate-180 transition" : "transition"}
-              />
-            </button>
-
-            {openOrder && (
-              <div
+          <div className="flex items-center gap-4">
+            
+            <div className="relative">
+              <button
+                onClick={() => setOpenFilters((prev) => !prev)}
                 className="
-                  absolute right-0 mt-2 
-                  bg-card shadow-xl rounded-xl
-                  w-48 z-50
-                  text-laranja
-                  overflow-hidden
-                  animate-fadeIn
+                  bg-card p-3 rounded-full shadow px-6 text-sm
+                  flex items-center gap-2
+                  hover:bg-gray-100 transition
+                  text-text
                 "
               >
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setOrder("price-asc");
-                    setOpenOrder(false);
-                  }}
+                Filtros
+                <FaChevronDown
+                  size={12}
+                  className={openFilters ? "rotate-180 transition" : "transition"}
+                />
+              </button>
+
+              {openFilters && (
+                <div
+                  className="
+                    absolute right-0 mt-2 
+                    bg-card shadow-xl rounded-xl
+                    w-56 z-50
+                    overflow-hidden
+                    animate-fadeIn
+                    p-3
+                  "
                 >
-                  Menor preço
-                </button>
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setOrder("price-desc");
-                    setOpenOrder(false);
-                  }}
+                  {childCategories.map((cat) => (
+                    <label
+                      key={cat.id}
+                      className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedFilters.includes(cat.id)}
+                        onChange={() => toggleFilter(cat.id)}
+                        className="accent-laranja"
+                      />
+                      <span className="text-sm text-text">{cat.name}</span>
+                    </label>
+                  ))}
+
+                  {childCategories.length === 0 && (
+                    <div className="text-sm text-gray-500 px-2 py-2">
+                      Nenhuma categoria
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => setOpenOrder((prev) => !prev)}
+                className="
+                  bg-card p-3 rounded-full shadow px-6 text-sm
+                  flex items-center gap-2
+                  hover:bg-gray-100 transition
+                  text-text
+                "
+              >
+                Ordenar por
+                <FaChevronDown
+                  size={12}
+                  className={openOrder ? "rotate-180 transition" : "transition"}
+                />
+              </button>
+
+              {openOrder && (
+                <div
+                  className="
+                    absolute right-0 mt-2 
+                    bg-card shadow-xl rounded-xl
+                    w-48 z-50
+                    text-laranja
+                    overflow-hidden
+                    animate-fadeIn
+                  "
                 >
-                  Maior preço
-                </button>
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setOrder("rating");
-                    setOpenOrder(false);
-                  }}
-                >
-                  Maior avaliação
-                </button>
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setOrder("recent");
-                    setOpenOrder(false);
-                  }}
-                >
-                  Mais recente
-                </button>
-              </div>
-            )}
+                  <button
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setOrder("price-asc");
+                      setOpenOrder(false);
+                    }}
+                  >
+                    Menor preço
+                  </button>
+                  <button
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setOrder("price-desc");
+                      setOpenOrder(false);
+                    }}
+                  >
+                    Maior preço
+                  </button>
+                  <button
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setOrder("rating");
+                      setOpenOrder(false);
+                    }}
+                  >
+                    Maior avaliação
+                  </button>
+                  <button
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setOrder("recent");
+                      setOpenOrder(false);
+                    }}
+                  >
+                    Mais recente
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
 
