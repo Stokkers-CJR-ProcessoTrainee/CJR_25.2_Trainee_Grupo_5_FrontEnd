@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
 import { getProductsByCategory, getChildCategories } from "@/api/api";
 import { Category, Products } from "@/app/Types";
+import { FaSearch } from "react-icons/fa";
 
 export default function CategoryPage() {
   const { id } = useParams();
@@ -19,7 +20,6 @@ export default function CategoryPage() {
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState("default");
 
-  // 🔥 Títulos personalizados do Figma
   const categoryHeroTexts: Record<number, string> = {
     1: "O universo da tecnologia em um só lugar",
     2: "Entre no mundo dos games",
@@ -76,19 +76,19 @@ export default function CategoryPage() {
   });
 
   return (
-    <main className=" min-h-screen">
+    <main className="min-h-screen">
       <Navbar />
 
       <section className="w-full bg-laranja flex items-center justify-center px-20 min-h-[400px] mt-16">
-
-        <h1 className="
+        <h1
+          className="
             text-white 
             font-extrabold 
             text-5xl 
             leading-tight 
             tracking-wide 
             text-end
-            w-[45%]     /* controla largura do bloco de texto */
+            w-[45%]
           "
         >
           {heroText}
@@ -101,17 +101,77 @@ export default function CategoryPage() {
         />
       </section>
 
+      <div className="bg-back px-10 py-6">
 
-      <div className="bg-[#F9F9F9] px-10 py-6">
+        <div className="flex justify-end w-full mb-6 mt-20 relative">
+          <div className="w-full max-w-xl relative">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 
-        <div className="flex justify-end w-full mb-6 mt-20">
-          <input
-            type="text"
-            placeholder="Procurar produto..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="bg-white p-3 px-4 rounded-full shadow text-sm w-64"
-          />
+            <input
+              type="text"
+              placeholder="Buscar produtos..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="
+                w-full
+                bg-white
+                border border-gray-300
+                rounded-full
+                py-3 pl-12 pr-4
+                text-sm
+                shadow
+                focus:ring-2 focus:ring-laranja/40
+                focus:border-laranja
+                outline-none
+                transition
+              "
+            />
+
+            {search.length > 0 && (
+              <div
+                className="
+                  absolute
+                  w-full
+                  bg-white
+                  border
+                  border-gray-200
+                  rounded-xl
+                  shadow-lg
+                  mt-2
+                  max-h-80
+                  overflow-y-auto
+                  z-50
+                "
+              >
+                {filtered.length > 0 ? (
+                  filtered.map((p) => (
+                    <div
+                      key={p.id}
+                      className="
+                        px-4 py-3
+                        hover:bg-gray-50
+                        cursor-pointer
+                        transition
+                        flex items-center gap-3
+                      "
+                      onClick={() => router.push(`/product/${p.id}`)}
+                    >
+                      <img
+                        src={p.product_images[0]?.image_url}
+                        alt={p.name}
+                        className="w-10 h-10 rounded-md object-cover"
+                      />
+                      <span className="text-gray-700 text-sm">{p.name}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-gray-500 text-sm">
+                    Nenhum produto encontrado.
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center justify-between m-40 mt-10 mb-8 gap-4">
