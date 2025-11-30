@@ -190,12 +190,14 @@ export default function UserPage() {
         <div className="flex items-center justify-between w-full mb-4">
           <h3 className="text-xl font-sans font-bold">Produtos</h3>
 
+        {produtos.length > 0 && (
           <div
             className="px-3 py-1 flex items-center justify-center text-laranja font-bold text-sx rounded-full hover:brightness-90 hover:cursor-pointer transition"
             onClick={() => router.push(`/ver-mais?tipo=produtos-usuario&userId=${usuario.id}`)}
           >
             Ver mais
           </div>
+        )}
         </div>
 
         
