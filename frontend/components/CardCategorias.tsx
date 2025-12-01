@@ -24,7 +24,7 @@ export default function CardCategorias({ name }: CategoriaProps) {
     <div
       className="
         flex flex-col items-center justify-center
-        w-28 h-28 bg-white rounded-3xl shadow-sm
+        w-28 h-28 bg-card rounded-3xl shadow-sm
         cursor-pointer transition-transform hover:scale-105
       "
     >
@@ -32,7 +32,7 @@ export default function CardCategorias({ name }: CategoriaProps) {
       
 
 
-      <p className="text-sm font-medium text-gray-800 text-center mt-2 truncate w-24">
+      <p className="text-sm font-medium text-text text-center mt-2 truncate w-24">
         {name}
       </p>
     </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import RateModal from "./RateModal";
 import { toast } from "react-toastify";
 import { getStoreRating, updateStoreRating, deleteStoreRating } from "@/api/api";
+import { on } from "events";
 
 interface Props {
   ratingId: number;

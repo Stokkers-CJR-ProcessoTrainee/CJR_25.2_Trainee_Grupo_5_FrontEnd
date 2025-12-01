@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import { createStore } from "@/api/api";
+import { toast } from "react-toastify";
 
 interface CreateStoreModalProps {
     abrir: boolean;
@@ -34,7 +35,7 @@ export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateSto
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name) return alert("O nome da loja é obrigatório!");
+        if (!name) return toast.warn("O nome da loja é obrigatório!");
         setLoading(true);
 
         try {
@@ -70,13 +71,11 @@ export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateSto
 
             await createStore(payload);
 
-            alert("Loja adicionada com sucesso!")
-
             onSuccess();
 
         }   catch (err) {
             console.error(err);
-            alert("Erro ao adicionar loja");
+            toast.error("Erro ao adicionar loja");
         } finally {
             setLoading(false);
         }

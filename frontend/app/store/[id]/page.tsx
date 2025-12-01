@@ -98,7 +98,7 @@ export default function StorePage() {
   const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r:any) => r.rating === maxRating));
   
   return (
-    <main className="min-h-screen bg-amber-50 pb-16">
+    <main className="min-h-screen bg-back pb-16">
 
       <Navbar />
 
@@ -156,7 +156,7 @@ export default function StorePage() {
 
 
 
-      <div className="relative bg-gray-100 flex flex-col">
+      <div className="relative bg-cinza flex flex-col">
         <img
           src={store.sticker_url}
           alt={`${store.name} sticker`}
@@ -171,13 +171,50 @@ export default function StorePage() {
           {mediaRating.toFixed(1)}
         </p>
 
+        <div className="flex gap-2 align-center justify-center mt-5">
+          {Array.from({ length: mediaRating }).map((_, i) => (
+            <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
+              <path
+              d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+              fill="#FFEB3A"
+              />
+            </svg>
+          ))}
+
+          {Array.from({ length: 5 - mediaRating }).map((_, i) => (
+            <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
+              <path
+              d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+              fill="#FFFFFF"
+              />
+            </svg>
+          ))}             
+        </div>
+
         <div className="px-40 mt-5 py-10">
+          
+          {ratings.length > 0 ? (
+            <div 
+              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              onClick={() => router.push(`/store/${id}/ratings`)}
+              >
+              Avaliações
+            </div>
+          ) : (
+            <div 
+              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              onClick={() => router.push(`/store/${id}/ratings`)}
+              >
+              Avaliar
+            </div>
+          )}
+   
           <Carrossel>
             {ratings.length > 0 ? (
               ratings.map((r) => (
                 <div
                   key={r.id}
-                  className="bg-amber-50 font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px]"
+                  className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px]"
                 >
                   {/* imagem do usuário */}
                   <img
@@ -189,7 +226,7 @@ export default function StorePage() {
                   {/* conteúdo do comentário */}
                   <div className="flex flex-col justify-between w-full">
                     <div className="flex justify-between items-center">
-                      <p className="font-semibold text-lg text-gray-900">{r.user.username}</p>
+                      <p className="font-semibold text-lg ">{r.user.username}</p>
                       {/* estrelas */}
                       <div className="flex gap-1">
                         {Array.from({ length: r.rating }).map((_, i) => (
@@ -214,7 +251,7 @@ export default function StorePage() {
                       </div>
                     </div>
 
-                    <p className="text-gray-800 text-[15px] leading-snug mt-2">
+                    <p className=" text-[15px] leading-snug mt-2">
                       {r.comment}
                     </p>
 
@@ -244,7 +281,7 @@ export default function StorePage() {
       </div>
 
       {/* Produtos */}
-      <div className="w-full max-w-5xl font-sans mx-auto mt-3 px-4">
+      <div className="w-full max-w-5xl text-text font-sans mx-auto mt-3 px-4">
         <div className="flex text-center gap-1">
           <h3 className="text-xl font-sans font-bold mb-4">
             Produtos 
@@ -266,10 +303,10 @@ export default function StorePage() {
       </div>
       
       <div className="mt-10 pb-10">
-        <div className="w-full max-w-5xl mx-auto px-4">
+        <div className="w-full text-text max-w-5xl mx-auto px-4">
 
           <div className="flex gap-1">
-            <h2 className="text-2xl font-bold font-sans text-gray-800 text-start mb-8">
+            <h2 className="text-2xl font-bold font-sans text-start mb-8">
               Produtos
             </h2>
             {store && (

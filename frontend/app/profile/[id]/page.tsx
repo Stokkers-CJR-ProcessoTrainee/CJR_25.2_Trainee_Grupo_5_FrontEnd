@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import CreateStoreModel from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
 import { useRouter } from "next/navigation";
@@ -85,6 +85,12 @@ export default function UserPage() {
       const lojasData = await getStoresByUser(Number(id));
       setlojas(lojasData);
 
+      if (lojasData && Array.isArray(lojasData)) {
+        lojasData.sort((a: Loja, b: Loja) => b.id - a.id);
+      }
+
+      setlojas(lojasData);
+
       const avaliacoesData = await getUserRatings(Number(id));
       setAvaliacoes({
         store_ratings: avaliacoesData.store_ratings || [],
@@ -123,8 +129,9 @@ export default function UserPage() {
   }, [id]);
 
   const handleStoreCreated = async () => {
-    setAbrir(false);
-    await fetchAllPageData();
+    setAbrir(false);  
+    toast.success('Loja criada com sucesso!'); 
+    await fetchAllPageData();    
   };
 
   if (loading) return <p className="text-center mt-20 text-laranja">Carregando usuário...</p>;
@@ -132,12 +139,12 @@ export default function UserPage() {
 
   return (
 
-    <main className="min-h-screen bg-gray-100 pb-16">
+    <main className="min-h-screen text-text bg-back pb-16">
 
       <Navbar />
 
       {/* Banner */}
-      <div className="w-full h-70 bg-gray-300 relative flex items-end px-16"></div>
+      <div className="w-full h-70 bg-cinza relative flex items-end px-16"></div>
 
       {/* Perfil */}
 
@@ -154,9 +161,9 @@ export default function UserPage() {
           ) : null}
 
           <div className="mt-1 font-sans text-left flex flex-col gap-0.5">
-            <h2 className="text-3xl font-semibold text-gray-800">{usuario.name}</h2>
-            <p className="text-gray-600">@{usuario.username}</p>
-            <p className="text-gray-600 flex items-center gap-1">
+            <h2 className="text-3xl font-semibold ">{usuario.name}</h2>
+            <p className="">@{usuario.username}</p>
+            <p className="flex items-center gap-1">
               <svg className="h-3 w-4 translate-y-0.5" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.04074 16.3259C1.47954 16.3259 0.999283 16.1263 0.599978 15.727C0.200673 15.3277 0.000680247 14.8471 0 14.2852V2.04074C0 1.47954 0.199993 0.999283 0.599978 0.599978C0.999963 0.200673 1.48022 0.000680247 2.04074 0H18.3667C18.9279 0 19.4085 0.199992 19.8084 0.599978C20.2084 0.999963 20.4081 1.48022 20.4074 2.04074V14.2852C20.4074 14.8464 20.2078 15.327 19.8084 15.727C19.4091 16.127 18.9285 16.3266 18.3667 16.3259H2.04074ZM10.2037 9.18333L18.3667 4.08148V2.04074L10.2037 7.14259L2.04074 2.04074V4.08148L10.2037 9.18333Z"
                   fill="currentColor"
@@ -184,12 +191,14 @@ export default function UserPage() {
         <div className="flex items-center justify-between w-full mb-4">
           <h3 className="text-xl font-sans font-bold">Produtos</h3>
 
+        {produtos.length > 0 && (
           <div
             className="px-3 py-1 flex items-center justify-center text-laranja font-bold text-sx rounded-full hover:brightness-90 hover:cursor-pointer transition"
             onClick={() => router.push(`/ver-mais?tipo=produtos-usuario&userId=${usuario.id}`)}
           >
             Ver mais
           </div>
+        )}
         </div>
 
 
@@ -218,12 +227,16 @@ export default function UserPage() {
           <h3 className="text-xl font-sans font-bold">Lojas</h3>
 
           {Dono && (
-            <div
-              className="w-8 h-8 text-center text-gray-50 font-bold text-2xl bg-laranja rounded-full hover:brightness-90 hover:cursor-pointer transition"
-              onClick={() => setAbrir(true)}
-            >
-              +
-            </div>
+          <div 
+          className="hover:brightness-90 hover:cursor-pointer transition"
+          onClick={() => setAbrir(true)}
+          >
+            <svg width="30" height="30" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22.5" cy="22.5" r="22.5" fill="#FF9933"/>
+            <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
+            <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+            </svg>
+          </div>
           )}
 
         </div>
@@ -350,10 +363,11 @@ export default function UserPage() {
       </div>
 
       <EditUserModal
-        mostrar={mostrar}
-        fechar={() => setMostrar(false)}
-        foto={usuario.profile_picture_url}
-      />
+      mostrar={mostrar}
+      fechar={() => setMostrar(false)}
+      foto={usuario.profile_picture_url}
+      onSuccess={fetchAllPageData}
+      />      
 
       <CreateStoreModel
         abrir={abrir}

@@ -78,7 +78,7 @@ export default function LoginPage() {
 
         {/* Card */}
         <div
-          className="bg-card flex-1 flex flex-col p-10 py-20 rounded-lg shadow-lg max-w-md text-center"
+          className="bg-cinza flex-1 flex flex-col p-10 py-20 rounded-lg shadow-lg max-w-md text-center"
         >
           <h1
             className="text-laranja font-sans font-extrabold text-2xl tracking-wider mb-6"
@@ -91,7 +91,7 @@ export default function LoginPage() {
             onSubmit={handleLogin}
           >
             <input
-              className="bg-background rounded-full p-2 pl-4 focus:border-laranja focus:outline-none border border-gray-300"
+              className="bg-back rounded-full text-text p-2 pl-4 focus:border-laranja focus:outline-none border border-transparent"
               type="text"
               name="Email"
               id="email"
@@ -106,7 +106,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               type={showAtual ? "text" : "password"}
               placeholder="Senha"
-              className="bg-background rounded-full p-2 pl-4 pr-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"
+              className="bg-back rounded-full text-text p-2 pl-4 pr-10 border border-transparent w-full focus:border-laranja focus:outline-none"
               />
               <button
               type="button"
@@ -139,7 +139,7 @@ export default function LoginPage() {
           </a></p>
 
           <p className="mt-3 text-gray-700">
-            Não possui conta? <a href="/register" className="text-orange-500 hover:underline">Crie Aqui!</a>
+            Não possui conta? <a href="/register" className="text-laranja hover:underline">Crie Aqui!</a>
           </p>
         </div>
 

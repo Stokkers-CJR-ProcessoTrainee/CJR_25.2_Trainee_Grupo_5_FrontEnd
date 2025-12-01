@@ -4,8 +4,11 @@
 
 :root {
   --color-cinza: #e0e0e0;    
-  --color-laranja: #ff6700;  
-  --color-card: #e0e0e0;
+  --color-laranja: #FF9933;  
+  --color-back: #F6F3E4;
+  --color-text: #000000;
+  --color-card: #ffffff;
+
   --color-laranja2: #d85f00;
   --color-balck: #131313;
   --color-themeBut: #6f5d9e;
@@ -15,9 +18,12 @@
 }
 
 .dark {
-  --color-cinza: #333333;  
-  --color-laranja: #ffa500; 
-  --color-card: #282828;
+  --color-cinza: #1E1E1E;  
+  --color-laranja: #FF9933; 
+  --color-back: #171918;
+  --color-text: #A0A0A0;
+  --color-card: #1E1E1E;
+  
   --color-balck: #ffffff;
   --color-themeBut: #ffa500;
 }
@@ -25,6 +31,10 @@
 @theme inline {
   --color-cinza: var(--color-cinza);
   --color-laranja: var(--color-laranja);
+  --color-back: var(--color-back);
+  --color-text: var(--color-text);
+
+
   --color-card: var(--color-card);
   --color-laranja2: var(--color-laranja2);
   --color-balck: var(--color-balck);

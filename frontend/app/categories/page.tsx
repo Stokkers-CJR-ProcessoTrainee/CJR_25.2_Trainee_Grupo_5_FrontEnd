@@ -58,11 +58,11 @@ export default function CategoriesPage() {
   }, []);
 
   return (
-    <main>
+    <main className='min-h-screen bg-back text-text '>
 
       <Navbar />
 
-      <div className="mt-18">
+      <div className="mt-18 ">
 
         <div className="flex flex-col gap-6 bg-laranja w-full h-80 p-15">
           <div className="font-sans font-bold text-3xl text-white"> <h1> Categorias </h1> </div>

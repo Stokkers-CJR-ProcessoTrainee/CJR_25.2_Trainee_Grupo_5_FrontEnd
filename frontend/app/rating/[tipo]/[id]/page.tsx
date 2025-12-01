@@ -139,10 +139,10 @@ export default function RatingsPage() {
     }
 
     return (
-        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-backBege">
+        <main className="w-full overflow-x-hidden min-h-screen flex flex-col bg-back">
             <Navbar />
 
-            <div className="bg-cinza w-full h-115 text-black shadow-md relative flex flex-col justify-center px-8">
+            <div className="bg-cinza w-full h-115 text-black text-text shadow-md relative flex flex-col justify-center px-8">
             
                 <div className="flex items-center justify-between mx-40">
 
@@ -200,7 +200,7 @@ export default function RatingsPage() {
 
             <div className="mt-10 px-12 sm:px-24 lg:px-40 pb-16">
                 <div className="flex">
-                    <div className="w-1 bg-gray-400 rounded-full"></div>
+                    <div className="w-1 bg-cinza text-text rounded-full"></div>
 
                     <div className="flex flex-col gap-8 pl-12">
                         <AnimatePresence>
@@ -239,7 +239,7 @@ export default function RatingsPage() {
                                     alt="Foto do usuário"
                                     className="w-10 h-10 rounded-full border-2 border-laranja object-cover"
                                     />
-                                    <div className="flex gap-2 items-center relative">
+                                    <div className="flex gap-2 text-text items-center relative">
                                         {(donoLoja == donoComment) && (
                                             <div className="relative group inline-block">
                                                 <span className="text-laranja">
@@ -251,15 +251,15 @@ export default function RatingsPage() {
                                                 </div>
                                             </div>
                                         )}
-                                        <p className="text-xl text-black-600 tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                        <p className="text-xl  tracking-wider font-sans font-semibold">{c.user?.username}</p>
                                         {(c.createdAt == c.updatedAt) ?
-                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
+                                            <p className="text-sm  font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                         : 
-                                            <p className="text-sm text-black font-sans  opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
+                                            <p className="text-sm  font-sans  opacity-80 leading-tight">Editado há {timeDiff(c.updatedAt)}</p>
                                         }
                                     </div>
                                 </div>
-                                <p className="text-md text-gray-700 font-sans mt-4">{c.content}</p>
+                                <p className="text-md text-text font-sans mt-4">{c.content}</p>
                             </motion.div>
                         );})}
                         </AnimatePresence>
@@ -274,7 +274,7 @@ export default function RatingsPage() {
                         <input 
                         value={newComentario}
                         onChange={(e) => setNewComentario(e.target.value)}
-                        className=" border font-sans tracking-wider border-transparent mt-16 w-full bg-card px-8 py-5 rounded-full focus:border-laranja focus:outline-none"
+                        className=" border font-sans tracking-wider text-text border-transparent mt-16 w-full bg-card px-8 py-5 rounded-full focus:border-laranja focus:outline-none"
                         type="text"
                         placeholder="Adicionar Comentário"
                         />

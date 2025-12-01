@@ -8,8 +8,11 @@ export type Products = {
   name: string;
   price: number;
   stock: number;
-  product_images?: { id: number; image_url: string; order: number }[];
+  product_images: { id: number; image_url: string; order: number }[];
   store: { id: number; name: string; sticker_url: string };
+  category: { id: number}
+  created_at: string;
+  rating?: number | null;
 };
 
 export type Store = {
