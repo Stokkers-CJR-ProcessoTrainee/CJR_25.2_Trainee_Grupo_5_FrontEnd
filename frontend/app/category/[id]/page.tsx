@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
-import { getProductsByCategory, getChildCategories } from "@/api/api";
+import { getProductsByCategory, getChildCategories, getCategoryById} from "@/api/api";
 import { Category, Products } from "@/app/Types";
 import { FaSearch, FaChevronDown } from "react-icons/fa";
 
@@ -13,6 +13,7 @@ export default function CategoryPage() {
   const router = useRouter();
 
   const categoryId = Number(id);
+  const [category, setCategory] = useState<Category>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [childCategories, setChildCategories] = useState<Category[]>([]);
@@ -24,18 +25,35 @@ export default function CategoryPage() {
   const [openFilters, setOpenFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
 
-  const categoryHeroTexts: Record<number, string> = {
-    1: "O universo da tecnologia em um só lugar",
-    2: "Entre no mundo dos games",
-    3: "Os melhores itens do seu mercado favorito",
-    4: "O estilo que combina com você",
-    5: "Tudo para sua saúde e bem-estar",
-    6: "Beleza e cuidado ao seu alcance",
-    7: "A diversão da criançada começa aqui",
-    8: "Transforme sua casa em um lar",
+  const categoryHeroTexts: Record<string, string> = {
+    "Eletrônicos": "O universo da tecnologia em um só lugar.",
+    "Jogos": "Entre no mundo dos games!",
+    "Mercado": "Os melhores itens do seu mercado favorito.",
+    "Moda": "O estilo que combina com você.",
+    "Farmácia": "Tudo para sua saúde e bem-estar.",
+    "Beleza": "Beleza e cuidado ao seu alcance.",
+    "Brinquedos": "A diversão da criançada começa aqui!",
+    "Casa": "Transforme sua casa em um lar",
+  };
+  const categoryHeroImages: Record<string, string> = {
+    "Eletrônicos": "/images/Categories/Eletronicos.svg",
+    "Jogos": "/images/Categories/Jogos.svg",
+    "Mercado": "/images/Categories/Mercado.svg",
+    "Moda": "/images/Categories/Moda.svg",
+    "Farmácia": "/images/Categories/Farmacia.svg",
+    "Beleza": "/images/Categories/Beleza.svg",
+    "Brinquedos": "/images/Categories/Brinquedos.svg",
+    "Casa": "/images/Categories/Casa.svg",
   };
 
-  const heroText = categoryHeroTexts[categoryId] ?? "Categoria";
+  const hero = {
+    text:
+    categoryHeroTexts[category?.name ?? ""] ??
+    `Produtos em ${category?.name ?? ""}`,
+    image: 
+    categoryHeroImages[category?.name ?? ""] ??
+    "/images/Categories/ImageCategories.svg",
+  }
 
   useEffect(() => {
     if (!categoryId) return;
@@ -45,6 +63,9 @@ export default function CategoryPage() {
 
     (async () => {
       try {
+        const categoryData = await getCategoryById(categoryId);
+        setCategory(categoryData);
+
         const childCats = await getChildCategories(categoryId);
         setChildCategories(childCats || []);
 
@@ -108,11 +129,11 @@ export default function CategoryPage() {
             w-[45%]
           "
         >
-          {heroText}
+          {hero.text}
         </h1>
 
         <img
-          src="/images/ImageHome.png"
+          src={hero.image}
           alt="Banner Categoria"
           className="w-[430px] h-auto"
         />
