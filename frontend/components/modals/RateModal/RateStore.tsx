@@ -3,11 +3,13 @@ import RateModal from "./RateModal";
 import { toast } from "react-toastify";
 import { createStoreRating, getStoreById } from "@/api/api";
 import { useState, useEffect } from "react";
+import { on } from "events";
 
 interface Props {
   storeId: number;
   open: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }
 type Store = {
   id: number;
@@ -18,7 +20,7 @@ type Store = {
   sticker_url?: string | null;
 };
 
-export function CreateStoreRatingModal({ storeId, open, onClose }: Props) {
+export function CreateStoreRatingModal({ storeId, open, onClose, onSuccess }: Props) {
 
   const [Store, setStore] = useState<Store>()
   const [rating, setRating] = useState<number>(0);
@@ -28,7 +30,12 @@ export function CreateStoreRatingModal({ storeId, open, onClose }: Props) {
     try {
       await createStoreRating(storeId, { rating, comment });
       toast.success("Avaliação enviada!");
+      if (onSuccess) {
+        onSuccess();
+      }
       onClose();
+      setRating(0);
+      setComment("");
     } catch {
       toast.error("Erro ao enviar avaliação!");
     }

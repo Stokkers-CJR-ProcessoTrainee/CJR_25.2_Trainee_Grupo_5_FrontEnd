@@ -1,30 +1,53 @@
 @import "tailwindcss";
-
 @import "@fontsource/inter";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-cinza: #e0e0e0;    
+  --color-laranja: #FF9933;  
+  --color-back: #F6F3E4;
+  --color-text: #000000;
+  --color-card: #ffffff;
+
+  --color-laranja2: #d85f00;
+  --color-balck: #131313;
+  --color-themeBut: #6f5d9e;
+
+  --font-mono: var(--font-geist-mono);
+  --font-sans: "Outfit", ui-sans-serif, system-ui;
+}
+
+.dark {
+  --color-cinza: #1E1E1E;  
+  --color-laranja: #FF9933; 
+  --color-back: #171918;
+  --color-text: #A0A0A0;
+  --color-card: #1E1E1E;
+  
+  --color-balck: #ffffff;
+  --color-themeBut: #ffa500;
 }
 
 @theme inline {
-  --color-background: #f5f5f5;
-  --color-card: #e0e0e0;
-  --color-laranja: #ff6700;
-  --color-laranja2: #d85f00;
-  --color-cinza: #e0e0e0;
-  --color-back: #fbfbf8;
-  --color-cinzaplaceholder: #8B8B8B;
+  --color-cinza: var(--color-cinza);
+  --color-laranja: var(--color-laranja);
+  --color-back: var(--color-back);
+  --color-text: var(--color-text);
 
+
+  --color-card: var(--color-card);
+  --color-laranja2: var(--color-laranja2);
+  --color-balck: var(--color-balck);
+  --color-themeBut: var(--color-themeBut);
   
-  --font-mono: var(--font-geist-mono);
-  --font-sans: "Outfit", ui-sans-serif, system-ui;
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .scrollbar-hide {

@@ -18,7 +18,7 @@ export default function CardProdutos({ produto }: ProdutoCardProps) {
     return (
           <div
                 key={produto.id}
-                className="relative min-w-[170px] bg-white shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                className="relative min-w-[170px] bg-card shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
               >
                 <div className="flex justify-center items-center flex-1">
                 <img
@@ -28,9 +28,9 @@ export default function CardProdutos({ produto }: ProdutoCardProps) {
                 />
                 </div>
 
-                <div className="flex flex-col items-start">
-                  <h4 className="text-lg font-semibold text-gray-800">{produto.name}</h4>
-                  <p className="text-gray-800 font-semibold">R${produto.price}</p>
+                <div className="flex flex-col text-text items-start">
+                  <h4 className="text-lg font-semibold">{produto.name}</h4>
+                  <p className="font-semibold">R${produto.price}</p>
                   {produto.stock > 0 ? (
                     <p className="text-green-600 font-bold text-sm">Disponível</p>
                   ) : (

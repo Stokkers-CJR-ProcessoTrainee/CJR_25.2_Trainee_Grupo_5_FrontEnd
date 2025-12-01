@@ -16,7 +16,7 @@ export default function CardLojas({ name, category, logoUrl }: LojaCardProps) {
         transition-transform hover:scale-105
       "
     >
-      <div className="w-28 h-28 rounded-full bg-white shadow flex items-center justify-center">
+      <div className="w-28 h-28 rounded-full bg-card shadow flex items-center justify-center">
         <img
           src={logoUrl}
           alt={name}
@@ -24,7 +24,7 @@ export default function CardLojas({ name, category, logoUrl }: LojaCardProps) {
         />
       </div>
 
-      <p className="mt-2 text-base font-semibold text-gray-900 text-center truncate w-28">
+      <p className="mt-2 text-base font-semibold text-text text-center truncate w-28">
         {name}
       </p>
 

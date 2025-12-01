@@ -98,7 +98,7 @@ export default function ProductPage() {
       <div className="mt-18">
 
         {/* Container 1 */}
-        <div className="flex flex-row p-4 gap-4 bg-background">
+        <div className="flex flex-row p-4 gap-4 bg-back text-text">
 
           {/*Espaco temporario*/}
           <div className="w-1/8"></div>
@@ -166,7 +166,7 @@ export default function ProductPage() {
         </div>
 
         {/* outros produtos */}
-        <div className="flex flex-col p-4 gap-4 bg-background h-96">
+        <div className="flex flex-col p-4 gap-4 bg-back text-text h-96">
           <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
           <div className=" flex-1 w-full">
             <Carrossel>
