@@ -349,7 +349,7 @@ export default function CategoryPage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-5 gap-20 md:grid-cols-5 sm:grid-cols-3 m-20 p-5">
+        <div className="flex relative rounded-3xl font-sans gap-10 ml-40">
           {ordered.length > 0 ? (
             ordered.map((produto) => (
               <CardProdutos key={produto.id} produto={produto} />
