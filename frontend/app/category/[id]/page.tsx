@@ -26,20 +26,20 @@ export default function CategoryPage() {
     "Jogos": "Entre no mundo dos games!",
     "Mercado": "Os melhores itens do seu mercado favorito.",
     "Moda": "O estilo que combina com você.",
-    "Saúde": "Tudo para sua saúde e bem-estar.",
+    "Farmácia": "Tudo para sua saúde e bem-estar.",
     "Beleza": "Beleza e cuidado ao seu alcance.",
-    "Infantil": "A diversão da criançada começa aqui!",
+    "Brinquedos": "A diversão da criançada começa aqui!",
     "Casa": "Transforme sua casa em um lar",
   };
   const categoryHeroImages: Record<string, string> = {
-    "Eletrônicos": "/images/electronics-hero.svg",
-    "Jogos": "/images/games-hero.svg",
-    "Mercado": "/images/market-hero.svg",
-    "Moda": "/images/fashion-hero.svg",
-    "Saúde": "/images/health-hero.svg",
-    "Beleza": "/images/beauty-hero.svg",
-    "Infantil": "/images/kids-hero.svg",
-    "Casa": "/images/home-hero.svg",
+    "Eletrônicos": "/images/Categories/Eletronicos.svg",
+    "Jogos": "/images/Categories/Jogos.svg",
+    "Mercado": "/images/Categories/Mercado.svg",
+    "Moda": "/images/Categories/Moda.svg",
+    "Farmácia": "/images/Categories/Farmacia.svg",
+    "Beleza": "/images/Categories/Beleza.svg",
+    "Brinquedos": "/images/Categories/Brinquedos.svg",
+    "Casa": "/images/Categories/Casa.svg",
   };
 
   const hero = {
@@ -47,8 +47,8 @@ export default function CategoryPage() {
     categoryHeroTexts[category?.name ?? ""] ??
     `Produtos em ${category?.name ?? ""}`,
     image: 
-    //categoryHeroImages[category?.name ?? ""] ??
-    "/images/ImageCategories.svg",
+    categoryHeroImages[category?.name ?? ""] ??
+    "/images/Categories/ImageCategories.svg",
   }
 
   useEffect(() => {
