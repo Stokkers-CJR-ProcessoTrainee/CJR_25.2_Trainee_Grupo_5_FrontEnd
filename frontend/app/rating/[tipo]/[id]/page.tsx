@@ -147,7 +147,9 @@ export default function RatingsPage() {
                 <div className="flex items-center justify-between mx-40">
 
                     {donoRating &&
-                        <button className="absolute top-[28%] right-[11%] text-laranja cursor-pointer hover:text-white transition">
+                        <button 
+                        onClick={() => setComentarioEditar(true)}
+                        className="absolute top-[28%] right-[11%] text-laranja cursor-pointer hover:text-white transition">
                             <FaPen size={28} />
                         </button>
                     }

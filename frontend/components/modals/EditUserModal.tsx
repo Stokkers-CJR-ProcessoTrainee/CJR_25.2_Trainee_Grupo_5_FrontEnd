@@ -28,7 +28,7 @@ export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUs
             const formData = new FormData();
             formData.append("file", file);
             
-            const res = await fetch("http://localhost:3001/upload", {
+            const res = await fetch("http://localhost:3001/uploads", {
                 method: "POST",
                 body: formData,
             });
