@@ -101,7 +101,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
     const UploadFile = async (file: File) => {
         const formData = new FormData();
         formData.append("file", file);
-        const res = await fetch("http://localhost:3001/upload", { method: "POST", body: formData });
+        const res = await fetch("https://stokkers.onrender.com/upload", { method: "POST", body: formData });
         const data = await res.json();
         return data.url;
     };
