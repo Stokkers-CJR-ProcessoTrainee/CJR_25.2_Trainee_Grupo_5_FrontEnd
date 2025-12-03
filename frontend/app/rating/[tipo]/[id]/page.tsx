@@ -2,6 +2,7 @@
 import { addProductComment, addStoreComment, deleteProductComment, deleteStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating } from "@/api/api";
 import { timeDiff } from "@/api/auxiliar/timeDiff";
 import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
+import UpdateRatingStoreModal from "@/components/modals/RateModal/UpdateRatingStore";
 import Navbar from "@/components/Navbar";
 import { useParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -40,6 +41,7 @@ export default function RatingsPage() {
     const [rating, setRating] = useState<Rating | null>(null);
 
     const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
+    const [ratingEditar,setRatingEditar] = useState<any | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -148,7 +150,7 @@ export default function RatingsPage() {
 
                     {donoRating &&
                         <button 
-                        onClick={() => setComentarioEditar(true)}
+                        onClick={() => setRatingEditar(true)}
                         className="absolute top-[28%] right-[11%] text-laranja cursor-pointer hover:text-white transition">
                             <FaPen size={28} />
                         </button>
@@ -287,6 +289,11 @@ export default function RatingsPage() {
                 )}
 
             </div>
+            <UpdateRatingStoreModal
+            ratingId={rating?.id!}
+            open={!!ratingEditar}
+            onClose={() => setRatingEditar(null)}
+            />
             <UpdateCommentModal
             mostrar={!!comentarioEditar}
             fechar={() => setComentarioEditar(null)}
