@@ -47,9 +47,19 @@ return (
                     )}
                 </Carrossel>
             </div>
-            
 
         </div>
+
+        <div className="px-30 mt-6 flex justify-end">
+            Barra pesquisa
+        </div>
+        
+        <div className="px-30 mt-5 ml-5 text-2xl font-bold font-sans">
+            <h2>
+                Lojas
+            </h2>
+        </div>
+        
 
     </main>
 )
