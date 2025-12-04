@@ -22,7 +22,7 @@ interface Products {
   store: { sticker_url: string, user_id: number },
   category: { name: string },
   product_images: { order: number, image_url: string }[],
-  product_ratings: { rating: number, comment?: string, user?: { id: number, username: string } }[] 
+  product_ratings: { rating: number, comment?: string, user?: { username: string } }[] // Adicionado user e comment
 }
 
 type Produto = {
@@ -46,7 +46,6 @@ export default function ProductPage() {
   const [isOwner, setOwner] = useState(false);
   const [allProducts, setAllProducts] = useState<Produto[]>([]);
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
-  const [hasUserRated, setHasUserRated] = useState(false); 
 
 
   async function fetchProduct() {
@@ -58,26 +57,6 @@ export default function ProductPage() {
       setProducts(product);
       setAllProducts(shuffledProducts);
 
-      let loggedInUserId: number | null = null;
-      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-
-
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          const userIdFromToken = payload.sub;
-
-          setOwner(userIdFromToken == product?.store?.user_id)
-          loggedInUserId = userIdFromToken;
-
-        } catch (err) {
-          console.error("Token Inválido ou Ausente");
-          setOwner(false);
-        }
-      } else {
-         setOwner(false);
-      }
-
       if (product) {
         const ratings = product?.product_ratings || [];
 
@@ -88,14 +67,16 @@ export default function ProductPage() {
           setMean(mean);
           setReviews(ratings.length);
         }
+      }
 
-        if (loggedInUserId !== null && ratings.length > 0) {
-            const hasRated = ratings.some(
-                (rating: any) => rating.user?.id === loggedInUserId
-            );
-            setHasUserRated(hasRated);
-        } else {
-            setHasUserRated(false);
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setOwner(payload.sub == product?.store?.user_id)
+        } catch (err) {
+          console.error("Token Inválido");
+          setOwner(false);
         }
       }
 
@@ -108,9 +89,6 @@ export default function ProductPage() {
     fetchProduct();
 
   }, [id]);
-
-
-  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
 
   return (
     <main>
@@ -194,7 +172,7 @@ export default function ProductPage() {
               </div>
             </div>
             <div className="flex flex-row gap-4 w-full h-8">
-              <div className="font-sans w-1/2 h-full flex-1"> ⭐ {mean.toFixed(1)} | {reviews} reviews </div>
+              <div className="font-sans w-1/2 h-full flex-1"> ⭐ {mean} | {reviews} reviews </div>
               <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.category?.name} </div>
               <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.stock} disponiveis </div>
             </div>
@@ -208,18 +186,15 @@ export default function ProductPage() {
 
         {/* Carrossel de Avaliações do Produto */}
         <div className="flex flex-col p-4 gap-4 bg-back text-text pb-20">
-            <div className="flex items-center justify-between h-12 w-full">
+            <div className="flex justify-between items-center h-12">
                 <div className="font-sans text-xl font-bold">
                     Avaliações de Clientes ({reviews})
                 </div>
-                {!isOwner && token && !hasUserRated && (
-                    <button
-                        onClick={() => null}
-                        className="bg-laranja cursor-pointer text-white font-sans font-bold py-2 px-6 text-md rounded-full hover:brightness-90 transition"
-                    >
-                        Avaliar
-                    </button>
-                )}
+                <button
+                    className="bg-laranja text-white font-sans tracking-wider cursor-pointer py-2 px-4 rounded-full hover:brightness-92 transition duration-300"
+                >
+                    Avaliar Produto
+                </button>
             </div>
             
             <div className=" flex-1 w-full">
