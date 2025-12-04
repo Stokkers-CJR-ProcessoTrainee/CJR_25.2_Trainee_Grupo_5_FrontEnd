@@ -49,10 +49,10 @@ export default function CategoryPage() {
   const hero = {
     text:
     categoryHeroTexts[category?.name ?? ""] ??
-    `Produtos em ${category?.name ?? ""}`,
+    null,
     image: 
     categoryHeroImages[category?.name ?? ""] ??
-    "/images/Categories/ImageCategories.svg",
+    null,
   }
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function CategoryPage() {
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     );
   }
-
+  if (category?.parent_category_id == null) {
   return (
     <main className="min-h-screen bg-back">
       <Navbar />
@@ -361,4 +361,5 @@ export default function CategoryPage() {
       </div>
     </main>
   );
+}
 }
