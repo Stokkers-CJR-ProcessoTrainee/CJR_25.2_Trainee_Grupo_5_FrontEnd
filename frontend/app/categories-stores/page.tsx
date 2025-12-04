@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import CardCategorias from "@/components/CardCategorias";
 import Link from "next/link";
 import { Category } from "../Types";
-import { getCategories } from "@/api/api";
+import { getCategories, getStores } from "@/api/api";
+import CardLojas from "@/components/CardLojas";
 
 export default function CategoriesStoresPage() {
     const [categories, setCategories] = useState<Category[]>([]);
+    const [stores, setStores] = useState<any[]>([]);
     
     useEffect(() => {
         async function fetchCategories() {
@@ -21,6 +23,18 @@ export default function CategoriesStoresPage() {
             }
         }
         fetchCategories();
+    }, [])
+
+    useEffect(() => {
+        async function fetchStores() {
+            try {
+                const data = await getStores();
+                setStores(data);
+            } catch (err) {
+                console.error("Erro ao carregar lojas:", err);
+            }
+        }
+        fetchStores();
     }, [])
 
 return (
@@ -54,12 +68,37 @@ return (
             Barra pesquisa
         </div>
         
-        <div className="px-30 mt-5 ml-5 text-2xl font-bold font-sans">
-            <h2>
-                Lojas
-            </h2>
+        <div className="w-full flex flex-col items-center pb-20">
+                
+            <div className="w-full max-w-[1200px] px-10 mt-10 text-2xl font-bold font-sans">
+                <h2>Lojas</h2>
+            </div>
+
+            <div className="w-full flex justify-center">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-10 place-items-center">
+                        
+                    {stores.length > 0 ? (
+                        stores.map((store: any) => {
+
+                        const categoriaEncontrada = categories.find((cat) => cat.id === store.category_id);
+                        
+                        return (
+                            <Link key={store.id} href={`/store/${store.id}`}>
+                                <CardLojas
+                                    name={store.name}
+                                    category={categoriaEncontrada ? categoriaEncontrada.name : "Categoria desconhecida"}
+                                    logoUrl={store.sticker_url}
+                                />
+                            </Link> 
+                        );
+                        })
+                    ) : (
+                        <p className="col-span-full text-gray-500">Lojas não encontradas.</p>
+                    )}
+
+                </div>
+            </div>
         </div>
-        
 
     </main>
 )
