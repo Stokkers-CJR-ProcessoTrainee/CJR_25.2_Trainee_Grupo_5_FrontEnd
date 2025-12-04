@@ -1,14 +1,21 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createProduct } from "@/api/api";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { getCategories } from "@/api/api";
 
 interface CreateProductModalProps {
   open: boolean;
   close: () => void;
   onUpdated?: () => void;
+}
+
+type Category = {
+  id: number,
+  name: string,
+  parent_category_id?: number
 }
 
 export default function CreateProductModal({ open, close, onUpdated }: CreateProductModalProps) {
@@ -20,6 +27,23 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [Categories, setCategories] = useState<Category[]>([]);
+
+
+  useEffect(() => {
+
+    async function fetchProduct() {
+
+      try {
+        const categories = await getCategories();
+        setCategories(categories);
+      } catch (error) {
+        console.error("Failed to fetch category data:", error);
+      }
+    }
+
+    fetchProduct();
+  }, []);
 
   const handleSubmit = async () => {
     if (!name || !category || !price) {
@@ -102,10 +126,14 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="" disabled> Select a category </option>
-            <option value="1" className="text-black"> gamer </option>
-            <option value="2" className="text-black"> subcategoria </option>
-            <option value="3" className="text-black"> Categoria 3 </option>
+            <option value="" disabled> Selecione uma Categoria </option>
+
+            {Categories.map((cat) => (
+              <option key={cat.id} value={cat.id} className="text-text">
+                {cat.name}
+              </option>
+            ))}
+
           </select>
 
           <input
