@@ -68,7 +68,7 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
     >
 
       <div
-        className="bg-bgmodal relative rounded-2xl p-6 w-150 h-140 shadow-lg flex flex-col items-center justify-center"
+        className="bg-bgmodal relative rounded-2xl p-6 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
 
