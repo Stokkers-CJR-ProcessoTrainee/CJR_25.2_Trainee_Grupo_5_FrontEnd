@@ -111,7 +111,7 @@ export default function ProductPage() {
                 {products?.product_images?.map((item, index) => (
                   <div
                     key={index}
-                    className="hover:brightness-90 hover:cursor-pointer transition w-full shrink-0 snap-start"
+                    className="bg-card hover:brightness-90 hover:cursor-pointer transition w-full shrink-0 snap-start"
                     onClick={() => setImage(index)}
                   >
                     <img
@@ -125,7 +125,7 @@ export default function ProductPage() {
               </CarrosselVertical>
 
             </div>
-            <div className="relative h-full w-3/4">  <ZoomableImage src={products?.product_images?.[image_number]?.image_url} alt="" className="rounded-2xl" />
+            <div className="relative h-full w-3/4">  <ZoomableImage src={products?.product_images?.[image_number]?.image_url} alt="" className="bg-card rounded-2xl" />
               <div className="absolute h-20 w-20 bottom-119 right-3 rounded-full">
                 <Link
                   key={products?.store_id}
