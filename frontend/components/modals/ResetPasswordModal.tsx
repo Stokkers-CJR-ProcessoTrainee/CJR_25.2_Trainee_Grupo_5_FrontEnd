@@ -6,15 +6,15 @@ import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 interface ResetPasswordModalProps {
   mostrar: boolean;
   fechar: () => void;
-  email : string;
+  email: string;
 }
 
-export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswordModalProps) {
+export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPasswordModalProps) {
   const [code, setCode] = useState("");
   const [codeVerified, setCodeVerified] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -39,7 +39,7 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
 
   const handleReset = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!newPassword || !confirmPassword) {
       toast.error("Por favor, preencha todos os campos!");
       return;
@@ -61,12 +61,12 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
     }
 
     try {
-        const res = await resetPassword(userId, newPassword);
-        toast.success(res.message);
-        fechar(); 
+      const res = await resetPassword(userId, newPassword);
+      toast.success(res.message);
+      fechar();
     } catch (error: any) {
-        const message = error?.response?.data?.message || "Erro ao redefinir senha!";
-        toast.error(message);
+      const message = error?.response?.data?.message || "Erro ao redefinir senha!";
+      toast.error(message);
     }
   }
 
@@ -74,7 +74,7 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-card rounded-lg p-8 max-w-md w-full text-center shadow-lg">
+      <div className="bg-bgmodal rounded-lg p-8 max-w-md w-full text-center shadow-lg">
         <h2 className="text-laranja font-extrabold text-xl mb-6">Recuperar Senha</h2>
 
         {/* Código */}
@@ -82,7 +82,7 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
           <input
             type="text"
             placeholder="Digite o código"
-            className="bg-background rounded-full p-2 pl-4 border border-gray-300 mb-4 w-full"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 mb-4 w-full"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
@@ -95,53 +95,50 @@ export default function ResetPasswordModal({mostrar, fechar, email}: ResetPasswo
         </form>
 
         <form onSubmit={handleReset}>
-            <div className="relative mb-4">
+          <div className="relative mb-4">
             <input
-                type={showNewPassword ? "text" : "password"}
-                placeholder="Nova senha"
-                className={`bg-background rounded-full p-2 pl-4 border w-full ${
-                codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+              type={showNewPassword ? "text" : "password"}
+              placeholder="Nova senha"
+              className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
                 }`}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                disabled={!codeVerified}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              disabled={!codeVerified}
             />
             <span
-                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                onClick={() => codeVerified && setShowNewPassword(!showNewPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+              onClick={() => codeVerified && setShowNewPassword(!showNewPassword)}
             >
-                {codeVerified ? (showNewPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
+              {codeVerified ? (showNewPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
             </span>
-            </div>
+          </div>
 
-            <div className="relative mb-4">
+          <div className="relative mb-4">
             <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirme a senha"
-                className={`bg-background rounded-full p-2 pl-4 border w-full ${
-                codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirme a senha"
+              className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
                 }`}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={!codeVerified}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={!codeVerified}
             />
             <span
-                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-                onClick={() => codeVerified && setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+              onClick={() => codeVerified && setShowConfirmPassword(!showConfirmPassword)}
             >
-                {codeVerified ? (showConfirmPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
+              {codeVerified ? (showConfirmPassword ? <FaEyeSlash /> : <FaEye />) : <FaLock />}
             </span>
-            </div>
+          </div>
 
-            <button
-            className={`w-full p-3 rounded-full font-sans tracking-wider text-white transition ${
-                codeVerified ? "bg-laranja hover:brightness-90 cursor-pointer" : "bg-gray-400 cursor-not-allowed"
-            }`}
+          <button
+            className={`w-full p-3 rounded-full font-sans tracking-wider text-white transition ${codeVerified ? "bg-laranja hover:brightness-90 cursor-pointer" : "bg-gray-400 cursor-not-allowed"
+              }`}
             type="submit"
             disabled={!codeVerified}
-            >
+          >
             Redefinir Senha
-            </button>
+          </button>
         </form>
 
         <button

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { deleteProduct, updateProduct } from "@/api/api";
 import { toast } from "react-toastify";
+import { getCategories } from "@/api/api";
 
 interface EditProductModalProps {
   open: boolean;
@@ -20,6 +21,12 @@ interface Product {
   category_id: number;
 }
 
+type Category = {
+  id: number,
+  name: string,
+  parent_category_id?: number
+}
+
 export default function EditProductModal({ open, close, product, onUpdated }: EditProductModalProps) {
   if (!open) return null;
   const [quantity, setQuantity] = useState(0);
@@ -28,6 +35,24 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [Categories, setCategories] = useState<Category[]>([]);
+
+
+  useEffect(() => {
+
+    async function fetchProduct() {
+
+      try {
+        const categories = await getCategories();
+        setCategories(categories);
+      } catch (error) {
+        console.error("Failed to fetch category data:", error);
+      }
+    }
+
+    fetchProduct();
+  }, []);
+
 
   useEffect(() => {
     if (open && product) {
@@ -96,18 +121,22 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     >
 
       <div
-        className="bg-background relative rounded-2xl p-6 w-150 h-140 shadow-lg flex flex-col items-center justify-center"
+        className="bg-bgmodal relative rounded-2xl p-6 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
 
         <button
-          className="absolute top-2 right-2 w-8 h-8 text-gray-500 font-bold text-3xl hover:text-red-500"
+          className="absolute top-2 right-2 w-8 h-8 hover:text-red-500"
           onClick={close}
         >
-          X
+          <img
+            src="/images/botao-de-sair.png"
+            alt='sair'
+            className="h-4 w-4"
+          />
         </button>
 
-        <h2 className="font-sans text-3xl mb-4"> Editar Produto </h2>
+        <h2 className="text-text font-sans text-3xl mb-4"> Editar Produto </h2>
 
         <div className="flex flex-col w-full h-full items-center justify-center gap-2">
 
@@ -116,26 +145,29 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
           <input
             type="text"
             placeholder="Nome do Produto"
-            className="w-full h-1/11 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-1/11 rounded-3xl pl-4"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <select
-            className={`pl-4 rounded-3xl w-full h-1/11 bg-white shadow-lg ${category === "" ? "text-cinzaplaceholder" : "text-black"}`}
+            className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none pl-4 rounded-3xl w-full h-1/10 ${category === "" ? "text-cinzaplaceholder" : "text-text"}`}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="" disabled> Select a category </option>
-            <option value="1" className="text-black"> gamer </option>
-            <option value="2" className="text-black"> subcategoria </option>
-            <option value="3" className="text-black"> Categoria 3 </option>
+            <option value="" disabled> Selecione uma Categoria </option>
+
+            {Categories.map((cat) => (
+              <option key={cat.id} value={cat.id} className="text-text">
+                {cat.name}
+              </option>
+            ))}
           </select>
 
           <input
             type="text"
             placeholder="Descricao do Produto"
-            className="w-full h-2/11 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-2/11 rounded-3xl pl-4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -144,7 +176,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
             type="number"
             step="0.01"
             placeholder="Preco do Produto"
-            className="w-full h-1/11 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-1/11 rounded-3xl pl-4"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
@@ -158,7 +190,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
 
           <div className="flex flex-row items-center justify-center gap-2 h-2/11">
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(Math.max(0, quantity - 1))}> - </div>
-            <div className="mr-20 ml-20 text-laranja font-sans text-5xl"> {quantity} </div>
+            <div className="w-60 text-center text-laranja font-sans text-5xl"> {quantity} </div>
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(quantity + 1)}> + </div>
           </div>
 
