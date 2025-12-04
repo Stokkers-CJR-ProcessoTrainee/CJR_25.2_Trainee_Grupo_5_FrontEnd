@@ -14,7 +14,7 @@ interface Category {
     name: string;
 }
 
-export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateStoreModalProps) {
+export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateStoreModalProps) {
     if (!abrir) return null;
 
     const [name, setName] = useState('');

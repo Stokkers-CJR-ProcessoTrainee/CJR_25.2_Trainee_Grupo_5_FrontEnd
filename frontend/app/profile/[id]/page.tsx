@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { getUserRatings, getProductsByUser, getStoresByUser, getUserById } from "@/api/api";
 import EditUserModal from "@/components/modals/EditUserModal";
 import { toast, ToastContainer } from "react-toastify";
-import CreateStoreModel from "@/components/modals/CreateStoreModal";
+import CreateStoreModal from "@/components/modals/CreateStoreModal";
 import Carrossel from "@/components/Carrossel";
 import { useRouter } from "next/navigation";
 import CardProdutos from "@/components/CardProdutos";
@@ -363,12 +363,14 @@ export default function UserPage() {
       onSuccess={fetchAllPageData}
       />      
 
-      <CreateStoreModel
+      {abrir && (
+      <CreateStoreModal
         abrir={abrir}
         fechar={() => setAbrir(false)}
         onSuccess={handleStoreCreated}
       />
-  
+      )}
+      
       <ToastContainer/>
       
     </main>
