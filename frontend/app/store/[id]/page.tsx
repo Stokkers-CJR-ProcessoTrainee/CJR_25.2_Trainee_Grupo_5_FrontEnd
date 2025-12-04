@@ -35,29 +35,29 @@ export default function StorePage() {
   }
 
   async function fetchStore() {
-      try {
-        const res = await getStoreById(id);
-        if (!res) {
-          setStore(null); // Loja não existe
-          return;
+    try {
+      const res = await getStoreById(id);
+      if (!res) {
+        setStore(null); // Loja não existe
+        return;
+      }
+      setStore(res);
+
+
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setDono(payload.sub == res.user_id);
+        } catch (err) {
+          console.error("Token inválido", err);
+          setDono(false)
         }
-        setStore(res);
+      }
 
-
-        const token = localStorage.getItem("token");
-        if (token) {
-          try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            setDono(payload.sub == res.user_id);
-          } catch (err) {
-            console.error("Token inválido", err);
-            setDono(false)
-          }
-        }
-
-      } catch (err) {
-        console.error("Erro ao carregar loja:", err);
-        setStore(null);
+    } catch (err) {
+      console.error("Erro ao carregar loja:", err);
+      setStore(null);
     }
   }
 
@@ -94,9 +94,9 @@ export default function StorePage() {
   const startIndex = (currentPage - 1) * ItemsPerPage;
   const endIndex = startIndex + ItemsPerPage;
   const currentProducts = produtos.slice(startIndex, endIndex);
-  const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r:any) => r.rating), 0))) : 0;
-  const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r:any) => r.rating === maxRating));
-  
+  const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r: any) => r.rating), 0))) : 0;
+  const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r: any) => r.rating === maxRating));
+
   return (
     <main className="min-h-screen bg-back pb-16">
 
@@ -143,9 +143,9 @@ export default function StorePage() {
               onClick={() => setIsCreateProductModalOpen(true)}
             >
               <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="22.5" cy="22.5" r="22.5" fill="#FF9933"/>
-              <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479"/>
-              <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479"/>
+                <circle cx="22.5" cy="22.5" r="22.5" fill="#FF9933" />
+                <path d="M6.86328 21.8179H37.3718" stroke="white" strokeWidth="3.14479" />
+                <path d="M22.5801 6.10144V36.6099" stroke="white" strokeWidth="3.14479" />
               </svg>
             </button>
 
@@ -175,8 +175,8 @@ export default function StorePage() {
           {Array.from({ length: mediaRating }).map((_, i) => (
             <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
               <path
-              d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-              fill="#FFEB3A"
+                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                fill="#FFEB3A"
               />
             </svg>
           ))}
@@ -184,37 +184,37 @@ export default function StorePage() {
           {Array.from({ length: 5 - mediaRating }).map((_, i) => (
             <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
               <path
-              d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-              fill="#FFFFFF"
+                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                fill="#FFFFFF"
               />
             </svg>
-          ))}             
+          ))}
         </div>
 
         <div className="px-40 mt-5 py-10">
-          
+
           {ratings.length > 0 ? (
-            <div 
+            <div
               className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
               onClick={() => router.push(`/store/${id}/ratings`)}
-              >
+            >
               Avaliações
             </div>
           ) : (
-            <div 
+            <div
               className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
               onClick={() => router.push(`/store/${id}/ratings`)}
-              >
+            >
               Avaliar
             </div>
           )}
-   
+
           <Carrossel>
             {ratings.length > 0 ? (
               ratings.map((r) => (
                 <div
                   key={r.id}
-                  className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px]"
+                  className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 min-w-[600px] max-w-[750px]"
                 >
                   {/* imagem do usuário */}
                   <img
@@ -222,7 +222,7 @@ export default function StorePage() {
                     alt={r.user.username}
                     className="w-24 h-24 rounded-full object-cover shrink-0"
                   />
-                  
+
                   {/* conteúdo do comentário */}
                   <div className="flex flex-col justify-between w-full">
                     <div className="flex justify-between items-center">
@@ -245,9 +245,9 @@ export default function StorePage() {
                               fill="#FFFFFF"
                             />
                           </svg>
-                         ))}
+                        ))}
 
-                                    
+
                       </div>
                     </div>
 
@@ -256,52 +256,52 @@ export default function StorePage() {
                     </p>
 
                     <div className="flex justify-end">
-                      <button 
-                      className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
-                      onClick={() => router.push(`/rating/store/${r.id}`)}
+                      <button
+                        className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                        onClick={() => router.push(`/rating/store/${r.id}`)}
                       >
                         ver mais
                       </button>
                     </div>
-                                
+
                   </div>
                 </div>
               ))
-             ) : (
-                <div className="w-full h-10 flex -mt-3 items-center justify-center">
-                  <p className="text-gray-500 opacity-60 font-sans text-center">
-                    Esta loja não foi avaliada ainda.
-                  </p>
-                </div>
-                  )
+            ) : (
+              <div className="w-full h-10 flex -mt-3 items-center justify-center">
+                <p className="text-gray-500 opacity-60 font-sans text-center">
+                  Esta loja não foi avaliada ainda.
+                </p>
+              </div>
+            )
             }
           </Carrossel>
         </div>
-        
+
       </div>
 
       {/* Produtos */}
       <div className="w-full max-w-5xl text-text font-sans mx-auto mt-3 px-4">
         <div className="flex text-center gap-1">
           <h3 className="text-xl font-sans font-bold mb-4">
-            Produtos 
+            Produtos
           </h3>
           <h3 className="text-xs mt-2.5 font-sans font-bold">melhor avaliados</h3>
         </div>
-                
+
         <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
             {TopProdutos.length > 0 ? (
               TopProdutos.map((produto) => (
                 <CardProdutos key={produto.id} produto={produto} />
               ))
-             ) : (
+            ) : (
               <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos avaliados.</p>
-             )}
+            )}
           </Carrossel>
         </div>
       </div>
-      
+
       <div className="mt-10 pb-10">
         <div className="w-full text-text max-w-5xl mx-auto px-4">
 
@@ -377,7 +377,7 @@ export default function StorePage() {
           onUpdated={fetchProducts}
         />
       )}
-      
+
     </main>
   )
 }

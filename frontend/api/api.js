@@ -269,39 +269,39 @@ export async function updateProduct(id, data) {
 };
 
 export async function getProductByCategory(categoryId) {
-  const res = await api.get (`/products/category/${categoryId}`);
+  const res = await api.get(`/products/category/${categoryId}`);
   return res.data
 }
 
-export async function createStoreRating(storeId, data){
+export async function createStoreRating(storeId, data) {
   const token = localStorage.getItem('token');
-  const res = await api.post(`/store-ratings/store/${storeId}`, data,{
-    headers: {Authorization: `Bearer ${token}`}
+  const res = await api.post(`/store-ratings/store/${storeId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
   });
-  return res.data; 
-};
-
-export async function updateStoreRating(ratingId, data){
-  const token = localStorage.getItem('token');
-  const res = await api.patch(`/store-ratings/${ratingId}`, data,{
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
   return res.data;
 };
 
-export async function createProductRating(productId, data){
+export async function updateStoreRating(ratingId, data) {
   const token = localStorage.getItem('token');
-  const res = await api.post(`/product-ratings/product/${productId}`, data,{
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
+  const res = await api.patch(`/store-ratings/${ratingId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
-export async function updateProductRating(ratingId, data){
+export async function createProductRating(productId, data) {
   const token = localStorage.getItem('token');
-  const res = await api.patch(`/product-ratings/${ratingId}`, data,{
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
+  const res = await api.post(`/product-ratings/product/${productId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+};
+
+export async function updateProductRating(ratingId, data) {
+  const token = localStorage.getItem('token');
+  const res = await api.patch(`/product-ratings/${ratingId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data
 };
 
@@ -309,19 +309,19 @@ export async function getProductById(productId) {
   return api.get(`/products/${productId}`);
 }
 
-export async function deleteProductRating(ratingId){
+export async function deleteProductRating(ratingId) {
   const token = localStorage.getItem('token');
   const res = await api.delete(`/product-ratings/${ratingId}`, {
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 }
 
-export async function deleteStoreRating(ratingId){
+export async function deleteStoreRating(ratingId) {
   const token = localStorage.getItem('token');
   const res = await api.delete(`/store-ratings/${ratingId}`, {
-    headers: {Authorization: `Bearer ${token}`}
-  }); 
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 }
 

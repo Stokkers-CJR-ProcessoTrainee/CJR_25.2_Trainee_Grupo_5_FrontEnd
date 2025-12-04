@@ -8,6 +8,10 @@
   --color-back: #F6F3E4;
   --color-text: #000000;
   --color-card: #ffffff;
+  
+  --color-cinzaplaceholder: #7F7F7F;
+  --color-modalinfo: #ffffff;
+  --color-bgmodal: #e0e0e0; 
 
   --color-laranja2: #d85f00;
   --color-balck: #131313;
@@ -24,6 +28,10 @@
   --color-text: #A0A0A0;
   --color-card: #1E1E1E;
   
+  --color-cinzaplaceholder: #696969;
+  --color-modalinfo: #333333;
+  --color-bgmodal: #1E1E1E; 
+
   --color-balck: #ffffff;
   --color-themeBut: #ffa500;
 }
@@ -34,6 +42,9 @@
   --color-back: var(--color-back);
   --color-text: var(--color-text);
 
+  --color-cinzaplaceholder: var(--color-cinzaplaceholder);
+  --color-modalinfo: var(--color-modalinfo);
+  --color-bgmodal: var(--color-bgmodal); 
 
   --color-card: var(--color-card);
   --color-laranja2: var(--color-laranja2);
