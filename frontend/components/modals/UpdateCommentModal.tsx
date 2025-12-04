@@ -4,83 +4,83 @@ import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 interface UpdateCommentModalProps {
-    mostrar: boolean,
-    fechar: () => void,
-    tipo: "store" | "product",
-    comentario: any | null;
-    onUpdate: (updated: any) => void;
-    rating_id: number | undefined;
+  mostrar: boolean,
+  fechar: () => void,
+  tipo: "store" | "product",
+  comentario: any | null;
+  onUpdate: (updated: any) => void;
+  rating_id: number | undefined;
 }
 
-export default function UpdateCommentModal({mostrar, fechar, tipo, rating_id ,comentario, onUpdate}: UpdateCommentModalProps) {
-    const [comment, setComment] = useState(comentario?.content || "");
+export default function UpdateCommentModal({ mostrar, fechar, tipo, rating_id, comentario, onUpdate }: UpdateCommentModalProps) {
+  const [comment, setComment] = useState(comentario?.content || "");
 
-    useEffect(() => {
-        setComment(comentario?.content || "");
-    }, [comentario]);
+  useEffect(() => {
+    setComment(comentario?.content || "");
+  }, [comentario]);
 
-    const handleClose = () => {
-        setComment('');
-        fechar();
-    };
+  const handleClose = () => {
+    setComment('');
+    fechar();
+  };
 
-    const handleUpdate = async () => {
-        if (!comment.trim()) {
-            toast.error('O comentário não pode estar vazio!');
-            return;
-        }
-
-        try {
-            const data = { content: comment };
-            if (tipo == "store") {
-                const updated = await updateStoreComment(comentario.id, data, rating_id);
-                onUpdate(updated);
-            }
-            if (tipo == "product") {
-                const updated = await updateProductComment(comentario.id, data, rating_id);
-                onUpdate(updated);
-            }
-            toast.success("Comentário atualizado!");
-            handleClose();
-        } catch (err: any) {
-            const message = err?.response?.data?.message || "Erro ao atualizar!";
-            toast.error(message);
-        }
+  const handleUpdate = async () => {
+    if (!comment.trim()) {
+      toast.error('O comentário não pode estar vazio!');
+      return;
     }
 
+    try {
+      const data = { content: comment };
+      if (tipo == "store") {
+        const updated = await updateStoreComment(comentario.id, data, rating_id);
+        onUpdate(updated);
+      }
+      if (tipo == "product") {
+        const updated = await updateProductComment(comentario.id, data, rating_id);
+        onUpdate(updated);
+      }
+      toast.success("Comentário atualizado!");
+      handleClose();
+    } catch (err: any) {
+      const message = err?.response?.data?.message || "Erro ao atualizar!";
+      toast.error(message);
+    }
+  }
 
-    if (!mostrar) return null
 
-    return(
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-card rounded-lg p-8 max-w-md w-full shadow-lg relative flex flex-col gap-6">
+  if (!mostrar) return null
 
-                <button
-                onClick={handleClose}
-                className="absolute cursor-pointer top-4 right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
-                >
-                <FaTimes />
-                </button>
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-bgmodal rounded-lg p-8 max-w-md w-full relative flex flex-col gap-6">
 
-                <h2 className="text-xl font-semibold font-sans text-laranja tracking-wider text-center text-foreground">
-                Editar Comentário
-                </h2>
+        <button
+          onClick={handleClose}
+          className="absolute cursor-pointer top-4 right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
+        >
+          <FaTimes />
+        </button>
 
-                <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Escreva seu comentário..."
-                className="w-full h-32 p-3 border border-laranja rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-laranja resize-none"
-                />
+        <h2 className="text-xl font-semibold font-sans text-laranja tracking-wider text-center text-foreground">
+          Editar Comentário
+        </h2>
 
-                <button
-                onClick={handleUpdate}
-                className="p-3 rounded-full font-sans tracking-wider text-laranja border text-white border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
-                >
-                Atualizar
-                </button>
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Escreva seu comentário..."
+          className="bg-modalinfo w-full h-32 p-3 border border-laranja rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-laranja resize-none"
+        />
 
-            </div>
-        </div>
-    );
+        <button
+          onClick={handleUpdate}
+          className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
+        >
+          Atualizar
+        </button>
+
+      </div>
+    </div>
+  );
 }
