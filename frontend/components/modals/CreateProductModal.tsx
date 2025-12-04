@@ -68,18 +68,22 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
     >
 
       <div
-        className="bg-background relative rounded-2xl p-6 w-150 h-140 shadow-lg flex flex-col items-center justify-center"
+        className="bg-bgmodal relative rounded-2xl p-6 w-150 h-140 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
 
         <button
-          className="absolute top-2 right-2 w-8 h-8 text-gray-500 font-bold text-3xl hover:text-red-500"
+          className="absolute top-2 right-2 w-8 h-8 hover:text-red-500"
           onClick={close}
         >
-          X
+          <img
+            src="/images/botao-de-sair.png"
+            alt='sair'
+            className="h-4 w-4"
+          />
         </button>
 
-        <h2 className="font-sans text-3xl mb-4"> Adicionar Produto </h2>
+        <h2 className="font-sans text-text text-3xl mb-4"> Adicionar Produto </h2>
 
         <div className="flex flex-col w-full h-full items-center justify-center gap-2">
 
@@ -88,13 +92,13 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
           <input
             type="text"
             placeholder="Nome do Produto"
-            className="w-full h-1/10 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo text-text w-full h-1/10 rounded-3xl pl-4"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <select
-            className={`pl-4 rounded-3xl w-full h-1/10 bg-white shadow-lg ${category === "" ? "text-cinzaplaceholder" : "text-black"}`}
+            className={`bg-modalinfo pl-4 rounded-3xl w-full h-1/10 ${category === "" ? "text-cinzaplaceholder" : "text-text"}`}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -107,7 +111,7 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
           <input
             type="text"
             placeholder="Descricao do Produto"
-            className="w-full h-1/5 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo text-text w-full h-1/5 rounded-3xl pl-4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -116,14 +120,14 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
             type="number"
             step="0.01"
             placeholder="Preco do Produto"
-            className="w-full h-1/10 rounded-3xl bg-white shadow-lg pl-4"
+            className="bg-modalinfo text-text w-full h-1/10 rounded-3xl pl-4"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
 
           <div className="flex flex-row items-center justify-center gap-2 h-1/5">
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(Math.max(0, quantity - 1))}> - </div>
-            <div className="mr-20 ml-20 text-laranja font-sans text-5xl"> {quantity} </div>
+            <div className="w-60 text-center text-laranja font-sans text-5xl"> {quantity} </div>
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(quantity + 1)}> + </div>
           </div>
 
