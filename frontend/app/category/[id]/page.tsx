@@ -48,11 +48,9 @@ export default function CategoryPage() {
 
   const hero = {
     text:
-    categoryHeroTexts[category?.name ?? ""] ??
-    null,
+    categoryHeroTexts[category?.name ?? ""],
     image: 
-    categoryHeroImages[category?.name ?? ""] ??
-    null,
+    categoryHeroImages[category?.name ?? ""],
   }
 
   useEffect(() => {
