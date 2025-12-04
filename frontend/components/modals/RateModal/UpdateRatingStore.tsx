@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void;
 }
 
-export function UpdateStoreRatingModal({ ratingId, open, onClose }: Props) {
+export default function UpdateStoreRatingModal({ ratingId, open, onClose }: Props) {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [storeName, setStoreName] = useState<string>("");

@@ -13,32 +13,33 @@ interface EditUserModalProps {
   onSuccess: () => void;
 }
 
-export default function EditUserModal({ mostrar, fechar, foto, onSuccess }: EditUserModalProps) {
-  const router = useRouter();
-  const [name, setName] = useState('');
-  const [user, setUser] = useState('');
-  const [email, setEmail] = useState('');
+export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUserModalProps) {
+    const router = useRouter();
+    const [name, setName] = useState('');
+    const [user, setUser] = useState('');
+    const [email, setEmail] = useState('');
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [mostrarModalPass, setMostrarPass] = useState(false)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [mostrarModalPass, setMostrarPass] = useState(false)
 
-  const UploadFile = async (file: File) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+    const UploadFile = async (file: File) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            
+            const res = await fetch("https://stokkers.onrender.com/upload", {
+                method: "POST",
+                body: formData,
+            });
 
-      const res = await fetch("http://localhost:3001/upload", {
-        method: "POST",
-        body: formData,
-      });
+            if (!res.ok) throw new Error("Erro na resposta do servidor de upload");
 
-      if (!res.ok) throw new Error("Erro na resposta do servidor de upload");
-
-      const data = await res.json();
-      return data.url;
-    } catch (error) {
-      throw error;
+            const data = await res.json();
+            return data.url;
+        } catch (error) {
+            throw error;
+        }
     }
   }
 

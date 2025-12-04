@@ -98,13 +98,13 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
     if (type === 'banner') { setBannerFile(null); setIsBannerRemoved(true); }
   };
 
-  const UploadFile = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("http://localhost:3001/upload", { method: "POST", body: formData });
-    const data = await res.json();
-    return data.url;
-  };
+   const UploadFile = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("https://stokkers.onrender.com/upload", { method: "POST", body: formData });
+        const data = await res.json();
+        return data.url;
+   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -204,7 +204,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
 
           <input type="file" className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer z-10"
             onChange={(e) => { setLogoFile(e.target.files?.[0] || null); setIsLogoRemoved(false); }} />
-
+  
           {logoStatus.showDelete && (
             <button type="button" className="absolute right-6 top-3 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
               onClick={(e) => { e.stopPropagation(); handleForceDelete('logo'); }}>
