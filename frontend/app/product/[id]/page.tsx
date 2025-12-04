@@ -22,7 +22,7 @@ interface Products {
   store: { sticker_url: string, user_id: number },
   category: { name: string },
   product_images: { order: number, image_url: string }[],
-  product_ratings: { rating: number }[]
+  product_ratings: { rating: number, comment?: string, user?: { username: string } }[] // Adicionado user e comment
 }
 
 type Produto = {
@@ -184,6 +184,51 @@ export default function ProductPage() {
           </div>
         </div>
 
+        {/* Carrossel de Avaliações do Produto */}
+        <div className="flex flex-col p-4 gap-4 bg-back text-text pb-20">
+            <div className="font-sans text-xl font-bold h-12 w-70">
+                Avaliações de Clientes ({reviews})
+            </div>
+            
+            <div className=" flex-1 w-full">
+                {products?.product_ratings && products.product_ratings.length > 0 ? (
+                    <Carrossel>
+                        {products.product_ratings.map((rating: any, index: number) => (
+                            <div
+                                key={index}
+                                className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex flex-col justify-between min-w-[300px] max-w-[400px] h-32"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <p className="font-semibold text-lg">
+                                        {rating.user?.username || `Cliente ${index + 1}`}
+                                    </p>
+                                    <div className="flex gap-1">
+                                        {Array.from({ length: rating.rating }).map((_, i) => (
+                                            <span key={i} className="text-laranja">★</span>
+                                        ))}
+                                        {Array.from({ length: 5 - rating.rating }).map((_, i) => (
+                                            <span key={i} className="text-gray-400">★</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <p className="text-[14px] leading-snug mt-2 overflow-hidden max-h-12 text-ellipsis">
+                                    {rating.comment || "Este cliente não deixou um comentário."}
+                                </p>
+                                
+                            </div>
+                        ))}
+                    </Carrossel>
+                ) : (
+                    <div className="w-full h-32 flex items-center justify-center bg-back rounded-3xl">
+                        <p className="text-gray-500 font-sans text-center">
+                            Este produto ainda não possui avaliações.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+
         {/* outros produtos */}
         <div className="flex flex-col p-4 gap-4 bg-back text-text h-96">
           <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
@@ -194,7 +239,7 @@ export default function ProductPage() {
                   <Link
                     key={p.id}
                     href={`/product/${p.id}`}
-                    className="block h-full" // block ensures the link wraps the whole card
+                    className="block h-full"
                   >
                     <CardProdutos key={p.id} produto={p} />
                   </Link>
