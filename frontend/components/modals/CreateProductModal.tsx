@@ -116,13 +116,13 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
           <input
             type="text"
             placeholder="Nome do Produto"
-            className="bg-modalinfo text-text w-full h-1/10 rounded-3xl pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-1/10 rounded-3xl pl-4"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <select
-            className={`bg-modalinfo pl-4 rounded-3xl w-full h-1/10 ${category === "" ? "text-cinzaplaceholder" : "text-text"}`}
+            className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none pl-4 rounded-3xl w-full h-1/10 ${category === "" ? "text-cinzaplaceholder" : "text-text"}`}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -138,7 +138,7 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
           <input
             type="text"
             placeholder="Descricao do Produto"
-            className="bg-modalinfo text-text w-full h-1/5 rounded-3xl pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-1/5 rounded-3xl pl-4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -147,7 +147,7 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
             type="number"
             step="0.01"
             placeholder="Preco do Produto"
-            className="bg-modalinfo text-text w-full h-1/10 rounded-3xl pl-4"
+            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full h-1/10 rounded-3xl pl-4"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />

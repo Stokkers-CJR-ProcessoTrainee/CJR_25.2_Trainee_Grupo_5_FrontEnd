@@ -108,7 +108,7 @@ export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateSto
           <input
             type="text"
             placeholder="Nome da loja"
-            className="w-full bg-modalinfo text-text p-2 pl-5 rounded-2xl mt-5"
+            className="w-full bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text p-2 pl-5 rounded-2xl mt-5"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -116,7 +116,7 @@ export default function CreateStoreModel({ abrir, fechar, onSuccess }: CreateSto
           <input
             type="text"
             placeholder="Descrição"
-            className="w-full bg-modalinfo text-text p-2 pl-5 rounded-2xl mt-3"
+            className="w-full bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text p-2 pl-5 rounded-2xl mt-3"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
