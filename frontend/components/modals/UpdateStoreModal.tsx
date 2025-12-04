@@ -163,8 +163,8 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
         <h2 className="text-text text-center font-sans font-semibold text-2xl -mt-2">Atualizar Loja</h2>
 
         <form onSubmit={handleSubmit} className="relative font-sans text-xs">
-          <input type="text" placeholder="Nome da loja" className="bg-modalinfo text-text w-full p-2 pl-5 rounded-2xl mt-5" value={name} onChange={(e) => setName(e.target.value)} />
-          <input type="text" placeholder="Descrição" className="bg-modalinfo text-text w-full p-2 pl-5 rounded-2xl mt-3" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <input type="text" placeholder="Nome da loja" className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full p-2 pl-5 rounded-2xl mt-5" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" placeholder="Descrição" className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none text-text w-full p-2 pl-5 rounded-2xl mt-3" value={description} onChange={(e) => setDescription(e.target.value)} />
 
           <div className="absolute flex justify-center mt-83 ml-26 font-sans text-xs hover:brightness-90 z-40">
             <button type="submit" disabled={loading} className="px-15 py-1 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
