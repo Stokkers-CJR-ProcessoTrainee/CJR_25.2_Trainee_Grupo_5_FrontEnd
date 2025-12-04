@@ -190,7 +190,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
 
           <div className="flex flex-row items-center justify-center gap-2 h-2/11">
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(Math.max(0, quantity - 1))}> - </div>
-            <div className="mr-20 ml-20 text-laranja font-sans text-5xl"> {quantity} </div>
+            <div className="w-60 text-center text-laranja font-sans text-5xl"> {quantity} </div>
             <div className="w-12 h-12 border-3 border-laranja text-center rounded-full hover:brightness-90 hover:cursor-pointer transition text-4xl text-laranja" onClick={() => setQuantity(quantity + 1)}> + </div>
           </div>
 
