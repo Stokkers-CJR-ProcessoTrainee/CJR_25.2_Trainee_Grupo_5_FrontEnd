@@ -133,7 +133,6 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
                 {cat.name}
               </option>
             ))}
-
           </select>
 
           <input
