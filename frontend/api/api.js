@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/',
+  baseURL: 'https://stokkers.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
