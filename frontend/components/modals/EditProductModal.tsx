@@ -49,8 +49,9 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     }
   }
 
-  fetchProduct();
-
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
   useEffect(() => {
     if (open && product) {
@@ -135,7 +136,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     >
 
       <div
-        className="bg-bgmodal relative rounded-2xl p-6 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
+        className="bg-bgmodal relative rounded-2xl p-10 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
 
