@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { deleteImage, deleteProduct, updateProduct } from "@/api/api";
+import { deleteImage, deleteProduct, getAllParentCategories, updateProduct } from "@/api/api";
 import { toast } from "react-toastify";
 import { getCategories } from "@/api/api";
 import Carrossel from "../Carrossel";
@@ -37,20 +37,33 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
-  const [Categories, setCategories] = useState<Category[]>([]);
+  const [AllCategories, setAllCategories] = useState<Category[]>([]);
+  const [ParentCategories, setParentCategories] = useState<Category[]>([]);
+  const [SubCategories, setSubCategories] = useState<Category[]>([]);
   const [Images, setImages] = useState(product?.product_images || []);
 
-  async function fetchProduct() {
+  async function fetchData() {
     try {
-      const categories = await getCategories();
-      setCategories(categories);
+      const [all, parents] = await Promise.all([
+        getCategories(),
+        getAllParentCategories()
+      ]);
+
+      setAllCategories(all);
+      setParentCategories(parents);
+
+      const parentIds = new Set(parents.map((p: Category) => p.id));
+      const subs = all.filter((cat: Category) => !parentIds.has(cat.id));
+
+      setSubCategories(subs);
+
     } catch (error) {
       console.error("Failed to fetch category data:", error);
     }
   }
 
   useEffect(() => {
-    fetchProduct();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -190,7 +203,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
           >
             <option value="" disabled> Selecione uma Categoria </option>
 
-            {Categories.map((cat) => (
+            {SubCategories.map((cat) => (
               <option key={cat.id} value={cat.id} className="text-text">
                 {cat.name}
               </option>
