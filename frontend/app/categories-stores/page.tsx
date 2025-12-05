@@ -10,6 +10,8 @@ import { getCategories, getStores } from "@/api/api";
 import CardLojas from "@/components/CardLojas";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
+
 
 export default function CategoriesStoresPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -19,6 +21,17 @@ export default function CategoriesStoresPage() {
     const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
 
     const router = useRouter();
+
+    const categoryIcons: Record<string, string> = {
+        "eletrônicos": "ion:tv-outline",
+        "jogos": "streamline:controller",
+        "mercado": "healthicons:vegetables-outline",
+        "moda": "ph:dress",
+        "farmácia": "hugeicons:medicine-02",
+        "beleza": "streamline-ultimate:make-up-lipstick",
+        "brinquedos": "ph:lego",
+        "casa": "ph:house-light"
+    };
     
     useEffect(() => {
         async function fetchCategories() {
@@ -165,6 +178,7 @@ return (
                         flex items-center gap-2
                         hover:bg-gray-100 transition
                         text-text
+                        hover: cursor-pointer
                     "
                 >
                     Filtros
@@ -185,7 +199,10 @@ return (
                         animate-fadeIn
                     ">
                         <div className="flex flex-col gap-3">
-                            {categories.map((cat) => (
+                            {categories.map((cat) => {
+                                const iconName = categoryIcons[cat.name.toLowerCase()] || "mdi:help-circle-outline";
+
+                                return (
                                 <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
                                       <input 
                                         type="checkbox"
@@ -199,11 +216,19 @@ return (
                                             transition
                                         "
                                     />
-                                    <span className="text-laranja text-base font-normal group-hover:opacity-80 transition">
+                                    <span className="text-laranja text-base font-normal group-hover:opacity-80 transition flex items-center gap-1">
                                         {cat.name} 
+
+                                        <Icon 
+                                            icon={iconName} 
+                                            className="text-laranja" 
+                                            width="20" 
+                                            height="20" 
+                                        />
                                     </span>
                                 </label>
-                            ))}
+                                );
+                             })}
                             {categories.length === 0 && <p className="text-sm text-gray-400">Sem categorias</p>}
                         </div>
                     </div>
