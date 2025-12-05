@@ -8,7 +8,7 @@ interface CategoriaProps {
 
 export default function CardCategorias({ name }: CategoriaProps) {
   const icons: Record<string, string> = {
-    "eletrônicos": "ion:tv-outline",
+    "eletrônico": "ion:tv-outline",
     "jogos": "streamline:controller",
     "mercado": "healthicons:vegetables-outline",
     "moda": "ph:dress",

@@ -9,6 +9,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { FaArrowLeft, FaGem, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import {motion, AnimatePresence} from "framer-motion";
+import { UpdateProductRatingModal } from "@/components/modals/RateModal/UpdateRatingProduct";
 
 interface Rating {
   id: number;
@@ -22,8 +23,14 @@ interface Rating {
     username: string;
     profile_picture_url?: string;
   };
-  store: {
+  store?: {
     user_id:number;
+  }
+  product?: {
+    store_id:number;
+    store?: {
+      user_id: number;
+    }
   }
 }
 
@@ -57,9 +64,12 @@ export default function RatingsPage() {
         if (rating && userId) {
             setDonoRating(rating.user_id === userId);
     
-            setDonoLoja(rating.store.user_id === userId)
+            const donoLoja = tipo === 'store' 
+                ? rating.store?.user_id === userId
+                : rating.product?.store?.user_id === userId;
+            setDonoLoja(donoLoja);
         }
-    }, [rating, userId]);
+    }, [rating, userId, tipo]);
 
     useEffect(() => {
         async function fetchRating() {
@@ -289,11 +299,19 @@ export default function RatingsPage() {
                 )}
 
             </div>
-            <UpdateRatingStoreModal
-            ratingId={rating?.id!}
-            open={!!ratingEditar}
-            onClose={() => setRatingEditar(null)}
-            />
+            {tipo === 'store' ? (
+                <UpdateRatingStoreModal
+                ratingId={rating?.id!}
+                open={!!ratingEditar}
+                onClose={() => setRatingEditar(null)}
+                />
+            ) : (
+                <UpdateProductRatingModal
+                ratingId={rating?.id!}
+                open={!!ratingEditar}
+                onClose={() => setRatingEditar(null)}
+                />
+            )}
             <UpdateCommentModal
             mostrar={!!comentarioEditar}
             fechar={() => setComentarioEditar(null)}

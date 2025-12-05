@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { deleteProduct, updateProduct } from "@/api/api";
+import { deleteImage, deleteProduct, getAllParentCategories, updateProduct } from "@/api/api";
 import { toast } from "react-toastify";
 import { getCategories } from "@/api/api";
+import Carrossel from "../Carrossel";
 
 interface EditProductModalProps {
   open: boolean;
@@ -19,6 +20,7 @@ interface Product {
   description?: string;
   stock: number;
   category_id: number;
+  product_images?: { id: number; image_url: string; order: number }[];
 }
 
 type Category = {
@@ -35,24 +37,34 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
-  const [Categories, setCategories] = useState<Category[]>([]);
+  const [AllCategories, setAllCategories] = useState<Category[]>([]);
+  const [ParentCategories, setParentCategories] = useState<Category[]>([]);
+  const [SubCategories, setSubCategories] = useState<Category[]>([]);
+  const [Images, setImages] = useState(product?.product_images || []);
 
+  async function fetchData() {
+    try {
+      const [all, parents] = await Promise.all([
+        getCategories(),
+        getAllParentCategories()
+      ]);
+
+      setAllCategories(all);
+      setParentCategories(parents);
+
+      const parentIds = new Set(parents.map((p: Category) => p.id));
+      const subs = all.filter((cat: Category) => !parentIds.has(cat.id));
+
+      setSubCategories(subs);
+
+    } catch (error) {
+      console.error("Failed to fetch category data:", error);
+    }
+  }
 
   useEffect(() => {
-
-    async function fetchProduct() {
-
-      try {
-        const categories = await getCategories();
-        setCategories(categories);
-      } catch (error) {
-        console.error("Failed to fetch category data:", error);
-      }
-    }
-
-    fetchProduct();
+    fetchData();
   }, []);
-
 
   useEffect(() => {
     if (open && product) {
@@ -61,6 +73,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
       setCategory(product.category_id.toString());
       setPrice(product.price.toString());
       setQuantity(product.stock);
+      setImages(product.product_images || []);
     }
   }, [open, product]);
 
@@ -114,6 +127,21 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     }
   }
 
+  const handleDeleteImage = async (id: number) => {
+    const confirmed = window.confirm("Are you sure you want to delete this image?");
+    if (!confirmed) return;
+
+    try {
+      await deleteImage(id); // Assumes deleteImage is your async API call
+      setImages((prev) => prev.filter((img) => img.id !== id));
+      toast.success("Image deleted successfully!");
+      if (onUpdated) onUpdated();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete image. Please try again.");
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
@@ -121,7 +149,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     >
 
       <div
-        className="bg-bgmodal relative rounded-2xl p-6 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
+        className="bg-bgmodal relative rounded-2xl p-10 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
 
@@ -140,7 +168,25 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
 
         <div className="flex flex-col w-full h-full items-center justify-center gap-2">
 
-          <div className="w-full h-2/11 border-2 border-dashed border-laranja rounded-3xl"></div>
+
+          <div className="flex flex-row h-2/11 w-full gap-4">
+            <div className="aspect-square h-full border-2 border-dashed border-laranja rounded-3xl"></div>
+            <Carrossel>
+              {Images?.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-modalinfo hover:border-3 hover:border-red-600 rounded-2xl hover:brightness-90 hover:cursor-pointer transition h-full shrink-0 snap-start"
+                  onClick={() => handleDeleteImage(item.id)}
+                >
+                  <img
+                    src={item?.image_url}
+                    className="w-full h-full object-cover rounded-2xl"
+                  />
+                </div>
+              ))}
+            </Carrossel>
+          </div>
+
 
           <input
             type="text"
@@ -157,7 +203,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
           >
             <option value="" disabled> Selecione uma Categoria </option>
 
-            {Categories.map((cat) => (
+            {SubCategories.map((cat) => (
               <option key={cat.id} value={cat.id} className="text-text">
                 {cat.name}
               </option>

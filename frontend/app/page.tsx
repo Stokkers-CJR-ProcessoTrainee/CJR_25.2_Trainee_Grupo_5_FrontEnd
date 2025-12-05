@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import { getCategories, getProductsByCategory, getStores } from "@/api/api";
+import { getAllParentCategories, getProductsByCategory, getStores } from "@/api/api";
 import { use, useEffect, useState } from "react";
 
 import Carrossel from "@/components/Carrossel";
@@ -28,7 +28,7 @@ export default function Home() {
   const router = useRouter();
 
   async function fetchCategories() {
-    return await getCategories();
+    return await getAllParentCategories();
   }
 
   async function fetchProductsbyCategory(categoryId: number) {
@@ -100,7 +100,6 @@ export default function Home() {
     <main>
       <Navbar/>
 
-      {/* HERO */}
       <div className="flex justify-center items-center bg-laranja p-10 pt-25 gap-10"> 
         <div className="text-white font-sans font-extrabold text-4xl tracking-wider mb-6 text-end h-32 w-196">
           <h1>Prepare-se para se despedir da desordem com o STOKKERS!</h1>
@@ -118,7 +117,6 @@ export default function Home() {
 
       <div className="bg-back p-30">
 
-        {/* 🔍 NOVA BARRA DE PESQUISA — IGUAL A CATEGORY PAGE */}
         <div className="flex justify-end w-full mb-6 mt-20 relative pr-10">
           <div className="w-full max-w-xl relative">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
