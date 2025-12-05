@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://stokkers.onrender.com',
+  baseURL: 'http://localhost:3001',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -329,3 +329,16 @@ export async function getChildCategories(parentCategoryId) {
   const res = await api.get(`/categories/children/${parentCategoryId}`);
   return res.data;
 }
+
+export async function deleteImage(imageId) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/products-images/${imageId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+
+
+
+
