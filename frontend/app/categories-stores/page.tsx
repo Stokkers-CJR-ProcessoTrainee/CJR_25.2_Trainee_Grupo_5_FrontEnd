@@ -212,7 +212,7 @@ return (
 
         </div>
         
-        <div className="w-full flex flex-col items-center pb-20 bg-back flex-1">
+        <div className="w-full flex flex-col items-center pb-20 grow">
                 
             <div className="w-full max-w-[1200px] px-10 mt-10 text-2xl font-bold font-sans">
                 <h2>Lojas</h2>

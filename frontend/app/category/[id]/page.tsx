@@ -225,7 +225,7 @@ export default function CategoryPage() {
                 Filtros
                 <FaChevronDown
                   size={12}
-                  className={`transition-transform duration-200 ${openFilters ? 'rotate-180' : ''}`}
+                  className={openFilters ? "rotate-180 transition" : "transition"}
                 />
               </button>
 
