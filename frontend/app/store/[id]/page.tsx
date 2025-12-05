@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar"
 import { useParams } from "next/navigation";
-import { getProductRating, getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
+import { getCategories, getProductRating, getProductsByStore, getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify"
+import { Category } from "@/app/Types";
 
 export default function StorePage() {
   const { id } = useParams();
@@ -23,6 +24,16 @@ export default function StorePage() {
   const [currentPage, setCurrentPage] = useState(1)
   const ItemsPerPage = 15;
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  async function fetchCategories() {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (err) {
+      console.error("Erro ao carregar categorias:", err);
+    }
+  }
 
 
   async function fetchProducts() {
@@ -85,6 +96,7 @@ export default function StorePage() {
       fetchProducts();
       fetchStore();
       fetchRatings();
+      fetchCategories();
     }
   }, [id]);
 
@@ -96,7 +108,8 @@ export default function StorePage() {
   const currentProducts = produtos.slice(startIndex, endIndex);
   const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r: any) => r.rating), 0))) : 0;
   const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r: any) => r.rating === maxRating));
-
+  const categoryName = categories.find(c => c.id == store.category_id)?.name;
+  
   return (
     <main className="min-h-screen bg-back pb-16">
 
@@ -115,10 +128,14 @@ export default function StorePage() {
 
         <div className="absolute inset-0 bg-linear-to-b from-black/60 to-transparent pointer-events-none"></div>
 
-        <div className="absolute inset-0 flex mt-10 items-center justify-center z-10 pointer-events-none">
-          <h2 className="text-white text-6xl font-bold font-sans tracking-wider text-center">
+        <div className="absolute inset-0 flex flex-col mt-10 items-center justify-center z-10 pointer-events-none">
+          <h2 className="text-white text-6xl font-bold items-center font-sans tracking-wider text-center">
             {store?.name}
+            <p className="flex text-start font-sans text-sm">
+              {categoryName}
+            </p>
           </h2>
+        
         </div>
 
         <div className="absolute bottom-4 right-6 z-10">
