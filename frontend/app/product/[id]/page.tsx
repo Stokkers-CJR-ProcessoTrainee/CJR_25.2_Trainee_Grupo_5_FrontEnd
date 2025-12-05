@@ -11,6 +11,7 @@ import EditProductModal from "@/components/modals/EditProductModal";
 import CarrosselVertical from "@/components/CarrosselVertical";
 import ZoomableImage from "@/components/ZoomableImage";
 import { FaStar } from 'react-icons/fa';
+import { CreateProductRatingModal } from '@/components/modals/RateModal/RateProduct';
 
 interface Products {
   id: number,
@@ -174,7 +175,7 @@ export default function ProductPage() {
                 {isOwner && (
                   <div
                     className="w-10 h-10 mt-4 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 hover:cursor-pointer transition"
-                    onClick={() => setIsEditProductModalOpen(true)}
+                    onClick={() => setIsRatingProductModalOpen(true)}
                   >
                     <FaStar
                     size={25}
@@ -271,6 +272,14 @@ export default function ProductPage() {
           close={() => setIsEditProductModalOpen(false)}
           product={products as any}
           onUpdated={fetchProduct}
+        />
+      )}
+
+      {isRatingProductModalOpen && (
+        <CreateProductRatingModal
+          open={isRatingProductModalOpen}
+          onClose={() => setIsRatingProductModalOpen(false)}
+          productId={Number(id)}
         />
       )}
 
