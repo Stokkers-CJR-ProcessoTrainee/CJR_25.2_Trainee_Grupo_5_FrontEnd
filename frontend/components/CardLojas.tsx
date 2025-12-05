@@ -20,7 +20,7 @@ export default function CardLojas({ name, category, logoUrl }: LojaCardProps) {
         <img
           src={logoUrl}
           alt={name}
-          className="w-20 h-20 object-contain rounded-full"
+          className="w-full h-full object-contain rounded-full"
         />
       </div>
 
