@@ -329,3 +329,16 @@ export async function getChildCategories(parentCategoryId) {
   const res = await api.get(`/categories/children/${parentCategoryId}`);
   return res.data;
 }
+
+export async function deleteImage(imageId) {
+  const token = localStorage.getItem('token');
+  const res = await api.delete(`/products-images/${imageId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return res.data;
+}
+
+
+
+
+
