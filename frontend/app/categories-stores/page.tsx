@@ -8,13 +8,15 @@ import Link from "next/link";
 import { Category } from "../Types";
 import { getCategories, getStores } from "@/api/api";
 import CardLojas from "@/components/CardLojas";
-import { FaSearch } from "react-icons/fa";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 export default function CategoriesStoresPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [stores, setStores] = useState<any[]>([]);
     const [search, setSearch] = useState("");
+    const [openFilters, setOpenFilters] = useState(false);
+    const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
 
     const router = useRouter();
     
@@ -42,9 +44,19 @@ export default function CategoriesStoresPage() {
         fetchStores();
     }, [])
 
-    const filteredStores = stores.filter(store => 
-        store.name.toLowerCase().includes(search.toLowerCase())
-    );
+    function toggleFilter(categoryId: number) {
+        setSelectedFilters((prev) => 
+            prev.includes(categoryId)
+                ? prev.filter((id) => id !== categoryId)
+                : [...prev, categoryId]
+        )
+    }
+
+    const filteredStores = stores.filter(store => {
+        const matchesSearch = store.name.toLowerCase().includes(search.toLowerCase());
+        const matchesCategory = selectedFilters.length === 0 || selectedFilters.includes(store.category_id);
+        return matchesSearch && matchesCategory;
+    });
 
 return (
     <main className="bg-back min-h-screen flex flex-col">
@@ -73,8 +85,9 @@ return (
 
         </div>
 
-        <div className="w-full max-w-[1200px] mx-auto px-5 mt-8 flex justify-end">
-            <div className="relative w-full max-w-md"> 
+        <div className="w-full max-w-[1200px] mx-auto px-5 mt-8 flex flex-col-reverse md:flex-row justify-end items-end md:items-center gap-4">
+
+            <div className="relative w-full max-w-md z-20"> 
                 <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                     
                 <input
@@ -143,9 +156,63 @@ return (
                     </div>
                 )}
             </div>
+
+            <div className="relative z-10">
+                <button
+                    onClick={() => setOpenFilters(!openFilters)}
+                    className="
+                        bg-card p-3 rounded-full shadow px-6 text-sm
+                        flex items-center gap-2
+                        hover:bg-gray-100 transition
+                        text-text
+                    "
+                >
+                    Filtros
+                    <FaChevronDown 
+                        size={14} 
+                        className={`transition-transform duration-200 ${openFilters ? 'rotate-180' : ''}`} 
+                    />
+                </button>
+
+                {openFilters && (
+                    <div className="
+                        absolute right-0 mt-2 w-56 
+                        bg-white
+                        rounded-3xl 
+                        shadow-[0_0_15px_rgba(0,0,0,0.1)] 
+                        p-5 
+                        z-50
+                        animate-fadeIn
+                    ">
+                        <div className="flex flex-col gap-3">
+                            {categories.map((cat) => (
+                                <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
+                                      <input 
+                                        type="checkbox"
+                                        checked={selectedFilters.includes(cat.id)}
+                                        onChange={() => toggleFilter(cat.id)}
+                                        className="
+                                            appearance-none w-5 h-5 
+                                            border-2 border-laranja rounded-md
+                                            checked:bg-laranja checked:border-laranja
+                                            relative cursor-pointer
+                                            transition
+                                        "
+                                    />
+                                    <span className="text-laranja text-base font-normal group-hover:opacity-80 transition">
+                                        {cat.name} 
+                                    </span>
+                                </label>
+                            ))}
+                            {categories.length === 0 && <p className="text-sm text-gray-400">Sem categorias</p>}
+                        </div>
+                    </div>
+                )}
+            </div>
+
         </div>
         
-        <div className="w-full flex flex-col items-center pb-20">
+        <div className="w-full flex flex-col items-center pb-20 bg-back flex-1">
                 
             <div className="w-full max-w-[1200px] px-10 mt-10 text-2xl font-bold font-sans">
                 <h2>Lojas</h2>
