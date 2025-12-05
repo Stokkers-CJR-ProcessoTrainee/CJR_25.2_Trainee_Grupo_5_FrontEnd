@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { getProductsById, getProductsByStore } from "@/api/api";
+import { getProductsById, getProductsByStore, getProductsRatingByProduct, getStoreRatingByStore } from "@/api/api";
 import Navbar from "@/components/Navbar";
 import Carrossel from "@/components/Carrossel";
 import { useParams } from "next/navigation";
@@ -12,6 +12,7 @@ import CarrosselVertical from "@/components/CarrosselVertical";
 import ZoomableImage from "@/components/ZoomableImage";
 import { FaStar } from 'react-icons/fa';
 import { CreateProductRatingModal } from '@/components/modals/RateModal/RateProduct';
+import { useRouter } from 'next/navigation'; // Corrigido para 'next/navigation'
 
 interface Products {
   id: number,
@@ -24,7 +25,7 @@ interface Products {
   store: { sticker_url: string, user_id: number },
   category: { name: string },
   product_images: { order: number, image_url: string }[],
-  product_ratings: { rating: number, comment?: string, user?: { username: string } }[] // Adicionado user e comment
+  product_ratings: { rating: number, comment?: string, user?: { username: string } }[]
 }
 
 type Produto = {
@@ -42,6 +43,7 @@ type Produto = {
 export default function ProductPage() {
   const [products, setProducts] = useState<Products | null>(null);
   const { id } = useParams();
+  const router = useRouter();
   const [mean, setMean] = useState(0);
   const [reviews, setReviews] = useState(0);
   const [image_number, setImage] = useState(0);
@@ -49,6 +51,7 @@ export default function ProductPage() {
   const [allProducts, setAllProducts] = useState<Produto[]>([]);
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
   const [isRatingProductModalOpen, setIsRatingProductModalOpen] = useState(false);
+  const [ratings, setRatings] = useState<any[]>([]);
 
 
   async function fetchProduct() {
@@ -87,10 +90,23 @@ export default function ProductPage() {
 
   }
 
+
+  
   useEffect(() => {
 
     fetchProduct();
 
+    async function fetchRatings() {
+      try {
+        const res = await getProductsRatingByProduct(id);
+        setRatings(res);
+      } catch (err) {
+        console.error("Erro ao carregar avaliações:", err);
+      }
+    }    
+
+    fetchRatings();
+    
   }, [id]);
 
   return (
@@ -172,7 +188,7 @@ export default function ProductPage() {
                     </svg>
                   </div>
                 )}
-                {isOwner && (
+                {!isOwner && (
                   <div
                     className="w-10 h-10 mt-4 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 hover:cursor-pointer transition"
                     onClick={() => setIsRatingProductModalOpen(true)}
@@ -198,7 +214,7 @@ export default function ProductPage() {
         </div>
 
         {/* Carrossel de Avaliações do Produto */}
-        <div className="flex flex-col p-4 gap-4 bg-back text-text pb-20">
+        <div className="flex flex-col p-4 gap-4 bg-back text-text">
             <div className="flex justify-between items-center h-12">
                 <div className="font-sans text-xl font-bold">
                     Avaliações de Clientes ({reviews})
@@ -206,44 +222,77 @@ export default function ProductPage() {
             </div>
             
             <div className=" flex-1 w-full">
-                {products?.product_ratings && products.product_ratings.length > 0 ? (
-                    <Carrossel>
-                        {products.product_ratings.map((rating: any, index: number) => (
-                            <div
-                                key={index}
-                                className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex flex-col justify-between min-w-[300px] max-w-[400px] h-32"
-                            >
-                                <div className="flex justify-between items-center">
-                                    <p className="font-semibold text-lg">
-                                        {rating.user?.username || `Cliente ${index + 1}`}
-                                    </p>
-                                    <div className="flex gap-1">
-                                        {Array.from({ length: rating.rating }).map((_, i) => (
-                                            <span key={i} className="text-laranja">★</span>
-                                        ))}
-                                        {Array.from({ length: 5 - rating.rating }).map((_, i) => (
-                                            <span key={i} className="text-gray-400">★</span>
-                                        ))}
-                                    </div>
-                                </div>
+              <Carrossel>
+                {ratings.length > 0 ? (
+                  ratings.map((r) => (
+                    <div
+                      key={r.id}
+                      className="bg-card text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 min-w-[600px] max-w-[750px]"
+                    >
+                      {/* imagem do usuário */}
+                      <img
+                        src={r.user.profile_picture_url}
+                        alt={r.user.username}
+                        className="w-24 h-24 rounded-full object-cover shrink-0"
+                      />
 
-                                <p className="text-[14px] leading-snug mt-2 overflow-hidden max-h-12 text-ellipsis">
-                                    {rating.comment || "Este cliente não deixou um comentário."}
-                                </p>
-                                
-                            </div>
-                        ))}
-                    </Carrossel>
-                ) : (
-                    <div className="w-full h-32 flex items-center justify-center bg-back rounded-3xl">
-                        <p className="text-gray-500 font-sans text-center">
-                            Este produto ainda não possui avaliações.
+                      {/* conteúdo do comentário */}
+                      <div className="flex flex-col justify-between w-full">
+                        <div className="flex justify-between items-center">
+                          <p className="font-semibold text-lg ">{r.user.username}</p>
+                          {/* estrelas */}
+                          <div className="flex gap-1">
+                            {Array.from({ length: r.rating }).map((_, i) => (
+                              <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
+                                <path
+                                  d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                  fill="#FFEB3A"
+                                />
+                              </svg>
+                            ))}
+
+                            {Array.from({ length: 5 - r.rating }).map((_, i) => (
+                              <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
+                                <path
+                                  d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                  fill="#FFFFFF"
+                                />
+                              </svg>
+                            ))}
+
+
+                          </div>
+                        </div>
+
+                        <p className=" text-[15px] leading-snug mt-2">
+                          {r.comment}
                         </p>
+
+                        <div className="flex justify-end">
+                          <button
+                            className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                            onClick={() => router.push(`/rating/product/${r.id}`)}
+                          >
+                            ver mais
+                          </button>
+                        </div>
+
+                      </div>
                     </div>
-                )}
+                  ))
+                ) : (
+                  <div className="w-full h-10 flex -mt-3 items-center justify-center">
+                    <p className="text-gray-500 opacity-60 font-sans text-center">
+                      Esta loja não foi avaliada ainda.
+                    </p>
+                  </div>
+                )
+                }
+              </Carrossel>
             </div>
         </div>
 
+        {/* Carrossel de Produtos da Mesma Loja (CORRIGIDO) */}
         <div className="flex flex-col p-4 gap-4 bg-back text-text h-96">
           <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
           <div className=" flex-1 w-full">
@@ -253,7 +302,8 @@ export default function ProductPage() {
                   <Link
                     key={p.id}
                     href={`/product/${p.id}`}
-                    className="block h-full"
+                    // ⭐️ CORREÇÃO AQUI: Adicionando largura mínima e margem para o carrossel funcionar
+                    className="block h-full min-w-[250px] max-w-[300px] mr-4 shrink-0"
                   >
                     <CardProdutos key={p.id} produto={p} />
                   </Link>
