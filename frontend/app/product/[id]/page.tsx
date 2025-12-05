@@ -10,6 +10,7 @@ import CardProdutos from "@/components/CardProdutos";
 import EditProductModal from "@/components/modals/EditProductModal";
 import CarrosselVertical from "@/components/CarrosselVertical";
 import ZoomableImage from "@/components/ZoomableImage";
+import { FaStar } from 'react-icons/fa';
 
 interface Products {
   id: number,
@@ -46,6 +47,7 @@ export default function ProductPage() {
   const [isOwner, setOwner] = useState(false);
   const [allProducts, setAllProducts] = useState<Produto[]>([]);
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
+  const [isRatingProductModalOpen, setIsRatingProductModalOpen] = useState(false);
 
 
   async function fetchProduct() {
@@ -169,6 +171,16 @@ export default function ProductPage() {
                     </svg>
                   </div>
                 )}
+                {isOwner && (
+                  <div
+                    className="w-10 h-10 mt-4 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 hover:cursor-pointer transition"
+                    onClick={() => setIsEditProductModalOpen(true)}
+                  >
+                    <FaStar
+                    size={25}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-row gap-4 w-full h-8">
@@ -190,11 +202,6 @@ export default function ProductPage() {
                 <div className="font-sans text-xl font-bold">
                     Avaliações de Clientes ({reviews})
                 </div>
-                <button
-                    className="bg-laranja text-white font-sans tracking-wider cursor-pointer py-2 px-4 rounded-full hover:brightness-92 transition duration-300"
-                >
-                    Avaliar Produto
-                </button>
             </div>
             
             <div className=" flex-1 w-full">
@@ -236,7 +243,6 @@ export default function ProductPage() {
             </div>
         </div>
 
-        {/* outros produtos */}
         <div className="flex flex-col p-4 gap-4 bg-back text-text h-96">
           <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
           <div className=" flex-1 w-full">
