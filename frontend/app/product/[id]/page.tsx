@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { getProductsById, getProductsByStore } from "@/api/api";
 import Navbar from "@/components/Navbar";
 import Carrossel from "@/components/Carrossel";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CardProdutos from "@/components/CardProdutos";
 import EditProductModal from "@/components/modals/EditProductModal";
@@ -24,7 +24,7 @@ interface Products {
   store: { sticker_url: string, user_id: number },
   category: { name: string },
   product_images: { order: number, image_url: string }[],
-  product_ratings: { rating: number, comment?: string, user?: { username: string } }[] // Adicionado user e comment
+  product_ratings: {id: number, rating: number, comment?: string, user?: { username: string, profile_picture_url?: string } }[] // Adicionado user, comment e profile_picture_url
 }
 
 type Produto = {
@@ -42,6 +42,7 @@ type Produto = {
 export default function ProductPage() {
   const [products, setProducts] = useState<Products | null>(null);
   const { id } = useParams();
+  const router = useRouter();
   const [mean, setMean] = useState(0);
   const [reviews, setReviews] = useState(0);
   const [image_number, setImage] = useState(0);
@@ -69,6 +70,9 @@ export default function ProductPage() {
 
           setMean(mean);
           setReviews(ratings.length);
+        } else {
+          setMean(0);
+          setReviews(0);
         }
       }
 
@@ -100,7 +104,7 @@ export default function ProductPage() {
 
       <div className="mt-18">
 
-        {/* Container 1 */}
+        {/* Container 1: Imagens e Informações do Produto */}
         <div className="flex flex-row p-4 gap-4 bg-back text-text">
 
           {/*Espaco temporario*/}
@@ -172,8 +176,7 @@ export default function ProductPage() {
                     </svg>
                   </div>
                 )}
-                {isOwner && (
-                  <div
+                <div
                     className="w-10 h-10 mt-4 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 hover:cursor-pointer transition"
                     onClick={() => setIsRatingProductModalOpen(true)}
                   >
@@ -181,11 +184,10 @@ export default function ProductPage() {
                     size={25}
                     />
                   </div>
-                )}
               </div>
             </div>
             <div className="flex flex-row gap-4 w-full h-8">
-              <div className="font-sans w-1/2 h-full flex-1"> ⭐ {mean} | {reviews} reviews </div>
+              <div className="font-sans w-1/2 h-full flex-1"> ⭐ {mean.toFixed(1)} | {reviews} reviews </div>
               <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.category?.name} </div>
               <div className="font-sans font-bold text-laranja h-full w-1/4"> {products?.stock} disponiveis </div>
             </div>
@@ -204,12 +206,76 @@ export default function ProductPage() {
                     Avaliações de Clientes ({reviews})
                 </div>
             </div>
-            
-            <div className=" flex-1 w-full">
+
+            <div className="flex-1 w-full px-10">
+              <Carrossel>
+                {products?.product_ratings && products.product_ratings.length > 0 ? (
+                  products.product_ratings.map((r, index) => (
+                    <div
+                      key={index} 
+                      className="bg-card text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 min-w-[600px] max-w-[750px] shadow-lg"
+                    >
+                      {/* imagem do usuário */}
+                      <img
+                        src={r.user?.profile_picture_url || "/default-avatar.png"} 
+                        alt={r.user?.username || "Usuário"}
+                        className="w-24 h-24 rounded-full object-cover shrink-0 border-2 border-laranja"
+                      />
+
+                      {/* conteúdo do comentário */}
+                      <div className="flex flex-col justify-between w-full">
+                        <div className="flex justify-between items-center">
+                          <p className="font-semibold text-lg ">{r.user?.username || "Usuário Anônimo"}</p>
+                          {/* estrelas */}
+                          <div className="flex gap-1">
+                            {Array.from({ length: r.rating }).map((_, i) => (
+                              <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
+                                <path
+                                  d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                  fill="#FFEB3A"
+                                />
+                              </svg>
+                            ))}
+
+                            {Array.from({ length: 5 - r.rating }).map((_, i) => (
+                              <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
+                                <path
+                                  d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                  fill="#cfcfcfff"
+                                />
+                              </svg>
+                            ))}
+                          </div>
+                        </div>
+
+                        <p className=" text-[15px] leading-snug mt-2">
+                          {r.comment || "*Sem comentário fornecido*"}
+                        </p>
+
+                        <div className="flex justify-end">
+                          <button
+                            className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                            onClick={() => router.push(`/rating/product/${r.id}`)}
+                          >
+                            ver mais
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full h-10 flex items-center justify-center">
+                    <p className="text-gray-500 opacity-60 font-sans text-center">
+                      Este produto ainda não foi avaliado.
+                    </p>
+                  </div>
+                )}
+              </Carrossel>
             </div>
-            
         </div>
 
+        {/* Produtos da mesma loja */}
         <div className="flex flex-col p-4 gap-4 bg-back text-text h-96">
           <div className="font-sans text-3xl font-bold h-12 w-70"> Da mesma loja </div>
           <div className=" flex-1 w-full">
@@ -244,7 +310,10 @@ export default function ProductPage() {
       {isRatingProductModalOpen && (
         <CreateProductRatingModal
           open={isRatingProductModalOpen}
-          onClose={() => setIsRatingProductModalOpen(false)}
+          onClose={() => {
+            setIsRatingProductModalOpen(false);
+            fetchProduct(); // Recarregar avaliações após fechar o modal, caso o usuário tenha avaliado
+          }}
           productId={Number(id)}
         />
       )}
