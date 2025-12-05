@@ -157,7 +157,7 @@ return (
                 )}
             </div>
 
-            <div className="relative z-10">
+            <div className="relative z-10 overflow-visible">
                 <button
                     onClick={() => setOpenFilters(!openFilters)}
                     className="
@@ -176,7 +176,7 @@ return (
 
                 {openFilters && (
                     <div className="
-                        absolute right-0 mt-2 w-56 
+                        absolute right-0 top-full mt-2 w-56 
                         bg-white
                         rounded-3xl 
                         shadow-[0_0_15px_rgba(0,0,0,0.1)] 
@@ -212,13 +212,16 @@ return (
 
         </div>
         
-        <div className="w-full flex flex-col items-center pb-20 grow">
+        <div className={`
+                w-full flex flex-col items-center pb-20 bg-back flex-1 
+                ${openFilters ? 'min-h-[490px]' : ''}
+            `}>
                 
             <div className="w-full max-w-[1200px] px-10 mt-10 text-2xl font-bold font-sans">
                 <h2>Lojas</h2>
             </div>
 
-            <div className="w-full flex justify-center">
+            <div className="w-full bg-back flex justify-center">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-10 place-items-center">
                         
                     {filteredStores.length > 0 ? (
