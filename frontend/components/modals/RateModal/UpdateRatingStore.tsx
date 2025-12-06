@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import RateModal from "./RateModal";
 import { toast } from "react-toastify";
 import { getStoreRating, updateStoreRating, deleteStoreRating } from "@/api/api";
 import { on } from "events";
+import { useRouter } from "next/navigation";
 
 interface Props {
   ratingId: number;
@@ -12,9 +13,12 @@ interface Props {
 }
 
 export default function UpdateStoreRatingModal({ ratingId, open, onClose, OnSucces }: Props) {
+  const router = useRouter();
+
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [storeName, setStoreName] = useState<string>("");
+  const [storeId, setStoreId] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadRating() {
@@ -24,6 +28,7 @@ export default function UpdateStoreRatingModal({ ratingId, open, onClose, OnSucc
         setRating(res.rating);
         setComment(res.comment);
         setStoreName(res.store.name);
+        setStoreId(res.store_id);
 
       } catch (err) {
         toast.error("Erro ao carregar avaliação.");
@@ -52,6 +57,7 @@ export default function UpdateStoreRatingModal({ ratingId, open, onClose, OnSucc
       await deleteStoreRating(ratingId);
       toast.success("Avaliação removida!");
       onClose();
+      router.push(`/store/${storeId}/ratings`)
     } catch {
       toast.error("Erro ao remover avaliação!");
     }
