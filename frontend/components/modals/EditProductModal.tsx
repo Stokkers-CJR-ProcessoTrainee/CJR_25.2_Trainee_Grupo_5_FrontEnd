@@ -35,14 +35,13 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
 
   const [quantity, setQuantity] = useState(0);
   const [name, setName] = useState("");
-  const [category, setCategory] = useState(""); // usaremos esse como selectedCategoryId
+  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [SubCategories, setSubCategories] = useState<Category[]>([]);
   const [Images, setImages] = useState(product?.product_images || []);
 
-  // dropdown custom
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -78,7 +77,6 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
     }
   }, [open, product]);
 
-  // fechar dropdown ao clicar fora
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -181,7 +179,7 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
               {Images.map(item => (
                 <div
                   key={item.id}
-                  className="bg-modalinfo hover:border-3 hover:border-red-600 rounded-2xl hover:brightness-90 hover:cursor-pointer transition h-full shrink-0 snap-start"
+                  className="bg-card hover:border-3 hover:border-red-600 rounded-2xl hover:brightness-90 hover:cursor-pointer transition h-full shrink-0 snap-start"
                   onClick={() => handleDeleteImage(item.id)}
                 >
                   <img
