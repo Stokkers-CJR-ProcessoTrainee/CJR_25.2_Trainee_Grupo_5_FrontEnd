@@ -156,8 +156,8 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50" onClick={fechar}>
             <div className="bg-back relative rounded-2xl p-6 w-120 h-135 shadow-lg" onClick={(e) => e.stopPropagation()}>
 
-                <button className="ml-105 -mt-2 absolute hover:cursor-pointer z-50" onClick={fechar}>
-                    <img src="/images/botao-de-sair.png" alt='sair' className="h-4 w-4" />
+                <button className="ml-105 -mt-2 absolute text-text hover:text-gray-800 text-xl hover:cursor-pointer transition z-50" onClick={fechar}>
+                    <FaTimes />
                 </button>
 
                 <h2 className="text-center font-sans text-text font-semibold text-2xl -mt-2">Atualizar Loja</h2>
