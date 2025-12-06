@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { createProduct, getAllParentCategories, getCategories } from "@/api/api";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { FaTimes } from "react-icons/fa";
 
 // Voltei para open/close/onUpdated para bater com o que seu botão já envia
 interface CreateProductModalProps {
@@ -158,14 +159,10 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
             >
                 {/* Botão de Fechar */}
                 <button 
-                    className="ml-105 -mt-2 absolute hover:cursor-pointer"
+                    className="ml-105 text-text hover:text-gray-800 text-xl transition -mt-2 absolute hover:cursor-pointer"
                     onClick={close}
                 >
-                    <img
-                        src="/images/botao-de-sair.png"
-                        alt='sair'
-                        className="h-4 w-4 ho ver:text-red-100"
-                    />
+                    <FaTimes />
                 </button>
 
                 <h2 className="text-center font-sans font-semibold text-2xl text-text -mt-2 mb-4">
@@ -270,26 +267,26 @@ export default function CreateProductModal({ open, close, onUpdated }: CreatePro
                     <div className="flex flex-row items-center justify-center gap-4 py-2">
                          <button 
                             type="button"
-                            className="w-8 h-8 rounded-full border border-laranja text-laranja flex items-center justify-center hover:bg-laranja hover:text-white transition"
+                            className="w-10 h-10 hover:cursor-pointer rounded-full border border-laranja text-laranja flex items-center justify-center hover:bg-laranja hover:text-white transition"
                             onClick={() => setQuantity(Math.max(0, quantity - 1))}
                          >
                             -
                          </button>
                          
-                         <div className="w-20 text-center text-text font-sans text-xl font-bold"> 
+                         <div className="w-20 text-center text-laranja font-sans text-2xl font-semibold"> 
                             {quantity} 
                          </div>
                          
                          <button 
                             type="button"
-                            className="w-8 h-8 rounded-full border border-laranja text-laranja flex items-center justify-center hover:bg-laranja hover:text-white transition"
+                            className="w-10 h-10 hover:cursor-pointer rounded-full border border-laranja text-laranja flex items-center justify-center hover:bg-laranja hover:text-white transition"
                             onClick={() => setQuantity(quantity + 1)}
                          >
                             +
                          </button>
                     </div>
 
-                    <div className="flex justify-center mt-4 mb-2">
+                    <div className="flex justify-center mb-2">
                         <button 
                             type="submit"
                             disabled={loading}

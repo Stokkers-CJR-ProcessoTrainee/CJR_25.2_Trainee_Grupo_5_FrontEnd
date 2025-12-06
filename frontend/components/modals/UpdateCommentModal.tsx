@@ -53,16 +53,16 @@ export default function UpdateCommentModal({ mostrar, fechar, tipo, rating_id, c
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-bgmodal rounded-lg p-8 max-w-md w-full relative flex flex-col gap-6">
+      <div className="bg-back rounded-lg p-8 max-w-md w-full relative flex flex-col gap-6">
 
         <button
           onClick={handleClose}
-          className="absolute cursor-pointer top-4 right-4 text-gray-500 hover:text-gray-800 transition text-2xl"
+          className="absolute cursor-pointer top-4 right-4 text-text hover:text-gray-800 transition text-xl"
         >
           <FaTimes />
         </button>
 
-        <h2 className="text-xl font-semibold font-sans text-laranja tracking-wider text-center text-foreground">
+        <h2 className="text-xl font-semibold font-sans text-text tracking-wider text-center text-foreground">
           Editar Comentário
         </h2>
 
@@ -70,12 +70,12 @@ export default function UpdateCommentModal({ mostrar, fechar, tipo, rating_id, c
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Escreva seu comentário..."
-          className="bg-modalinfo w-full h-32 p-3 border border-laranja rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-laranja resize-none"
+          className="bg-card text-text w-full h-32 p-3 border border-transparent rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-laranja focus:border-laranja resize-none"
         />
 
         <button
           onClick={handleUpdate}
-          className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja bg-laranja hover:bg-transparent hover:text-laranja transition cursor-pointer flex items-center justify-center gap-2"
+          className="p-3 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2"
         >
           Atualizar
         </button>

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react"; 
 import { createStore, getAllParentCategories } from "@/api/api";
 import { toast } from "react-toastify";
+import { FaTimes } from "react-icons/fa";
 
 interface CreateStoreModalProps {
     abrir: boolean;
@@ -140,14 +141,10 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
             onClick={(e) => e.stopPropagation()}>
 
                 <button 
-                className="ml-105 -mt-2 absolute hover:cursor-pointer"
+                className="ml-105 -mt-2 absolute text-text text-xl hover:text-gray-800 hover:cursor-pointer"
                 onClick={fechar}
                 >
-                    <img
-                        src="/images/botao-de-sair.png"
-                        alt='sair'
-                        className="h-4 w-4"
-                    />
+                    <FaTimes />
                 </button>
 
                 <h2 className="text-center font-sans font-semibold text-2xl -mt-2">
