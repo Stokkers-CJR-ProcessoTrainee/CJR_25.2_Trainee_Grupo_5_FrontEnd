@@ -234,7 +234,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                 </div>
 
                 <div className="flex justify-center">
-                    <button type="button" onClick={handleDeleteStore} className="text-xs px-10 py-0.5 mt-11 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
+                    <button type="button" onClick={handleDeleteStore} className="text-xs px-10 py-0.5 mt-11 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:border-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
                         <FaTrash /> Deletar Loja
                     </button>
                 </div>
