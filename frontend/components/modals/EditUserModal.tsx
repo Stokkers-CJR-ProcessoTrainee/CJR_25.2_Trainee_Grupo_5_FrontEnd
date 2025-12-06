@@ -119,7 +119,7 @@ export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUs
 
     return (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-8 max-w-md w-full text-center shadow-lg relative">
+                <div className="bg-back rounded-lg p-8 max-w-md w-full text-center shadow-lg relative">
 
                     <button onClick={handleClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl cursor-pointer">
                         <FaTimes />
@@ -151,16 +151,16 @@ export default function EditUserModal({mostrar, fechar, foto, onSuccess}: EditUs
 
                     <form onSubmit={handleUpdate}>
                         <div className="relative mb-4">
-                            <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Nome" className="bg-gray-100 rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"/>
-                            <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Nome" className="bg-card text-text rounded-full border border-transparent p-2 pl-10 w-full focus:border-laranja focus:outline-none"/>
+                            <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-text" />
                         </div>
                         <div className="relative mb-4">
-                            <input value={user} onChange={(e) => setUser(e.target.value)} type="text" placeholder="Username" className="bg-gray-100 rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"/>
-                            <FaCrown className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <input value={user} onChange={(e) => setUser(e.target.value)} type="text" placeholder="Username" className="bg-card text-text rounded-full p-2 pl-10 w-full border border-transparent focus:border-laranja focus:outline-none"/>
+                            <FaCrown className="absolute left-4 top-1/2 -translate-y-1/2 text-text" />
                         </div>
                         <div className="relative mb-4">
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" className="bg-gray-100 rounded-full p-2 pl-10 border border-gray-300 w-full focus:border-laranja focus:outline-none"/>
-                            <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" className="bg-card text-text rounded-full p-2 pl-10 w-full border border-transparent focus:border-laranja focus:outline-none"/>
+                            <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-text" />
                         </div>
 
                         <div className="mt-6 flex flex-col gap-3">
