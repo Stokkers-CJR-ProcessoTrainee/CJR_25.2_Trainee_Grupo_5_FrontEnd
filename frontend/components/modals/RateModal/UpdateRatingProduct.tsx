@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import RateModal from "./RateModal";
 import { toast } from "react-toastify";
 import { getProductRating, updateProductRating, deleteProductRating } from "@/api/api";
+import { on } from "events";
 
 interface Props {
   ratingId: number;
   open: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
-export function UpdateProductRatingModal({ ratingId, open, onClose }: Props) {
+export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }: Props) {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
@@ -37,6 +39,7 @@ export function UpdateProductRatingModal({ ratingId, open, onClose }: Props) {
     try {
       await updateProductRating(ratingId, { rating, comment });
       toast.success("Avaliação atualizada!");
+      onSuccess();
       onClose();
     } catch {
       toast.error("Erro ao atualizar avaliação!");

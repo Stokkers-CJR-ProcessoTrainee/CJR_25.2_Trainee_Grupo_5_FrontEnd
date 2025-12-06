@@ -316,13 +316,14 @@ export default function RatingsPage() {
                 ratingId={rating?.id!}
                 open={!!ratingEditar}
                 onClose={() => setRatingEditar(null)}
-                OnSucces={fetchRating}
+                onSuccess={fetchRating}
                 />
             ) : (
                 <UpdateProductRatingModal
                 ratingId={rating?.id!}
                 open={!!ratingEditar}
                 onClose={() => setRatingEditar(null)}
+                onSuccess={fetchRating}
                 />
             )}
             <UpdateCommentModal

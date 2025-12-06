@@ -9,10 +9,10 @@ interface Props {
   ratingId: number;
   open: boolean;
   onClose: () => void;
-  OnSucces: () => void;
+  onSuccess: () => void;
 }
 
-export default function UpdateStoreRatingModal({ ratingId, open, onClose, OnSucces }: Props) {
+export default function UpdateStoreRatingModal({ ratingId, open, onClose, onSuccess }: Props) {
   const router = useRouter();
 
   const [rating, setRating] = useState<number>(0);
@@ -44,7 +44,7 @@ export default function UpdateStoreRatingModal({ ratingId, open, onClose, OnSucc
     try {
       await updateStoreRating(ratingId, { rating, comment });
       toast.success("Avaliação atualizada!");
-      OnSucces()
+      onSuccess()
       onClose();
     } catch {
       toast.error("Erro ao atualizar avaliação!");
