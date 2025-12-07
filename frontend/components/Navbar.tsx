@@ -300,8 +300,31 @@ export default function Navbar() {
                             </button>
                         </div>
                     )}
-                    <button onClick={toggleTheme} className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition absolute left-[2%]" aria-label="Toggle Dark Mode">
-                        {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
+                    <button 
+                        onClick={toggleTheme} 
+                        className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition-colors absolute left-[2%] overflow-hidden group" 
+                        aria-label="Toggle Dark Mode"
+                    >
+                        <div className="relative w-6 h-6 flex items-center justify-center">
+                            <FaSun 
+                                size={22} 
+                                className={`absolute transition-all duration-500 ease-in-out transform
+                                    ${theme === 'light' 
+                                        ? 'opacity-100 rotate-0 translate-y-0' 
+                                        : 'opacity-0 -rotate-90 translate-y-8'
+                                    }
+                                `}
+                            />
+                            <FaMoon 
+                                size={22} 
+                                className={`absolute transition-all duration-500 ease-in-out transform
+                                    ${theme === 'dark' 
+                                        ? 'opacity-100 rotate-0 translate-y-0'
+                                        : 'opacity-0 rotate-90 -translate-y-8'
+                                    }
+                                `}
+                            />
+                        </div>
                     </button>
                 </div>
             </nav>
