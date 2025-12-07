@@ -9,7 +9,10 @@
   --color-text: #000000;
   --color-card: #ffffff;
   --color-selectDrop: orange;
+  --color-whiteText: white;
   
+  --color-icons: #FF9933;
+
   --color-cinzaplaceholder: #7F7F7F;
   --color-modalinfo: #ffffff;
   --color-bgmodal: #e0e0e0; 
@@ -29,8 +32,11 @@
   --color-text: #A0A0A0;
   --color-card: #1E1E1E;
   --color-selectDrop: orange;
+  --color-whiteText: #ffffff;
   
-  --color-cinzaplaceholder: #696969;
+  --color-icons: #ffffff;
+
+  --color-cinzaplaceholder: #b7b7b7;
   --color-modalinfo: #333333;
   --color-bgmodal: #1E1E1E; 
 
@@ -44,6 +50,9 @@
   --color-back: var(--color-back);
   --color-text: var(--color-text);
   --color-selectDrop: var(--color-selcetDrop);
+  --color-whiteText: var(--color-whiteText);
+
+  --color-icons: var(--color-icons);
 
   --color-cinzaplaceholder: var(--color-cinzaplaceholder);
   --color-modalinfo: var(--color-modalinfo);
