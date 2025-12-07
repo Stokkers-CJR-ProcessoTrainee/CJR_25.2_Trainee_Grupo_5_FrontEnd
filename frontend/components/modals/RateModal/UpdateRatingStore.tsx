@@ -67,7 +67,7 @@ export default function UpdateStoreRatingModal({ ratingId, open, onClose, onSucc
   return (
     <RateModal
       open={open}
-      title={`Editar: ${storeName}`}
+      title={`${storeName}`}
       rating={rating}
       setRating={setRating}
       comment={comment}
