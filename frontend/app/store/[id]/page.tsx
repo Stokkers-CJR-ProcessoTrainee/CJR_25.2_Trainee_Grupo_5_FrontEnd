@@ -9,8 +9,8 @@ import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify"
 import { Category } from "@/app/Types";
+import Link from "next/link"; 
 
 export default function StorePage() {
   const { id } = useParams();
@@ -180,15 +180,15 @@ export default function StorePage() {
           className="absolute top-0 left-1/2 w-46 h-46 rounded-full object-cover -translate-x-1/2 -translate-y-1/2"
         />
 
-        <p className="text-laranja text-center font-sans font-semibold text-3xl mt-30">
+        <p className="text-laranja text-center font-sans font-semibold text-3xl mt-28">
           Reviews e Comentários
         </p>
 
-        <p className="text-center text-5xl font-sans font-semibold text-laranja mt-2">
+        <p className="text-center text-5xl font-sans font-semibold text-laranja mt-3">
           {mediaRating.toFixed(1)}
         </p>
 
-        <div className="flex gap-2 align-center justify-center mt-5">
+        <div className="flex gap-2 align-center justify-center mt-3">
           {Array.from({ length: mediaRating }).map((_, i) => (
             <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
               <path
@@ -208,18 +208,18 @@ export default function StorePage() {
           ))}
         </div>
 
-        <div className="px-40 mt-5 py-10">
+        <div className="px-40 mt-2 py-10">
 
           {ratings.length > 0 ? (
             <div
-              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              className="w-fit ml-auto flex justify-end text-laranja hover:underline font-sans font-bold hover:cursor-pointer"
               onClick={() => router.push(`/store/${id}/ratings`)}
             >
               Avaliações
             </div>
           ) : (
             <div
-              className="w-fit ml-auto flex justify-end text-laranja font-sans font-bold hover:cursor-pointer"
+              className="w-fit ml-auto flex hover:underline justify-end text-laranja font-sans font-bold hover:cursor-pointer"
               onClick={() => router.push(`/store/${id}/ratings`)}
             >
               Avaliar
@@ -233,18 +233,14 @@ export default function StorePage() {
                   key={r.id}
                   className="bg-back text-text font-sans rounded-3xl px-6 py-4 flex items-center gap-5 min-w-[600px] max-w-[750px]"
                 >
-                  {/* imagem do usuário */}
                   <img
                     src={r.user.profile_picture_url}
                     alt={r.user.username}
                     className="w-24 h-24 rounded-full object-cover shrink-0"
                   />
-
-                  {/* conteúdo do comentário */}
                   <div className="flex flex-col justify-between w-full">
                     <div className="flex justify-between items-center">
                       <p className="font-semibold text-lg ">{r.user.username}</p>
-                      {/* estrelas */}
                       <div className="flex gap-1">
                         {Array.from({ length: r.rating }).map((_, i) => (
                           <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
@@ -254,7 +250,6 @@ export default function StorePage() {
                             />
                           </svg>
                         ))}
-
                         {Array.from({ length: 5 - r.rating }).map((_, i) => (
                           <svg key={i} width="20" height="20" viewBox="0 0 29 28" fill="none">
                             <path
@@ -263,24 +258,19 @@ export default function StorePage() {
                             />
                           </svg>
                         ))}
-
-
                       </div>
                     </div>
-
                     <p className=" text-[15px] leading-snug mt-2">
                       {r.comment}
                     </p>
-
                     <div className="flex justify-end">
                       <button
-                        className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                        className="w-14 text-sm text-laranja font-medium mt-2 hover:underline cursor-pointer"
                         onClick={() => router.push(`/rating/store/${r.id}`)}
                       >
-                        ver mais
+                        Ver mais
                       </button>
                     </div>
-
                   </div>
                 </div>
               ))
@@ -298,19 +288,23 @@ export default function StorePage() {
       </div>
 
       {/* Produtos */}
-      <div className="w-full max-w-5xl text-text font-sans mx-auto mt-3 px-4">
-        <div className="flex text-center gap-1">
-          <h3 className="text-xl font-sans font-bold mb-4">
+      <div className="w-full max-w-5xl text-text font-sans mx-auto mt-5 px-4">
+        <div className="flex text-center gap-1 mb-4">
+          <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">
             Produtos
-          </h3>
-          <h3 className="text-xs mt-2.5 font-sans font-bold">melhor avaliados</h3>
+            <span className="text-xl md:text-2xl font-normal text-gray-500 block md:inline md:ml-2">
+              com avaliações <strong className="text-laranja">mais altas</strong>
+            </span> 
+          </h2>
         </div>
 
         <div className="flex relative rounded-3xl font-sans gap-6">
           <Carrossel>
             {TopProdutos.length > 0 ? (
               TopProdutos.map((produto) => (
-                <CardProdutos key={produto.id} produto={produto} />
+                <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full">
+                   <CardProdutos produto={produto} />
+                </Link>
               ))
             ) : (
               <p className="text-gray-500 opacity-60 font-sans">Este usuário ainda não possui produtos avaliados.</p>
@@ -322,21 +316,21 @@ export default function StorePage() {
       <div className="mt-10 pb-10">
         <div className="w-full text-text max-w-5xl mx-auto px-4">
 
-          <div className="flex gap-1">
-            <h2 className="text-2xl font-bold font-sans text-start mb-8">
+          <div className="flex gap-1 mb-4">
+            <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">
               Produtos
+              <span className="text-xl md:text-2xl font-normal text-gray-500 block md:inline md:ml-2">
+                de <strong className="text-laranja">{store.name}</strong>
+              </span> 
             </h2>
-            {store && (
-              <p className="mt-3.5 font-sans font-bold text-xs">
-                de {store.name}
-              </p>
-            )}
           </div>
 
           {currentProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 justify-items-center">
               {currentProducts.map((produto) => (
-                <CardProdutos key={produto.id} produto={produto} />
+                <Link key={produto.id} href={`/product/${produto.id}`} className="block">
+                  <CardProdutos produto={produto} />
+                </Link>
               ))}
             </div>
           ) : (

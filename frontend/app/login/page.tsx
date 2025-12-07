@@ -29,7 +29,7 @@ export default function LoginPage() {
       localStorage.setItem('token', data.token);
       toast.success("Login bem-sucedido! Redirecionando...");
       setTimeout(() => {
-      router.push('/home');
+      router.push('/');
       }, 2500);
     } catch (error:any) {
       const message = error?.response?.data?.message;

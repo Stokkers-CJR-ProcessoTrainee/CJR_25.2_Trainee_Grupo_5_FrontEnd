@@ -2,22 +2,17 @@ import { useEffect, useState } from "react";
 import RateModal from "./RateModal";
 import { toast } from "react-toastify";
 import { getProductRating, updateProductRating, deleteProductRating } from "@/api/api";
-import { on } from "events";
-import { useRouter } from "next/navigation";
 
 interface Props {
   ratingId: number;
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
 }
 
-export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }: Props) {
-  const router = useRouter();
+export function UpdateProductRatingModal({ ratingId, open, onClose }: Props) {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
-  const [productId, setProductId] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadRating() {
@@ -27,7 +22,6 @@ export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }:
         setRating(res.rating);
         setComment(res.comment);
         setProductName(res.product.name);
-        setProductId(res.product_id);
 
       } catch (err) {
         toast.error("Erro ao carregar avaliação.");
@@ -43,7 +37,6 @@ export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }:
     try {
       await updateProductRating(ratingId, { rating, comment });
       toast.success("Avaliação atualizada!");
-      onSuccess();
       onClose();
     } catch {
       toast.error("Erro ao atualizar avaliação!");
@@ -52,12 +45,10 @@ export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }:
 
   // ---- DELETAR ----
   const handleDelete = async () => {
-    if (!confirm("Deletar avaliação?")) return;
     try {
       await deleteProductRating(ratingId);
       toast.success("Avaliação removida!");
       onClose();
-      router.push(`/product/${productId}`)
     } catch {
       toast.error("Erro ao remover avaliação!");
     }
@@ -66,7 +57,7 @@ export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }:
   return (
     <RateModal
       open={open}
-      title={`${productName}`}
+      title={`Editar: ${productName}`}
       rating={rating}
       setRating={setRating}
       comment={comment}
