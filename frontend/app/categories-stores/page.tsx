@@ -1,277 +1,232 @@
 'use client';
 
-import Carrossel from "@/components/Carrossel";
-import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
-import CardCategorias from "@/components/CardCategorias";
 import Link from "next/link";
-import { Category } from "../Types";
-import { getCategories, getStores } from "@/api/api";
-import CardLojas from "@/components/CardLojas";
-import { FaChevronDown, FaSearch } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
-
+import { FaChevronDown, FaSearch } from "react-icons/fa";
+import Navbar from "@/components/Navbar";
+import Carrossel from "@/components/Carrossel";
+import CardCategorias from "@/components/CardCategorias";
+import CardLojas from "@/components/CardLojas";
+import { getAllParentCategories, getStores } from "@/api/api";
+import { Category, Store } from "../Types";
 
 export default function CategoriesStoresPage() {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [stores, setStores] = useState<any[]>([]);
-    const [search, setSearch] = useState("");
-    const [openFilters, setOpenFilters] = useState(false);
-    const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [stores, setStores] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+  const [openFilters, setOpenFilters] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
 
-    const router = useRouter();
+  const router = useRouter();
 
-    const categoryIcons: Record<string, string> = {
-        "eletrônicos": "ion:tv-outline",
-        "jogos": "streamline:controller",
-        "mercado": "healthicons:vegetables-outline",
-        "moda": "ph:dress",
-        "farmácia": "hugeicons:medicine-02",
-        "beleza": "streamline-ultimate:make-up-lipstick",
-        "brinquedos": "ph:lego",
-        "casa": "ph:house-light"
-    };
-    
-    useEffect(() => {
-        async function fetchCategories() {
-            try {
-                const data = await getCategories();
-                setCategories(data);
-            } catch (err) {
-                console.error("Erro ao carregar categorias:", err);
-            }
-        }
-        fetchCategories();
-    }, [])
+  const categoryIcons: Record<string, string> = {
+    "eletrônicos": "ion:tv-outline",
+    "jogos": "streamline:controller",
+    "mercado": "healthicons:vegetables-outline",
+    "moda": "ph:dress",
+    "farmácia": "hugeicons:medicine-02",
+    "beleza": "streamline-ultimate:make-up-lipstick",
+    "brinquedos": "ph:lego",
+    "casa": "ph:house-light"
+  };
 
-    useEffect(() => {
-        async function fetchStores() {
-            try {
-                const data = await getStores();
-                setStores(data);
-            } catch (err) {
-                console.error("Erro ao carregar lojas:", err);
-            }
-        }
-        fetchStores();
-    }, [])
-
-    function toggleFilter(categoryId: number) {
-        setSelectedFilters((prev) => 
-            prev.includes(categoryId)
-                ? prev.filter((id) => id !== categoryId)
-                : [...prev, categoryId]
-        )
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [catsData, storesData] = await Promise.all([
+          getAllParentCategories(),
+          getStores()
+        ]);
+        setCategories(catsData);
+        setStores(storesData);
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
+      }
     }
+    fetchData();
+  }, []);
 
-    const filteredStores = stores.filter(store => {
-        const matchesSearch = store.name.toLowerCase().includes(search.toLowerCase());
-        const matchesCategory = selectedFilters.length === 0 || selectedFilters.includes(store.category_id);
-        return matchesSearch && matchesCategory;
-    });
+  function toggleFilter(categoryId: number) {
+    setSelectedFilters((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  }
 
-return (
-    <main className="bg-back min-h-screen flex flex-col">
+  const filteredStores = stores.filter(store => {
+    const matchesSearch = store.name.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedFilters.length === 0 || selectedFilters.includes(store.category_id);
+    return matchesSearch && matchesCategory;
+  });
 
-        <Navbar />
+  return (
+    <main className="min-h-screen flex flex-col bg-back">
+      <Navbar />
 
-        <div className="bg-laranja mt-15 h-90 w-full p-4">
-
-            <div className="px-30 flex  mt-15 text-3xl text-back font-semibold font-sans flex-col gap-10">
-                <h2>
-                    Categoria
-                </h2>
-
-                <Carrossel>
-                    {categories.length > 0 ? (
-                    categories.map((cat: any) => (
-                        <Link key={cat.id} href={`/category/${cat.id}`}>
-                        <CardCategorias key={cat.id} name={cat.name}/>
-                        </Link>
-                    ))
-                    ) : (
-                    <p>Categorias não encontradas.</p>
-                    )}
-                </Carrossel>
-            </div>
-
-        </div>
-
-        <div className="w-full max-w-[1200px] mx-auto px-5 mt-8 flex flex-col-reverse md:flex-row justify-end items-end md:items-center gap-4">
-
-            <div className="relative w-full max-w-md z-20"> 
-                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                    
-                <input
-                    type="text"
-                    placeholder="Buscar lojas..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="
-                        w-full
-                        bg-card
-                        border border-transparent
-                        rounded-full
-                        py-3 pl-12 pr-4
-                        text-sm
-                        shadow
-                        focus:border-laranja
-                        outline-none
-                        transition
-                        text-text
-                    "
-                />
-
-                {search.length > 0 && (
-                    <div className="
-                        absolute
-                        w-full
-                        bg-white
-                        border border-gray-100
-                        rounded-xl
-                        shadow-xl
-                        mt-2
-                        max-h-80
-                        overflow-y-auto
-                        z-50
-                    ">
-
-                    {filteredStores.length > 0 ? (
-                        filteredStores.map((store) => (
-                            <div
-                                key={store.id}
-                                className="
-                                    px-4 py-3
-                                    hover:bg-gray-100
-                                    cursor-pointer
-                                    transition
-                                    flex items-center gap-3
-                                    border-b last:border-none border-gray-50
-                                "
-                                onClick={() => router.push(`/store/${store.id}`)}
-                            >
-                                {store.sticker_url && (
-                                    <img
-                                        src={store.sticker_url}
-                                        alt={store.name}
-                                        className="w-10 h-10 rounded-md object-cover border border-gray-200"
-                                    />
-                                )}
-                                <span className="text-black text-sm font-medium">{store.name}</span>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="px-4 py-3 text-gray-500 text-sm">
-                            Nenhuma loja encontrada.
-                        </div>
-                    )}
-                    </div>
+      <div className="bg-laranja w-full">
+        <div className="container mx-auto px-6 py-10 md:pt-32 pb-16">
+          <div className="flex flex-col gap-6">
+            <h1 className="text-white font-sans font-extrabold text-3xl md:text-4xl tracking-wide">
+              Navegue por Categorias
+            </h1>
+            
+            <div className="relative w-full flex justify-center">
+              <Carrossel>
+                {categories.length > 0 ? (
+                  categories.map((cat: any) => (
+                    <Link key={cat.id} href={`/category/${cat.id}`} className="block">
+                         <div className="transform hover:-translate-y-1 transition-transform duration-300">
+                            <CardCategorias name={cat.name}/>
+                         </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="text-white opacity-80">Carregando categorias...</div>
                 )}
+              </Carrossel>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="relative z-10 overflow-visible">
+      <div className="flex-1 bg-back">
+        <div className="container mx-auto px-6 py-10">
+          
+          <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-4 mb-12">
+            
+            <h2 className="text-text font-sans font-bold text-2xl md:text-3xl self-start md:self-center">
+              Lojas Disponíveis
+            </h2>
+
+            <div className="flex gap-3 w-full md:w-auto">
+              <div className="relative w-full md:w-96 group">
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-laranja transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Buscar lojas..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="
+                    w-full
+                    bg-card
+                    border border-transparent
+                    rounded-full
+                    py-3 pl-12 pr-6
+                    text-sm md:text-base
+                    shadow-sm
+                    hover:shadow-md
+                    focus:shadow-lg
+                    focus:border-laranja
+                    outline-none
+                    transition-all duration-300
+                    text-text
+                    placeholder-gray-400
+                  "
+                />
+              </div>
+
+              <div className="relative z-20">
                 <button
-                    onClick={() => setOpenFilters(!openFilters)}
-                    className="
-                        bg-card p-3 rounded-full shadow px-6 text-sm
-                        flex items-center gap-2
-                        hover:bg-gray-100 transition
-                        text-text
-                        hover: cursor-pointer
-                    "
+                  onClick={() => setOpenFilters(!openFilters)}
+                  className={`
+                    h-full
+                    bg-card px-6 py-3 rounded-full shadow-sm
+                    flex items-center gap-2
+                    text-sm font-medium text-text
+                    hover:shadow-md hover:text-laranja
+                    transition-all duration-300
+                    border border-transparent
+                    ${openFilters ? 'border-laranja text-laranja' : ''}
+                  `}
                 >
-                    Filtros
-                    <FaChevronDown 
-                        size={14} 
-                        className={`transition-transform duration-200 ${openFilters ? 'rotate-180' : ''}`} 
-                    />
+                  Filtros
+                  <FaChevronDown 
+                    size={12} 
+                    className={`transition-transform duration-300 ${openFilters ? 'rotate-180' : ''}`} 
+                  />
                 </button>
 
                 {openFilters && (
-                    <div className="
-                        absolute right-0 top-full mt-2 w-56 
-                        bg-white
-                        rounded-3xl 
-                        shadow-[0_0_15px_rgba(0,0,0,0.1)] 
-                        p-5 
-                        z-50
-                        animate-fadeIn
-                    ">
-                        <div className="flex flex-col gap-3">
-                            {categories.map((cat) => {
-                                const iconName = categoryIcons[cat.name.toLowerCase()] || "mdi:help-circle-outline";
-
-                                return (
-                                <label key={cat.id} className="flex items-center gap-3 cursor-pointer group">
-                                      <input 
-                                        type="checkbox"
-                                        checked={selectedFilters.includes(cat.id)}
-                                        onChange={() => toggleFilter(cat.id)}
-                                        className="
-                                            appearance-none w-5 h-5 
-                                            border-2 border-laranja rounded-md
-                                            checked:bg-laranja checked:border-laranja
-                                            relative cursor-pointer
-                                            transition
-                                        "
-                                    />
-                                    <span className="text-laranja text-base font-normal group-hover:opacity-80 transition flex items-center gap-1">
-                                        {cat.name} 
-
-                                        <Icon 
-                                            icon={iconName} 
-                                            className="text-laranja" 
-                                            width="20" 
-                                            height="20" 
-                                        />
-                                    </span>
-                                </label>
-                                );
-                             })}
-                            {categories.length === 0 && <p className="text-sm text-gray-400">Sem categorias</p>}
-                        </div>
+                  <div className="
+                    absolute right-0 top-full mt-3 w-64
+                    bg-card
+                    rounded-2xl
+                    shadow-xl
+                    p-5
+                    border border-transparent
+                    animate-in fade-in slide-in-from-top-2 duration-200
+                  ">
+                    <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Filtrar por</span>
+                        {selectedFilters.length > 0 && (
+                            <button onClick={() => setSelectedFilters([])} className="text-xs text-laranja hover:underline">Limpar</button>
+                        )}
                     </div>
-                )}
-            </div>
+                    <div className="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-1">
+                      {categories.map((cat) => {
+                        const iconName = categoryIcons[cat.name.toLowerCase()] || "mdi:help-circle-outline";
+                        const isSelected = selectedFilters.includes(cat.id);
 
-        </div>
-        
-        <div className={`
-                w-full flex flex-col items-center pb-20 bg-back flex-1 
-                ${openFilters ? 'min-h-[490px]' : ''}
-            `}>
-                
-            <div className="w-full max-w-[1200px] px-10 mt-10 text-2xl font-bold font-sans">
-                <h2>Lojas</h2>
-            </div>
-
-            <div className="w-full bg-back flex justify-center">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-10 place-items-center">
-                        
-                    {filteredStores.length > 0 ? (
-                        filteredStores.map((store: any) => {
-
-                        const categoriaEncontrada = categories.find((cat) => cat.id === store.category_id);
-                        
                         return (
-                            <Link key={store.id} href={`/store/${store.id}`}>
-                                <CardLojas
-                                    name={store.name}
-                                    category={categoriaEncontrada ? categoriaEncontrada.name : "Categoria desconhecida"}
-                                    logoUrl={store.sticker_url}
-                                />
-                            </Link> 
+                          <label key={cat.id} className="flex items-center gap-3 cursor-pointer group hover:bg-back p-2 rounded-lg transition-colors">
+                            <div className={`
+                                w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                                ${isSelected ? 'bg-laranja border-laranja' : 'border-gray-300 group-hover:border-laranja'}
+                            `}>
+                                {isSelected && <Icon icon="mdi:check" className="text-white w-3 h-3" />}
+                            </div>
+                            <input 
+                              type="checkbox"
+                              className="hidden"
+                              checked={isSelected}
+                              onChange={() => toggleFilter(cat.id)}
+                            />
+                            <div className="flex items-center gap-2">
+                                <Icon icon={iconName} className={isSelected ? "text-laranja" : "text-gray-400 group-hover:text-laranja"} width="18" />
+                                <span className={`text-sm ${isSelected ? 'text-laranja font-medium' : 'text-text group-hover:text-laranja'}`}>
+                                    {cat.name}
+                                </span>
+                            </div>
+                          </label>
                         );
-                        })
-                    ) : (
-                        <p className="col-span-full text-gray-500">Loja não encontrada.</p>
-                    )}
-
-                </div>
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-        </div>
+          </div>
 
+          <div className="min-h-[300px]">
+            {filteredStores.length > 0 ? (
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-6 md:gap-8 justify-items-center">
+                {filteredStores.map((store: any) => {
+                  const categoriaEncontrada = categories.find((cat) => cat.id === store.category_id);
+                  return (
+                    <Link key={store.id} href={`/store/${store.id}`} className="transform hover:scale-105 transition-transform duration-300 block w-full max-w-[220px]">
+                      <CardLojas
+                        name={store.name}
+                        category={categoriaEncontrada ? categoriaEncontrada.name : "Geral"}
+                        logoUrl={store.sticker_url}
+                      />
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 opacity-60">
+                <Icon icon="mdi:store-off-outline" width="64" className="text-gray-300 mb-4" />
+                <p className="text-xl font-sans text-gray-500">Nenhuma loja encontrada.</p>
+                <p className="text-sm text-gray-400 mt-2">Tente ajustar seus filtros ou busca.</p>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
     </main>
-)
+  );
 }

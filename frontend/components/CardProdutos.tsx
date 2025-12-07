@@ -18,19 +18,24 @@ export default function CardProdutos({ produto }: ProdutoCardProps) {
     return (
           <div
                 key={produto.id}
-                className="relative min-w-[170px] bg-card shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer"
+                className="relative w-[170px] bg-card shadow rounded-4xl p-4 h-55 flex flex-col justify-between text-gray-500 transition-transform cursor-pointer shrink-0"
               >
-                <div className="flex justify-center items-center flex-1">
-                <img
-                  src={produto.product_images?.[0]?.image_url}
-                  alt={produto.name}
-                  className="h-24"
-                />
+                <div className="flex justify-center items-center flex-1 overflow-hidden">
+                  <img
+                    src={produto.product_images?.[0]?.image_url}
+                    alt={produto.name}
+                    className="h-24 object-contain" 
+                  />
                 </div>
 
-                <div className="flex flex-col text-text items-start">
-                  <h4 className="text-lg font-semibold">{produto.name}</h4>
+                <div className="flex flex-col text-text items-start w-full">
+                  
+                  <h4 className="text-lg font-semibold w-full truncate" title={produto.name}>
+                    {produto.name}
+                  </h4>
+                  
                   <p className="font-semibold">R${produto.price}</p>
+                  
                   {produto.stock > 0 ? (
                     <p className="text-green-600 font-bold text-sm">Disponível</p>
                   ) : (
@@ -38,7 +43,6 @@ export default function CardProdutos({ produto }: ProdutoCardProps) {
                   )}
                 </div>
                 
-                {/* Sticker do produto */}
                 <div className="absolute h-12 w-12 mb-32 ml-22 rounded-full bg-blue-500">
                   <img
                     src={produto.store.sticker_url}

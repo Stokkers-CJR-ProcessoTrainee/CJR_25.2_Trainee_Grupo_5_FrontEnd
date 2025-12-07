@@ -28,7 +28,7 @@ export default function CardCategorias({ name }: CategoriaProps) {
         cursor-pointer transition-transform hover:scale-105
       "
     >
-      <Icon icon={iconName} color="#FF6700" width="40" height="40" />
+      <Icon icon={iconName} color="#FF9933" width="40" height="40" />
       
 
 

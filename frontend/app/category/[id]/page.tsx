@@ -2,26 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { FaSearch, FaChevronDown } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
-import { getProductsByCategory, getChildCategories, getCategoryById} from "@/api/api";
+import { getProductsByCategory, getChildCategories, getCategoryById } from "@/api/api";
 import { Category, Products } from "@/app/Types";
-import { FaSearch, FaChevronDown } from "react-icons/fa";
+import { Icon } from "@iconify/react";
 
 export default function CategoryPage() {
   const { id } = useParams();
   const router = useRouter();
-
   const categoryId = Number(id);
   const [category, setCategory] = useState<Category>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [childCategories, setChildCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Products[]>([]);
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState("default");
   const [openOrder, setOpenOrder] = useState(false);
-
   const [openFilters, setOpenFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
 
@@ -47,17 +46,14 @@ export default function CategoryPage() {
   };
 
   const hero = {
-    text:
-    categoryHeroTexts[category?.name ?? ""],
-    image: 
-    categoryHeroImages[category?.name ?? ""],
+    text: categoryHeroTexts[category?.name ?? ""] || category?.name,
+    image: categoryHeroImages[category?.name ?? ""] || "/images/placeholder.svg",
   }
 
   useEffect(() => {
     if (!categoryId) return;
 
     setLoading(true);
-    setError(null);
 
     (async () => {
       try {
@@ -68,10 +64,9 @@ export default function CategoryPage() {
         setChildCategories(childCats || []);
 
         const Products = await getProductsByCategory(categoryId);
-
         setProducts(Products);
       } catch (err: any) {
-        setError(err?.message || "Erro ao carregar categoria");
+        console.error("Erro ao carregar categoria", err);
       } finally {
         setLoading(false);
       }
@@ -101,254 +96,198 @@ export default function CategoryPage() {
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     );
   }
+
+  if (loading || !category) return <div className="min-h-screen bg-back flex items-center justify-center text-laranja font-bold">Carregando...</div>;
+
   if (category?.parent_category_id == null) {
-  return (
-    <main className="min-h-screen bg-back">
-      <Navbar />
+    return (
+      <main className="min-h-screen bg-back flex flex-col pb-20">
+        <Navbar />
 
-      <section className="w-full bg-laranja flex items-center justify-center px-20 min-h-[400px] mt-16">
-        <h1
-          className="
-            text-white 
-            font-extrabold 
-            text-5xl 
-            leading-tight 
-            tracking-wide 
-            text-end
-            w-[45%]
-          "
-        >
-          {hero.text}
-        </h1>
-
-        <img
-          src={hero.image}
-          alt="Banner Categoria"
-          className="w-[430px] h-auto"
-        />
-      </section>
-
-      <div className="bg-back px-10 py-6">
-
-        <div className="flex items-center justify-between w-full px-40 mt-20 mb-10">
-
-          <div className="w-full max-w-xl relative">
-            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-
-            <input
-              type="text"
-              placeholder="Buscar produtos..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="
-                w-full
-                bg-card
-                border border-transparent
-                rounded-full
-                py-3 pl-12 pr-4
-                text-sm
-                shadow
-                focus:border-laranja
-                outline-none
-                transition
-                text-text
-              "
-            />
-
-            {search.length > 0 && (
-              <div
-                className="
-                  absolute
-                  w-full
-                  bg-card
-                  border
-                  border-transparent
-                  rounded-xl
-                  shadow-lg
-                  mt-2
-                  max-h-80
-                  overflow-y-auto
-                  z-50
-                "
-              >
-                {searchFiltered.length > 0 ? (
-                  searchFiltered.map((p) => (
-                    <div
-                      key={p.id}
-                      className="
-                        px-4 py-3
-                        hover:bg-gray-50
-                        cursor-pointer
-                        transition
-                        flex items-center gap-3
-                      "
-                      onClick={() => router.push(`/product/${p.id}`)}
-                    >
-                      <img
-                        src={p.product_images[0]?.image_url}
-                        alt={p.name}
-                        className="w-10 h-10 rounded-md object-cover"
-                      />
-                      <span className="text-text text-sm">{p.name}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="px-4 py-3 text-gray-500 text-sm">
-                    Nenhum produto encontrado.
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-4">
+        <div className="bg-laranja w-full mt-16">
+          <div className="container mx-auto px-6 py-8 md:py-10 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-white font-extrabold text-3xl md:text-5xl leading-tight tracking-wide max-w-2xl">
+                {hero.text}
+              </h1>
+            </div>
             
-            <div className="relative">
-              <button
-                onClick={() => setOpenFilters((prev) => !prev)}
-                className="
-                  bg-card p-3 rounded-full shadow px-6 text-sm
-                  flex items-center gap-2
-                  hover:bg-gray-100 transition
-                  text-text
-                "
-              >
-                Filtros
-                <FaChevronDown
-                  size={12}
-                  className={openFilters ? "rotate-180 transition" : "transition"}
-                />
-              </button>
+            <div className="flex-1 flex justify-center md:justify-end">
+              <img
+                src={hero.image}
+                alt={category.name}
+                className="w-56 md:w-[380px] h-auto object-contain drop-shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
 
-              {openFilters && (
-                <div
-                  className="
-                    absolute right-0 mt-2 
-                    bg-card shadow-xl rounded-xl
-                    w-56 z-50
-                    overflow-hidden
-                    animate-fadeIn
-                    p-3
-                  "
-                >
-                  {childCategories.map((cat) => (
-                    <label
-                      key={cat.id}
-                      className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedFilters.includes(cat.id)}
-                        onChange={() => toggleFilter(cat.id)}
-                        className="accent-laranja"
-                      />
-                      <span className="text-sm text-text">{cat.name}</span>
-                    </label>
-                  ))}
-
-                  {childCategories.length === 0 && (
-                    <div className="text-sm text-gray-500 px-2 py-2">
-                      Nenhuma categoria
-                    </div>
+        <div className="container mx-auto px-6 -mt-8 relative z-10">
+          
+          <div className="bg-card rounded-xl shadow-lg p-4 flex flex-col md:flex-row items-center gap-4 mb-8">
+            
+            <div className="relative w-full md:flex-1 group">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-laranja transition-colors" />
+              <input
+                type="text"
+                placeholder="Buscar produtos nesta categoria..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-cinzaclaro border border-transparent rounded-full py-3 pl-12 pr-4 text-sm focus:bg-cinzaclaro focus:border-laranja focus:ring-2 focus:ring-laranja/20 outline-none transition-all text-text placeholder-gray-400"
+              />
+              
+              {search.length > 0 && (
+                <div className="absolute top-full left-0 w-full bg-card border border-cinzaclaro rounded-xl shadow-xl mt-2 max-h-80 overflow-y-auto z-50">
+                  {searchFiltered.length > 0 ? (
+                    searchFiltered.map((p) => (
+                      <Link 
+                        key={p.id} 
+                        href={`/product/${p.id}`}
+                        className="hover:bg-cinzaclaro px-4 py-3 flex items-center gap-3 transition-colors"
+                      >
+                        <img src={p.product_images[0]?.image_url} alt={p.name} className="w-10 h-10 rounded-md object-cover" />
+                        <span className="text-text text-sm font-medium">{p.name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="px-4 py-3 text-gray-500 text-sm">Nenhum produto encontrado.</div>
                   )}
                 </div>
               )}
             </div>
 
-            <div className="relative">
-              <button
-                onClick={() => setOpenOrder((prev) => !prev)}
-                className="
-                  bg-card p-3 rounded-full shadow px-6 text-sm
-                  flex items-center gap-2
-                  hover:bg-gray-100 transition
-                  text-text
-                "
-              >
-                Ordenar por
-                <FaChevronDown
-                  size={12}
-                  className={openOrder ? "rotate-180 transition" : "transition"}
-                />
-              </button>
-
-              {openOrder && (
-                <div
-                  className="
-                    absolute right-0 mt-2 
-                    bg-card shadow-xl rounded-xl
-                    w-48 z-50
-                    text-laranja
-                    overflow-hidden
-                    animate-fadeIn
-                  "
+            <div className="flex gap-3 w-full md:w-auto">
+              
+              <div className="relative">
+                <button
+                  onClick={() => setOpenFilters(!openFilters)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg cursor-pointer border ${openFilters ? 'bg-laranja text-white border-laranja' : 'bg-card text-text border-cinzaclaro hover:border-laranja hover:text-laranja'}`}
                 >
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setOrder("price-asc");
-                      setOpenOrder(false);
-                    }}
-                  >
-                    Menor preço
-                  </button>
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setOrder("price-desc");
-                      setOpenOrder(false);
-                    }}
-                  >
-                    Maior preço
-                  </button>
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setOrder("rating");
-                      setOpenOrder(false);
-                    }}
-                  >
-                    Maior avaliação
-                  </button>
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setOrder("recent");
-                      setOpenOrder(false);
-                    }}
-                  >
-                    Mais recente
-                  </button>
-                </div>
-              )}
+                  Filtros <FaChevronDown size={10} className={`transition-transform ${openFilters ? 'rotate-180' : ''}`} />
+                </button>
+
+                {openFilters && (
+                  <div className="
+                    absolute right-0 top-full mt-3 w-64
+                    bg-card
+                    z-10
+                    rounded-2xl
+                    shadow-xl
+                    p-5
+                    border border-transparent
+                    animate-in fade-in slide-in-from-top-2 duration-200
+                  ">
+                    <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Filtrar por</span>
+                        {selectedFilters.length > 0 && (
+                            <button onClick={() => setSelectedFilters([])} className="text-xs text-laranja cursor-pointer hover:underline">Limpar</button>
+                        )}
+                    </div>
+                    <div className="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-1">
+                      {childCategories.map((cat) => {
+                        const isSelected = selectedFilters.includes(cat.id);
+
+                        return (
+                          <label key={cat.id} className="flex items-center gap-3 cursor-pointer group hover:bg-back p-2 rounded-lg transition-colors">
+                            <div className={`
+                                w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                                ${isSelected ? 'bg-laranja border-laranja' : 'border-gray-300 group-hover:border-laranja'}
+                            `}>
+                                {isSelected && <Icon icon="mdi:check" className="text-white w-3 h-3" />}
+                            </div>
+                            <input 
+                              type="checkbox"
+                              className="hidden"
+                              checked={isSelected}
+                              onChange={() => toggleFilter(cat.id)}
+                            />
+                            <div className="flex items-center gap-2">
+                                <span className={`text-sm ${isSelected ? 'text-laranja font-medium' : 'text-text group-hover:text-laranja'}`}>
+                                    {cat.name}
+                                </span>
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="relative z-10">
+                <button
+                  onClick={() => setOpenOrder(!openOrder)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg cursor-pointer border ${openOrder ? 'bg-laranja text-white border-laranja' : 'bg-card text-text border-cinzaclaro hover:border-laranja hover:text-laranja'}`}
+                >
+                  Ordenar <FaChevronDown size={10} className={`transition-transform ${openOrder ? 'rotate-180' : ''}`} />
+                </button>
+
+                {openOrder && (
+                  <div className="absolute right-0 mt-2 w-48 bg-card shadow-xl rounded-xl z-50 overflow-hidden border border-cinzaclaro animate-fadeIn">
+                    {[
+                      { label: "Menor preço", val: "price-asc" },
+                      { label: "Maior preço", val: "price-desc" },
+                      { label: "Melhor avaliação", val: "rating" },
+                      { label: "Mais recente", val: "recent" }
+                    ].map((opt) => (
+                      <button
+                        key={opt.val}
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-back p-2 cursor-pointer hover:text-laranja transition-colors ${order === opt.val ? 'text-laranja font-bold bg-orange-50' : 'text-text'}`}
+                        onClick={() => { setOrder(opt.val); setOpenOrder(false); }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-
           </div>
-        </div>
 
-        <div className="flex items-center gap-4 px-40 mb-10">
-          {childCategories.map((cat) => (
-            <button
-              key={cat.id}
-              className="bg-white p-3 rounded-full shadow text-sm hover:bg-laranja hover:text-white transition"
-              onClick={() => router.push(`/category/${cat.id}`)}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex relative rounded-3xl font-sans gap-10 ml-40">
-          {ordered.length > 0 ? (
-            ordered.map((produto) => (
-              <CardProdutos key={produto.id} produto={produto} />
-            ))
-          ) : (
-            <p className="text-gray-600">Nenhum produto encontrado.</p>
+          {childCategories.length > 0 && (
+            <div className="flex flex-wrap gap-3 mb-10 justify-center md:justify-start">
+              {childCategories.map((cat) => {
+                const isSelected = selectedFilters.includes(cat.id);
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => toggleFilter(cat.id)}
+                    className={`
+                      px-4 py-2 rounded-full text-sm transition-all cursor-pointer shadow-sm border
+                      ${isSelected 
+                        ? 'bg-laranja text-white border-laranja' 
+                        : 'bg-card text-text shadow-lg border border-transparent hover:border-laranja hover:text-laranja'
+                      }
+                    `}
+                  >
+                    {cat.name}
+                  </button>
+                );
+              })}
+            </div>
           )}
+
+          <div className="min-h-[400px] relative z-0">
+            {ordered.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8 justify-items-center">
+                {ordered.map((produto) => (
+                  <Link key={produto.id} href={`/product/${produto.id}`}>
+                    <CardProdutos produto={produto} />
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 opacity-60">
+                <p className="text-xl font-sans text-gray-500">Nenhum produto encontrado.</p>
+                <p className="text-sm text-gray-400 mt-2">Tente ajustar seus filtros.</p>
+              </div>
+            )}
+          </div>
+
         </div>
-      </div>
-    </main>
-  );
-}
+      </main>
+    );
+  }
+
+  return null; 
 }
