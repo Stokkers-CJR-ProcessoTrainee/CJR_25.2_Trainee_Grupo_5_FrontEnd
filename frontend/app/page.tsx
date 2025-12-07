@@ -108,7 +108,7 @@ export default function Home() {
         <div>
           <Image
             src="/images/ImageHome.png"
-            alt="Placeholder Image"
+            alt="Imagem Hambúrguer"
             width={500}
             height={300}
           />
