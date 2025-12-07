@@ -12,6 +12,18 @@ import CarrosselVertical from "@/components/CarrosselVertical";
 import ZoomableImage from "@/components/ZoomableImage";
 import { CreateProductRatingModal } from '@/components/modals/RateModal/RateProduct';
 
+interface Products {
+  id: number,
+  store_id: number,
+  category_id: number,
+  name: string,
+  description?: string,
+  price: number,
+  stock: number,
+  store: { category_id: number, sticker_url: string, user_id: number },
+  category: { name: string },
+  product_images: { order: number, image_url: string }[],
+  product_ratings: { id: number, rating: number, comment?: string, user?: { username: string, profile_picture_url?: string } }[] // Adicionado user, comment e profile_picture_url
 // --- INTERFACES ---
 interface User {
   username: string;
@@ -281,6 +293,7 @@ export default function ProductPage() {
                           Ver mais
                         </Link>
                       </div>
+
                     </div>
                   </div>
                 ))
@@ -325,6 +338,7 @@ export default function ProductPage() {
           close={() => setIsEditProductModalOpen(false)}
           product={products as any}
           onUpdated={fetchProduct}
+          storeCategoryId={products?.store?.category_id ?? 0}
         />
       )}
 
