@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import CardProdutos from "@/components/CardProdutos";
 import { getProductsByCategory, getChildCategories, getCategoryById } from "@/api/api";
 import { Category, Products } from "@/app/Types";
+import { Icon } from "@iconify/react";
 
 export default function CategoryPage() {
   const { id } = useParams();
@@ -136,13 +137,13 @@ export default function CategoryPage() {
               />
               
               {search.length > 0 && (
-                <div className="absolute top-full left-0 w-full bg-white border border-gray-100 rounded-xl shadow-xl mt-2 max-h-80 overflow-y-auto z-50">
+                <div className="absolute top-full left-0 w-full bg-card border border-cinzaclaro rounded-xl shadow-xl mt-2 max-h-80 overflow-y-auto z-50">
                   {searchFiltered.length > 0 ? (
                     searchFiltered.map((p) => (
                       <Link 
                         key={p.id} 
                         href={`/product/${p.id}`}
-                        className="px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition-colors border-b last:border-none border-gray-50"
+                        className="hover:bg-cinzaclaro px-4 py-3 flex items-center gap-3 transition-colors"
                       >
                         <img src={p.product_images[0]?.image_url} alt={p.name} className="w-10 h-10 rounded-md object-cover" />
                         <span className="text-text text-sm font-medium">{p.name}</span>
@@ -166,30 +167,54 @@ export default function CategoryPage() {
                 </button>
 
                 {openFilters && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white shadow-xl rounded-xl z-50 p-3 border border-gray-100 animate-fadeIn">
-                    <div className="flex justify-between items-center mb-2 px-2">
-                        <span className="text-xs font-bold text-gray-400 uppercase">Subcategorias</span>
-                        {selectedFilters.length > 0 && <button onClick={() => setSelectedFilters([])} className="text-xs text-laranja hover:underline">Limpar</button>}
+                  <div className="
+                    absolute right-0 top-full mt-3 w-64
+                    bg-card
+                    z-10
+                    rounded-2xl
+                    shadow-xl
+                    p-5
+                    border border-transparent
+                    animate-in fade-in slide-in-from-top-2 duration-200
+                  ">
+                    <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Filtrar por</span>
+                        {selectedFilters.length > 0 && (
+                            <button onClick={() => setSelectedFilters([])} className="text-xs text-laranja cursor-pointer hover:underline">Limpar</button>
+                        )}
                     </div>
-                    <div className="flex flex-col gap-1 max-h-60 overflow-y-auto custom-scrollbar">
-                      {childCategories.map((cat) => (
-                        <label key={cat.id} className="flex items-center gap-3 px-2 py-2 hover:bg-gray-50 rounded-lg cursor-pointer group">
-                          <input
-                            type="checkbox"
-                            checked={selectedFilters.includes(cat.id)}
-                            onChange={() => toggleFilter(cat.id)}
-                            className="accent-laranja w-4 h-4"
-                          />
-                          <span className={`text-sm group-hover:text-laranja transition-colors ${selectedFilters.includes(cat.id) ? 'text-laranja font-medium' : 'text-text'}`}>{cat.name}</span>
-                        </label>
-                      ))}
-                      {childCategories.length === 0 && <div className="text-sm text-gray-400 px-2">Nenhuma subcategoria.</div>}
+                    <div className="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar pr-1">
+                      {childCategories.map((cat) => {
+                        const isSelected = selectedFilters.includes(cat.id);
+
+                        return (
+                          <label key={cat.id} className="flex items-center gap-3 cursor-pointer group hover:bg-back p-2 rounded-lg transition-colors">
+                            <div className={`
+                                w-5 h-5 rounded border-2 flex items-center justify-center transition-colors
+                                ${isSelected ? 'bg-laranja border-laranja' : 'border-gray-300 group-hover:border-laranja'}
+                            `}>
+                                {isSelected && <Icon icon="mdi:check" className="text-white w-3 h-3" />}
+                            </div>
+                            <input 
+                              type="checkbox"
+                              className="hidden"
+                              checked={isSelected}
+                              onChange={() => toggleFilter(cat.id)}
+                            />
+                            <div className="flex items-center gap-2">
+                                <span className={`text-sm ${isSelected ? 'text-laranja font-medium' : 'text-text group-hover:text-laranja'}`}>
+                                    {cat.name}
+                                </span>
+                            </div>
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="relative">
+              <div className="relative z-10">
                 <button
                   onClick={() => setOpenOrder(!openOrder)}
                   className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg cursor-pointer border ${openOrder ? 'bg-laranja text-white border-laranja' : 'bg-card text-text border-cinzaclaro hover:border-laranja hover:text-laranja'}`}
@@ -198,7 +223,7 @@ export default function CategoryPage() {
                 </button>
 
                 {openOrder && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-xl z-50 overflow-hidden border border-gray-100 animate-fadeIn">
+                  <div className="absolute right-0 mt-2 w-48 bg-card shadow-xl rounded-xl z-50 overflow-hidden border border-cinzaclaro animate-fadeIn">
                     {[
                       { label: "Menor preço", val: "price-asc" },
                       { label: "Maior preço", val: "price-desc" },
@@ -207,7 +232,7 @@ export default function CategoryPage() {
                     ].map((opt) => (
                       <button
                         key={opt.val}
-                        className={`w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors ${order === opt.val ? 'text-laranja font-bold bg-orange-50' : 'text-text'}`}
+                        className={`w-full text-left px-4 py-3 text-sm hover:bg-back p-2 cursor-pointer hover:text-laranja transition-colors ${order === opt.val ? 'text-laranja font-bold bg-orange-50' : 'text-text'}`}
                         onClick={() => { setOrder(opt.val); setOpenOrder(false); }}
                       >
                         {opt.label}
@@ -242,7 +267,7 @@ export default function CategoryPage() {
             </div>
           )}
 
-          <div className="min-h-[400px]">
+          <div className="min-h-[400px] relative z-0">
             {ordered.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8 justify-items-center">
                 {ordered.map((produto) => (
