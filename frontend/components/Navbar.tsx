@@ -84,9 +84,9 @@ export default function Navbar() {
             </button>
 
             {isCartOpen && (
-                <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 border border-gray-200">
-                    <div className="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-                        <h3 className="text-gray-800 font-semibold">Meu Carrinho</h3>
+                <div className="absolute right-0 mt-3 w-80 bg-card rounded-lg shadow-xl overflow-hidden z-50 border border-transparent">
+                    <div className="p-4 bg-cinzaclaro border-b border-cinzaclaro flex justify-between items-center">
+                        <h3 className="text-text font-semibold">Meu Carrinho</h3>
                         <span className="text-xs text-gray-500">{cartCount} itens</span>
                     </div>
 
@@ -95,9 +95,9 @@ export default function Navbar() {
                             <p className="p-4 text-gray-500 text-center text-sm">O carrinho está vazio.</p>
                         ) : (
                             cartItems.map((item) => (
-                                <div key={item.id} className="flex justify-between items-center p-3 border-b border-gray-100 hover:bg-gray-50">
+                                <div key={item.id} className="flex justify-between items-center p-3 border-b border-cinzaclaro hover:brightness-90 transition cursor-pointer">
                                     <div className="flex-1 pr-2">
-                                        <p className="text-sm font-medium text-gray-800 truncate">{item.name}</p>
+                                        <p className="text-sm font-medium text-text truncate">{item.name}</p>
                                         <p className="text-xs text-gray-500">
                                             {item.quantity}x R$ {item.price}
                                         </p>
@@ -108,7 +108,7 @@ export default function Navbar() {
                                         </span>
                                         <button 
                                             onClick={() => removeFromCart(item.id)}
-                                            className="text-red-500 hover:text-red-700 p-1"
+                                            className="text-red-500 cursor-pointer hover:text-red-700 p-1"
                                             title="Remover item"
                                         >
                                             <FaTrash size={12} />
@@ -120,10 +120,10 @@ export default function Navbar() {
                     </div>
 
                     {cartItems.length > 0 && (
-                        <div className="p-4 bg-gray-50">
+                        <div className="p-4 bg-cinzaclaro">
                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-gray-600 font-medium">Total:</span>
-                                <span className="text-lg font-bold text-gray-900">
+                                <span className="text-gray-500 font-medium">Total:</span>
+                                <span className="text-lg font-bold text-text">
                                     R$ {totalPrice.toFixed(2).replace('.', ',')}
                                 </span>
                             </div>
