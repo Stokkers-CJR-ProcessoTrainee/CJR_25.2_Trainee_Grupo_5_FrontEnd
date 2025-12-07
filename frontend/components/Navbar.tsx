@@ -99,14 +99,13 @@ export default function Navbar() {
                                     <div className="flex-1 pr-2">
                                         <p className="text-sm font-medium text-gray-800 truncate">{item.name}</p>
                                         <p className="text-xs text-gray-500">
-                                            {item.quantity}x R$ {item.price.toFixed(2)}
+                                            {item.quantity}x R$ {item.price}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-sm font-bold text-laranja">
                                             R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
                                         </span>
-                                        {/* Botão para remover item */}
                                         <button 
                                             onClick={() => removeFromCart(item.id)}
                                             className="text-red-500 hover:text-red-700 p-1"
@@ -144,7 +143,7 @@ export default function Navbar() {
 
                 <Link href="/" className="flex items-center">
                     <span className="text-4xl font-extrabold font-sans text-laranja tracking-tight">
-                        Stok<span className="text-black">kers</span>
+                        Stok<span className="text-balck">kers</span>
                     </span>
                 </Link>
 
@@ -157,7 +156,6 @@ export default function Navbar() {
                         <Link href="/categories-stores" className={`${getActiveClass('/categories-stores')} text-2xl hover:text-white transition-colors`}>
                             <FaStore />
                         </Link>
-                        {/* Carrinho aparece mesmo se não estiver logado (opcional) */}
                          <CartDropdown /> 
                     </div>
                 
