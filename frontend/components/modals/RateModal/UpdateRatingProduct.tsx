@@ -52,6 +52,7 @@ export function UpdateProductRatingModal({ ratingId, open, onClose, onSuccess }:
 
   // ---- DELETAR ----
   const handleDelete = async () => {
+    if (!confirm("Deletar avaliação?")) return;
     try {
       await deleteProductRating(ratingId);
       toast.success("Avaliação removida!");
