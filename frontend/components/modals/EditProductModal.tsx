@@ -46,12 +46,19 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Carregar dados
-  async function fetchData() {
-    const childCategories = await getChildCategories(storeCategoryId)
-    setSubCategories(childCategories)
-  }
-  fetchData();
+  useEffect(() => {
+    if (open && storeCategoryId) {
+      const loadCategories = async () => {
+        try {
+          const childCategories = await getChildCategories(storeCategoryId);
+          setSubCategories(childCategories || []);
+        } catch (error) {
+          console.error("Failed to load categories", error);
+        }
+      };
+      loadCategories();
+    }
+  }, [open, storeCategoryId]);
 
   useEffect(() => {
     if (open && product) {
