@@ -1,9 +1,10 @@
 'use client';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { updateStore, deleteStore } from "@/api/api";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { UploadArea } from "@/components/UploadArea";
 
 const DEFAULT_STICKER_URL = "/foto-loja.svg"; 
 const DEFAULT_LOGO_URL = "/foto-loja.svg";
@@ -47,12 +48,12 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
     const isDefaultImage = (url: string, type: 'sticker' | 'logo' | 'banner') => {
         if (!url) return true;
         const targetDefault = type === 'sticker' ? DEFAULT_STICKER_URL : type === 'logo' ? DEFAULT_LOGO_URL : DEFAULT_BANNER_URL;
-        return url === targetDefault || url.includes(targetDefault.replace('/', '')); // Verifica match exato ou parcial
+        return url === targetDefault || url.includes(targetDefault.replace('/', '')); 
     };
 
     if (!abrir || !store) return null;
 
-    const getImageState = (
+    const getImageText = (
         file: File | null,          
         dbUrl: string,              
         isRemoved: boolean,         
@@ -60,37 +61,24 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
         labelCurrent: string,
         type: 'sticker' | 'logo' | 'banner'
     ) => {
-        if (isRemoved) {
-            return {
-                text: labelDefault, 
-                showDelete: false,
-                textColor: 'text-laranja'
-            };
-        }
-        if (file) {
-            return {
-                text: `Selecionado: ${file.name}`,
-                showDelete: true, 
-                textColor: 'text-laranja'
-            };
-        }
+        if (isRemoved) return labelDefault;
+        
+        if (file) return null; 
+
         if (dbUrl && !isDefaultImage(dbUrl, type)) {
-            return {
-                text: `${labelCurrent}: ${dbUrl.split('/').pop()?.substring(0, 15)}...`,
-                showDelete: true, 
-                textColor: 'text-laranja'
-            };
+            return `${labelCurrent}: ${dbUrl.split('/').pop()?.substring(0, 15)}...`;
         }
-        return {
-            text: labelDefault,
-            showDelete: false,
-            textColor: 'text-laranja'
-        };
+
+        return labelDefault;
     };
 
-    const stickerStatus = getImageState(stickerFile, store.sticker_url, isStickerRemoved, "Anexe a foto de perfil de sua loja", "Perfil Atual", 'sticker');
-    const logoStatus = getImageState(logoFile, store.logo_url, isLogoRemoved, "Anexe a logo em SVG de sua loja", "Logo Atual", 'logo');
-    const bannerStatus = getImageState(bannerFile, store.banner_url, isBannerRemoved, "Anexe o banner de sua loja", "Banner Atual", 'banner');
+    const stickerText = getImageText(stickerFile, store.sticker_url, isStickerRemoved, "Anexe a foto de perfil de sua loja", "Perfil Atual", 'sticker');
+    const logoText = getImageText(logoFile, store.logo_url, isLogoRemoved, "Anexe a logo em SVG de sua loja", "Logo Atual", 'logo');
+    const bannerText = getImageText(bannerFile, store.banner_url, isBannerRemoved, "Anexe o banner de sua loja", "Banner Atual", 'banner');
+
+    const showDeleteSticker = stickerFile || (store.sticker_url && !isDefaultImage(store.sticker_url, 'sticker') && !isStickerRemoved);
+    const showDeleteLogo = logoFile || (store.logo_url && !isDefaultImage(store.logo_url, 'logo') && !isLogoRemoved);
+    const showDeleteBanner = bannerFile || (store.banner_url && !isDefaultImage(store.banner_url, 'banner') && !isBannerRemoved);
 
     const handleForceDelete = (type: 'sticker' | 'logo' | 'banner') => {
         if (type === 'sticker') { setStickerFile(null); setIsStickerRemoved(true); }
@@ -154,7 +142,7 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
 
     return (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50" onClick={fechar}>
-            <div className="bg-back relative rounded-2xl p-6 w-120 h-135 shadow-lg" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-back relative rounded-2xl p-6 w-120 h-140 shadow-lg" onClick={(e) => e.stopPropagation()}>
 
                 <button className="ml-105 -mt-2 absolute text-text hover:text-gray-800 text-xl hover:cursor-pointer transition z-50" onClick={fechar}>
                     <FaTimes />
@@ -166,78 +154,59 @@ export default function UpdateStoreModal({ abrir, fechar, store, onUpdated }: Up
                     <input type="text" placeholder="Nome da loja" className="w-full bg-card p-2 pl-5 focus:outline-none border border-transparent focus:border-laranja rounded-2xl mt-5" value={name} onChange={(e) => setName(e.target.value)} />
                     <input type="text" placeholder="Descrição" className="w-full bg-card p-2 pl-5 focus:outline-none border border-transparent focus:border-laranja rounded-2xl mt-3" value={description} onChange={(e) => setDescription(e.target.value)} />
                     
-                    <div className="absolute flex justify-center mt-83 ml-26 font-sans text-xs hover:brightness-90 z-40">
+                    <div className="relative mt-4">
+                        <UploadArea 
+                            file={stickerFile} 
+                            setFile={(f) => { setStickerFile(f); setIsStickerRemoved(false); }}
+                            placeholder={stickerText || ""} 
+                        />
+                        {showDeleteSticker && (
+                            <button type="button" className="absolute right-4 top-4 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
+                                onClick={(e) => { e.stopPropagation(); handleForceDelete('sticker'); }}>
+                                <FaTimes size={12} />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="relative mt-1">
+                        <UploadArea 
+                            file={logoFile} 
+                            setFile={(f) => { setLogoFile(f); setIsLogoRemoved(false); }}
+                            placeholder={logoText || ""}
+                            accept=".svg"
+                        />
+                        {showDeleteLogo && (
+                            <button type="button" className="absolute right-4 top-4 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
+                                onClick={(e) => { e.stopPropagation(); handleForceDelete('logo'); }}>
+                                <FaTimes size={12} />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="relative mt-1">
+                        <UploadArea 
+                            file={bannerFile} 
+                            setFile={(f) => { setBannerFile(f); setIsBannerRemoved(false); }}
+                            placeholder={bannerText || ""}
+                        />
+                        {showDeleteBanner && (
+                            <button type="button" className="absolute right-4 top-4 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
+                                onClick={(e) => { e.stopPropagation(); handleForceDelete('banner'); }}>
+                                <FaTimes size={12} />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col items-center gap-2 mt-6">
                         <button type="submit" disabled={loading} className="px-15 py-1 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-laranja hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
                             {loading ? "Salvando..." : "Salvar alterações"}
                         </button>
+                        
+                        <button type="button" onClick={handleDeleteStore} className="text-xs px-10 py-0.5 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:border-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
+                            <FaTrash /> Deletar Loja
+                        </button>
                     </div>
                 </form>
-
-                {/* --- STICKER --- */}
-                <div className="w-full mt-4 flex justify-center h-25 relative">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none"><path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30" /></svg>
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none"><path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" strokeWidth="0" strokeDasharray="30 30" /></svg>
-
-                    <p className={`absolute font-bold text-center font-sans text-xs mt-15 max-w-100 px-2 truncate ${stickerStatus.textColor}`}>
-                        {stickerStatus.text}
-                    </p>
-
-                    <input type="file" className="absolute w-100 h-21 opacity-0 mt-2 hover:cursor-pointer z-10"
-                        onChange={(e) => { setStickerFile(e.target.files?.[0] || null); setIsStickerRemoved(false); }} />
-
-                    {stickerStatus.showDelete && (
-                        <button type="button" className="absolute right-6 top-3 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
-                            onClick={(e) => { e.stopPropagation(); handleForceDelete('sticker'); }}>
-                            <FaTimes size={12} />
-                        </button>
-                    )}
-                </div>
-
-                {/* --- LOGO --- */}
-                <div className="w-full mt-1 flex justify-center h-25 relative">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none"><path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30" /></svg>
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none"><path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" strokeWidth="0" strokeDasharray="30 30" /></svg>
-
-                    <p className={`absolute font-bold text-center font-sans text-xs mt-15 max-w-100 px-2 truncate ${logoStatus.textColor}`}>
-                        {logoStatus.text}
-                    </p>
-
-                    <input type="file" className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer z-10"
-                        onChange={(e) => { setLogoFile(e.target.files?.[0] || null); setIsLogoRemoved(false); }} />
-                    
-                    {logoStatus.showDelete && (
-                        <button type="button" className="absolute right-6 top-3 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
-                            onClick={(e) => { e.stopPropagation(); handleForceDelete('logo'); }}>
-                            <FaTimes size={12} />
-                        </button>
-                    )}
-                </div>
-
-                {/* --- BANNER --- */}
-                <div className="w-full mt-1 flex justify-center h-25 relative">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none"><path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30" /></svg>
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none"><path d="M29.75 1H6.75C5.22501 1 3.76247 1.6058 2.68414 2.68414C1.6058 3.76247 1 5.22501 1 6.75V52.75C1 54.275 1.6058 55.7375 2.68414 56.8159C3.76247 57.8942 5.22501 58.5 6.75 58.5H41.25C42.775 58.5 44.2375 57.8942 45.3159 56.8159C46.3942 55.7375 47 54.275 47 52.75V18.25L29.75 1ZM28.3125 41.25V49.875H19.6875V41.25H12.5L24 29.75L35.5 41.25H28.3125ZM26.875 21.125V5.3125L42.6875 21.125H26.875Z" fill="#FF6700" stroke="#FF6700" strokeWidth="0" strokeDasharray="30 30" /></svg>
-
-                    <p className={`absolute font-bold text-center font-sans text-xs mt-15 max-w-100 px-2 truncate ${bannerStatus.textColor}`}>
-                        {bannerStatus.text}
-                    </p>
-
-                    <input type="file" className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer z-10"
-                        onChange={(e) => { setBannerFile(e.target.files?.[0] || null); setIsBannerRemoved(false); }} />
-                    
-                    {bannerStatus.showDelete && (
-                        <button type="button" className="absolute right-6 top-3 z-20 rounded-full p-1 text-laranja hover:bg-laranja hover:text-white border border-laranja transition"
-                            onClick={(e) => { e.stopPropagation(); handleForceDelete('banner'); }}>
-                            <FaTimes size={12} />
-                        </button>
-                    )}
-                </div>
-
-                <div className="flex justify-center">
-                    <button type="button" onClick={handleDeleteStore} className="text-xs px-10 py-0.5 mt-11 rounded-full font-sans tracking-wider text-laranja border border-laranja hover:bg-red-600 hover:border-red-600 hover:text-white transition cursor-pointer flex items-center justify-center gap-2">
-                        <FaTrash /> Deletar Loja
-                    </button>
-                </div>
             </div>
         </div>
     )
