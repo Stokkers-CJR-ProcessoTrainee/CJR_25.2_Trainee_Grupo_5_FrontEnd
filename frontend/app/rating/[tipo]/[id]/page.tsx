@@ -370,4 +370,5 @@ export default function RatingsPage() {
             <ToastContainer/>
         </main>
     );
+    
 }
