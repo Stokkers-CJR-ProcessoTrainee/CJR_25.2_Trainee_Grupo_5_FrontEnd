@@ -211,7 +211,7 @@ export default function ProductPage() {
               <div className="flex gap-2 shrink-0">
                 {isOwner && (
                   <button
-                    className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full hover:brightness-90 transition shadow-md"
+                    className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full hover:brightness-90 transition shadow-md hover:cursor-pointer"
                     onClick={() => setIsEditProductModalOpen(true)}
                     title="Editar Produto"
                   >
@@ -219,7 +219,7 @@ export default function ProductPage() {
                   </button>
                 )}
                 <button
-                  className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md"
+                  className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md hover:cursor-pointer"
                   onClick={() => setIsRatingProductModalOpen(true)}
                   title="Avaliar Produto"
                 >
