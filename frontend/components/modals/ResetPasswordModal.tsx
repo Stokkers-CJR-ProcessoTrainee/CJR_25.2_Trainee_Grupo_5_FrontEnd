@@ -74,7 +74,7 @@ export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPass
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-bgmodal rounded-lg p-8 max-w-md w-full text-center shadow-lg">
+      <div className="bg-back rounded-lg p-8 max-w-md w-full text-center shadow-lg">
         <h2 className="text-laranja font-extrabold text-xl mb-6">Recuperar Senha</h2>
 
         {/* Código */}
@@ -82,7 +82,7 @@ export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPass
           <input
             type="text"
             placeholder="Digite o código"
-            className="bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 mb-4 w-full"
+            className="bg-card text-text border border-transparent focus:border-laranja focus:outline-none rounded-full p-2 pl-4 mb-4 w-full"
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
@@ -99,7 +99,7 @@ export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPass
             <input
               type={showNewPassword ? "text" : "password"}
               placeholder="Nova senha"
-              className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+              className={`bg-card border border-transparent text-text focus:border-laranja focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
                 }`}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -117,7 +117,7 @@ export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPass
             <input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirme a senha"
-              className={`bg-modalinfo border border-gray-300 focus:border-laranja focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
+              className={`bg-card border border-transparent focus:border-laranja text-text focus:outline-none rounded-full p-2 pl-4 w-full ${codeVerified ? "border-gray-300 focus:border-laranja focus:outline-none" : "border-gray-400 bg-gray-200 cursor-not-allowed"
                 }`}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -143,7 +143,7 @@ export default function ResetPasswordModal({ mostrar, fechar, email }: ResetPass
 
         <button
           onClick={fechar}
-          className="mt-6 text-gray-500 hover:underline"
+          className="mt-6 text-text hover:cursor-pointer hover:underline"
         >
           Fechar
         </button>

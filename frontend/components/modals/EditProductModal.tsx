@@ -206,7 +206,7 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
       onClick={close}
     >
       <div
-        className="bg-back relative rounded-2xl p-10 w-120 h-135 shadow-lg flex flex-col items-center justify-center"
+        className="bg-back relative rounded-2xl p-10 w-120 h-145 shadow-lg flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -307,7 +307,7 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
 
           <textarea
             placeholder="Descrição"
-            className="w-full bg-card p-2 px-5 pt-3 text-text border border-transparent focus:border-laranja focus:outline-none rounded-2xl resize-none h-24"
+            className="w-full bg-card p-2 px-5 pt-3 text-text border border-transparent focus:border-laranja focus:outline-none rounded-2xl resize-none h-40"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
