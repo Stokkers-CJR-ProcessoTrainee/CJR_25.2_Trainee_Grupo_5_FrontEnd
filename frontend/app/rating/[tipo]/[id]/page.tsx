@@ -50,18 +50,6 @@ export default function RatingsPage() {
     const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
     const [ratingEditar,setRatingEditar] = useState<any | null>(null);
 
-    async function fetchRating() {
-        if (!tipo || !id) return;
-        try {
-            const rating = tipo === 'store'
-                ? await getStoreRating(Number(id))
-                : await getProductRating(Number(id));
-            setRating(rating);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) { return; }
@@ -316,14 +304,12 @@ export default function RatingsPage() {
                 ratingId={rating?.id!}
                 open={!!ratingEditar}
                 onClose={() => setRatingEditar(null)}
-                onSuccess={fetchRating}
                 />
             ) : (
                 <UpdateProductRatingModal
                 ratingId={rating?.id!}
                 open={!!ratingEditar}
                 onClose={() => setRatingEditar(null)}
-                onSuccess={fetchRating}
                 />
             )}
             <UpdateCommentModal

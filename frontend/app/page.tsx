@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import { getAllParentCategories, getProductsByCategory, getStores } from "@/api/api";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Carrossel from "@/components/Carrossel";
 import Navbar from "@/components/Navbar";
@@ -63,7 +63,6 @@ export default function Home() {
     loadData();
   }, []);
 
-  // 🔎 Lógica de busca (mantida)
   function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
@@ -97,163 +96,167 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main className="min-h-screen flex flex-col">
       <Navbar/>
 
-      <div className="flex justify-center items-center bg-laranja p-10 pt-25 gap-10"> 
-        <div className="text-white font-sans font-extrabold text-4xl tracking-wider mb-6 text-end h-32 w-196">
-          <h1>Prepare-se para se despedir da desordem com o STOKKERS!</h1>
-        </div>
+      <div className="bg-laranja w-full">
+        <div className="container mx-auto px-6 py-8 md:pt-24 flex flex-col-reverse md:flex-row justify-center items-center gap-6 md:gap-12"> 
+          
+          <div className="text-white font-sans font-extrabold text-2xl md:text-4xl tracking-wide text-center md:text-right max-w-xl leading-tight">
+            <h1>Prepare-se para se despedir da desordem com o STOKKERS!</h1>
+          </div>
 
-        <div>
-          <Image
-            src="/images/ImageHome.png"
-            alt="Placeholder Image"
-            width={500}
-            height={300}
-          />
+          <div className="flex-shrink-0">
+            <Image
+              src="/images/home.png"
+              alt="STOKKERS Hero"
+              width={420}
+              height={280}
+              className="object-contain drop-shadow-lg"
+              priority
+            />
+          </div>
         </div>
       </div>
 
-      <div className="bg-back p-30">
+      <div className="bg-back flex-1">
+        <div className="container mx-auto px-6 pb-20">
 
-        <div className="flex justify-end w-full mb-6 mt-20 relative pr-10">
-          <div className="w-full max-w-xl relative">
-            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <div className="flex justify-end w-full mb-10 mt-10 relative">
+            <div className="w-full max-w-lg relative group">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-laranja transition-colors" />
 
-            <input
-              type="text"
-              placeholder="Buscar..."
-              value={searchTerm}
-              onChange={handleSearchInput}
-              onFocus={() => searchResults.length > 0 && setShowResults(true)}
-              className="
-                w-full
-                bg-card
-                border border-transparent
-                rounded-full
-                py-3 pl-12 pr-4
-                text-sm
-                shadow
-                focus:border-laranja
-                outline-none
-                transition
-                text-text
-              "
-            />
-
-            {showResults && searchResults.length > 0 && (
-              <div
+              <input
+                type="text"
+                placeholder="O que você procura hoje?"
+                value={searchTerm}
+                onChange={handleSearchInput}
+                onFocus={() => searchResults.length > 0 && setShowResults(true)}
                 className="
-                  absolute
                   w-full
                   bg-card
-                  border
-                  border-transparent
-                  rounded-xl
-                  shadow-lg
-                  mt-2
-                  max-h-80
-                  overflow-y-auto
-                  z-50
+                  border border-transparent
+                  rounded-full
+                  py-4 pl-12 pr-6
+                  text-sm md:text-base
+                  shadow-sm
+                  hover:shadow-md
+                  focus:shadow-lg
+                  focus:border-laranja
+                  outline-none
+                  transition-all duration-300
+                  text-text
+                  placeholder-gray-400
                 "
-              >
-                {searchResults.map((result, index) => (
-                  <Link
-                    key={index}
-                    href={
-                      result.type === "Categoria"
-                        ? `/category/${result.item.id}`
-                        : result.type === "Produto"
-                        ? `/product/${result.item.id}`
-                        : `/store/${result.item.id}`
-                    }
-                    onClick={() => setShowResults(false)}
-                  >
-                    <div
-                      className="
-                        px-4 py-3
-                        hover:bg-gray-50
-                        cursor-pointer
-                        transition
-                      "
+              />
+
+              {showResults && searchResults.length > 0 && (
+                <div className="absolute w-full bg-card border border-transparent rounded-2xl shadow-xl mt-2 max-h-80 overflow-y-auto z-50 custom-scrollbar">
+                  {searchResults.map((result, index) => (
+                    <Link
+                      key={index}
+                      href={
+                        result.type === "Categoria"
+                          ? `/category/${result.item.id}`
+                          : result.type === "Produto"
+                          ? `/product/${result.item.id}`
+                          : `/store/${result.item.id}`
+                      }
+                      onClick={() => setShowResults(false)}
                     >
-                      <p className="text-xs text-laranja">{result.type}</p>
-                      <p className="text-text text-sm font-medium">{result.item.name}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-
-        <h2 className="text-text font-sans text-4xl ml">Categorias</h2>
-        <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5"> 
-          <Carrossel>
-            {categories.length > 0 ? (
-              categories.map((cat: any) => (
-                <Link key={cat.id} href={`/category/${cat.id}`}>
-                  <CardCategorias key={cat.id} name={cat.name}/>
-                </Link>
-              ))
-            ) : (
-              <p>Categorias não encontradas.</p>
-            )}
-          </Carrossel>
-        </div>
-
-        {categories.slice(0, 3).map((cat) => (
-          <div key={cat.id}>
-            <h2 className="text-text font-sans text-4xl ml">
-              Produtos <span className="text-sm">em {cat.name}</span>
-            </h2>
-
-          {productsByCategory[cat.id]?.length > 0 && (
-            <div 
-              className="w-fit ml-auto flex justify-end font-sans text-laranja -mt-8 font-bold hover:cursor-pointer"
-              onClick={() => router.push(`/ver-mais?tipo=categoria&categoryId=${cat.id}`)}
-              >
-              Ver mais
+                      <div className="px-5 py-3 hover:bg-back cursor-pointer transition border-b border-gray-50 last:border-none">
+                        <p className="text-xs text-laranja font-semibold uppercase tracking-wider mb-1">{result.type}</p>
+                        <p className="text-text text-sm font-medium">{result.item.name}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-            )}
-            
+          </div>
 
-            <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5">
-              
+          <div className="mb-12">
+            <div className="ml-2 mb-4">
+              <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">Categorias</h2>
+            </div>
+            
+            <div className="relative py-2 flex justify-center"> 
               <Carrossel>
-                {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
-                  productsByCategory[cat.id]?.map((produto) => (
-                    <Link key={produto.id} href={`/product/${produto.id}`}>
-                      <CardProdutos key={produto.id} produto={produto} />
+                {categories.length > 0 ? (
+                  categories.map((cat: any) => (
+                    <Link key={cat.id} href={`/category/${cat.id}`} className="transform hover:-translate-y-1 transition-transform duration-300 block">
+                      <CardCategorias key={cat.id} name={cat.name}/>
                     </Link>
                   ))
                 ) : (
-                  <p>Produtos não encontrados.</p>
+                  <div className="p-4 text-gray-400">Carregando categorias...</div>
                 )}
               </Carrossel>
             </div>
           </div>
-        ))}
 
-        <h2 className="text-text font-sans text-4xl ml">Lojas</h2>
-        <div className="flex relative bg-back rounded-3xl py-5 font-sans gap-6 m-5">
-          <Carrossel>
-            {stores.length > 0 ? (
-              stores.map((store: any) => (
-                <Link key={store.id} href={`/store/${store.id}`}>
-                  <CardLojas
-                    name={store.name}
-                    category={store.categoryName}
-                    logoUrl={store.logo_url}
-                  />
-                </Link>
-              ))
-            ) : (
-              <p>Lojas não encontradas.</p>
-            )}
-          </Carrossel>
+          {categories.filter(cat => cat.id === 2 || cat.id === 3 || cat.id === 5).map((cat) => (
+            <div key={cat.id} className="mb-16">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 ml-2 gap-2">
+                <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">
+                  Produtos
+                  <span className="text-xl md:text-2xl font-normal text-gray-500 block md:inline md:ml-2">
+                    em  
+                    <Link href={`/category/${cat.id}`} className="text-laranja hover:underline transition-colors">
+                      <strong> {cat.name}</strong>
+                    </Link>
+                  </span> 
+                </h2>
+
+                {productsByCategory[cat.id]?.length > 0 && (
+                  <button 
+                    className="text-laranja font-sans font-bold text-sm md:text-base hover:underline hover:cursor-pointer transition-colors self-end md:self-auto"
+                    onClick={() => router.push(`/ver-mais?tipo=categoria&categoryId=${cat.id}`)}
+                  >
+                    Ver todos
+                  </button>
+                )}
+              </div>
+
+              <div className="relative py-2">
+                <Carrossel>
+                  {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
+                    productsByCategory[cat.id]?.map((produto) => (
+                      <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full">
+                        <CardProdutos key={produto.id} produto={produto} />
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 p-4">Carregando produtos...</p>
+                  )}
+                </Carrossel>
+              </div>
+            </div>
+          ))}
+
+          <div className="mb-10">
+            <div className="ml-2 mb-4">
+              <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">Lojas</h2>
+            </div>
+            <div className="relative py-2">
+              <Carrossel>
+                {stores.length > 0 ? (
+                  stores.map((store: any) => (
+                    <Link key={store.id} href={`/store/${store.id}`} className="transform hover:scale-105 transition-transform duration-300 block">
+                      <CardLojas
+                        name={store.name}
+                        category={store.categoryName}
+                        logoUrl={store.logo_url}
+                      />
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-gray-400 p-4">Carregando lojas...</p>
+                )}
+              </Carrossel>
+            </div>
+          </div>
+
         </div>
       </div>
     </main>
