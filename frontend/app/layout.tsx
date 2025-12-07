@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from "@/context/Carrinho";
+import NotificationSystem from "@/components/notifica";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,9 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <CartProvider>
-        {children}
+            {children}
+
+            <NotificationSystem />
           </CartProvider>
         </ThemeProvider>
 
