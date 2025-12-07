@@ -1,11 +1,12 @@
 'use client'
-import { getUserById } from "@/api/api"; 
+import { getUserById, processCheckout } from "@/api/api"; 
 import { useTheme } from "@/context/ThemeProvider";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { FaBoxOpen, FaMoon, FaSignOutAlt, FaStore, FaSun, FaShoppingCart, FaTrash, FaCreditCard, FaCheckCircle, FaSpinner } from "react-icons/fa";
-import { usePathname } from 'next/navigation'; 
+import { usePathname, useRouter } from 'next/navigation'; 
 import { useCart } from "@/context/Carrinho"; 
+
 interface User {
     profile_picture_url: string,
 }
@@ -27,7 +28,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
                     quantity: item.quantity
                 }));
 
-                // await processCheckout(payload);
+                await processCheckout(payload);
 
                 setStatus('success');
                 
@@ -37,7 +38,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
                 }, 1500);
 
             } catch (error) {
-                console.error(error);
+                console.error("Erro no checkout:", error);
                 setStatus('error');
             }
         }, 2000);
@@ -66,7 +67,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
                             <button onClick={onClose} className="flex-1 py-3 cursor-pointer rounded-xl border border-gray-300 text-gray-500 font-semibold hover:bg-gray-100 transition">
                                 Cancelar
                             </button>
-                            <button onClick={handleConfirmPayment} className="flex-1 py-3 rounded-xl cursor-pointer bg-laranja text-white font-bold hover:brightness-80 transition shadow-lg">
+                            <button onClick={handleConfirmPayment} className="flex-1 py-3 rounded-xl cursor-pointer bg-laranja text-white font-bold hover:brightness-90 transition shadow-lg">
                                 Pagar Agora
                             </button>
                         </div>
@@ -105,6 +106,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
 export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const { cartItems, totalPrice, removeFromCart, cartCount, clearCart } = useCart();
+    const router = useRouter(); 
     const pathname = usePathname();
     const [logado, setLogado] = useState(false);
     const [userId, setUserId] = useState<number | null>(null);
@@ -231,6 +233,12 @@ export default function Navbar() {
                             
                             <button 
                                 onClick={() => {
+                                    if (!logado) {
+                                        setIsCartOpen(false);
+                                        router.push('/login');
+                                        return;
+                                    }
+
                                     setIsCartOpen(false);
                                     setIsPaymentModalOpen(true);
                                 }}
@@ -303,7 +311,10 @@ export default function Navbar() {
                 onClose={() => setIsPaymentModalOpen(false)}
                 total={totalPrice}
                 cartItems={cartItems}
-                onSuccess={clearCart}
+                onSuccess={() => {
+                    clearCart();
+                    router.push('/');
+                }}
             />
         </>
     );

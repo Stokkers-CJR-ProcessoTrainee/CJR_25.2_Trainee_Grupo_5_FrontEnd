@@ -352,7 +352,14 @@ export async function deleteImage(imageId) {
   return res.data;
 }
 
-
+export async function processCheckout(items) {
+  const token = localStorage.getItem('token');
+  const res = await api.post('/products/checkout', items, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  
+  return res.data;
+}
 
 
 
