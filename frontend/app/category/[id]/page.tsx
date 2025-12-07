@@ -67,18 +67,9 @@ export default function CategoryPage() {
         const childCats = await getChildCategories(categoryId);
         setChildCategories(childCats || []);
 
-        const ownProducts = await getProductsByCategory(categoryId);
+        const Products = await getProductsByCategory(categoryId);
 
-        let childProducts: Products[] = [];
-        if (childCats && childCats.length > 0) {
-          const arrays = await Promise.all(
-            childCats.map((Category: Category) => getProductsByCategory(Category.id))
-          );
-          childProducts = arrays.flat();
-        }
-
-        const allProducts = [...(ownProducts || []), ...(childProducts || [])];
-        setProducts(allProducts);
+        setProducts(Products);
       } catch (err: any) {
         setError(err?.message || "Erro ao carregar categoria");
       } finally {
