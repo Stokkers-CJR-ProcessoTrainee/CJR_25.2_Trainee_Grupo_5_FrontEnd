@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { deleteImage, deleteProduct, getAllParentCategories, getCategories, updateProduct } from "@/api/api";
+import { deleteImage, deleteProduct, getChildCategories, getAllParentCategories, getCategories, updateProduct } from "@/api/api";
 import { toast } from "react-toastify";
 import Carrossel from "../Carrossel";
 import { FaTimes } from "react-icons/fa";
@@ -11,6 +11,7 @@ interface EditProductModalProps {
   close: () => void;
   product: Product | null;
   onUpdated?: () => void;
+  storeCategoryId: number;
 }
 
 interface Product {
@@ -29,7 +30,7 @@ type Category = {
   parent_category_id?: number
 }
 
-export default function EditProductModal({ open, close, product, onUpdated }: EditProductModalProps) {
+export default function EditProductModal({ open, close, product, onUpdated, storeCategoryId }: EditProductModalProps) {
 
   if (!open) return null;
 
@@ -45,25 +46,12 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Carregar dados
   async function fetchData() {
-    try {
-      const [all, parents] = await Promise.all([
-        getCategories(),
-        getAllParentCategories()
-      ]);
-
-      const parentIds = new Set(parents.map((p: Category) => p.id));
-      const subs = all.filter((cat: Category) => !parentIds.has(cat.id));
-      setSubCategories(subs);
-
-    } catch (error) {
-      console.error("Failed to fetch category data:", error);
-    }
+    const childCategories = await getChildCategories(storeCategoryId)
+    setSubCategories(childCategories)
   }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  fetchData();
 
   useEffect(() => {
     if (open && product) {
@@ -229,11 +217,10 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
                       setCategory(cat.id.toString());
                       setIsDropdownOpen(false);
                     }}
-                    className={`cursor-pointer select-none py-2 pl-3 pr-9 ${
-                      cat.id.toString() === category
-                        ? "bg-laranja text-white font-semibold"
-                        : "text-text hover:bg-laranja/20"
-                    }`}
+                    className={`cursor-pointer select-none py-2 pl-3 pr-9 ${cat.id.toString() === category
+                      ? "bg-laranja text-white font-semibold"
+                      : "text-text hover:bg-laranja/20"
+                      }`}
                   >
                     {cat.name}
                   </div>
@@ -288,9 +275,8 @@ export default function EditProductModal({ open, close, product, onUpdated }: Ed
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className={`w-48 h-12 border mb-3 border-laranja rounded-2xl text-laranja text-lg transition ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer hover:bg-laranja hover:text-white"
-            }`}
+            className={`w-48 h-12 border mb-3 border-laranja rounded-2xl text-laranja text-lg transition ${loading ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer hover:bg-laranja hover:text-white"
+              }`}
           >
             {loading ? "Salvando..." : "Salvar"}
           </button>

@@ -109,7 +109,7 @@ export default function StorePage() {
   const maxRating = produtos.length > 0 ? Math.max(...produtos.map((p) => Math.max(...(p?.product_ratings ?? []).map((r: any) => r.rating), 0))) : 0;
   const TopProdutos = produtos.filter((p) => (p?.product_ratings ?? []).some((r: any) => r.rating === maxRating));
   const categoryName = categories.find(c => c.id == store.category_id)?.name;
-  
+
   return (
     <main className="min-h-screen bg-back pb-16">
 
@@ -135,7 +135,7 @@ export default function StorePage() {
               {categoryName}
             </p>
           </h2>
-        
+
         </div>
 
         <div className="absolute bottom-4 right-6 z-10">
@@ -392,6 +392,7 @@ export default function StorePage() {
           open={isCreateProductModalOpen}
           close={() => setIsCreateProductModalOpen(false)}
           onUpdated={fetchProducts}
+          storeCategoryId={store.category_id}
         />
       )}
 
