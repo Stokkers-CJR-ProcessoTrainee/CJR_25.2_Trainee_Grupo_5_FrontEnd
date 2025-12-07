@@ -2,7 +2,8 @@
 import { getUserById } from "@/api/api";
 import { useTheme } from "@/context/ThemeProvider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+// Adicionei useRef aqui nos imports
+import { useEffect, useState, useRef } from "react";
 import { FaBoxOpen, FaMoon, FaSignOutAlt, FaStore, FaSun, FaShoppingCart } from "react-icons/fa";
 import { usePathname } from 'next/navigation'; 
 
@@ -25,7 +26,13 @@ export default function Navbar() {
     const [userId, setUserId] = useState<number | null>(null);
     const [user, setUser] = useState<User | null>(null);
     
+    // Estado do carrinho
     const [isCartOpen, setIsCartOpen] = useState(false);
+    
+    // --- NOVO: Referência para o carrinho ---
+    // Isto cria uma "ligação" direta ao elemento HTML do carrinho
+    const cartRef = useRef<HTMLDivElement>(null);
+
     const [cartItems, setCartItems] = useState<CartItem[]>([
         { id: 1, name: "Produto Exemplo 1", price: 29.90 },
         { id: 2, name: "Produto Exemplo 2", price: 55.00 },
@@ -33,6 +40,25 @@ export default function Navbar() {
     ]);
 
     const totalCart = cartItems.reduce((acc, item) => acc + item.price, 0);
+
+    // --- NOVO: Lógica para clicar fora ---
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            // Se o carrinho estiver aberto, E a referência existir,
+            // E o local onde clicaste NÃO estiver dentro do container do carrinho...
+            if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
+                setIsCartOpen(false); // Fecha o carrinho
+            }
+        }
+
+        // Adiciona o "escutador" de cliques quando o componente carrega
+        document.addEventListener("mousedown", handleClickOutside);
+        
+        // Limpa o "escutador" quando o componente é removido (boa prática)
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -75,10 +101,12 @@ export default function Navbar() {
     }
 
     const CartDropdown = () => (
-        <div className="relative">
+        // --- NOVO: Adicionei a ref={cartRef} nesta div ---
+        // Agora o React sabe que esta div é a "área segura"
+        <div className="relative" ref={cartRef}>
             <button 
                 onClick={() => setIsCartOpen(!isCartOpen)} 
-                className="text-2xl text-laranja hover:text-white cursor-pointer transition-colors relative flex items-center"
+                className="text-2xl text-laranja hover:text-white transition-colors relative flex items-center"
             >
                 <FaShoppingCart />
                 {cartItems.length > 0 && (
@@ -135,82 +163,46 @@ export default function Navbar() {
 
                 <Link href="/" className="flex items-center">
                     <span className="text-4xl font-extrabold font-sans text-laranja tracking-tight">
-                        Stok<span className="text-balck">kers</span> 
+                        Stok<span className="text-black">kers</span>
                     </span>
                 </Link>
 
                 {!logado ? (
                 <div className="flex space-x-8 items-center"> 
-
                     <div className="flex space-x-6 items-center">
-                        <Link 
-                            href="/categories" 
-                            className={`${getActiveClass('/categories')} text-2xl hover:text-white transition-colors`}
-                        >
+                        <Link href="/categories" className={`${getActiveClass('/categories')} text-2xl hover:text-white transition-colors`}>
                             <FaBoxOpen />
                         </Link>
-                        <Link 
-                            href="/categories-stores" 
-                            className={`${getActiveClass('/categories-stores')} text-2xl hover:text-white transition-colors`}
-                        >
+                        <Link href="/categories-stores" className={`${getActiveClass('/categories-stores')} text-2xl hover:text-white transition-colors`}>
                             <FaStore />
                         </Link>
-                        
+                        <CartDropdown />
                     </div>
-                
                     <div className="space-x-4">
-                        <Link
-                            href="/login"
-                            className={`px-5 py-2 rounded-full tracking-wider font-sans font-semibold transition-all duration-200 ${getLinkActiveClass('/login')}`}
-                        >
-                            Login
-                        </Link>
-                        <Link
-                            href="/register"
-                            className={`px-5 py-2 rounded-full font-sans tracking-wider font-semibold transition-all duration-200 ${getLinkActiveClass('/register')}`}
-                        >
-                            Registrar
-                        </Link>
+                        <Link href="/login" className={`px-5 py-2 rounded-full tracking-wider font-sans font-semibold transition-all duration-200 ${getLinkActiveClass('/login')}`}>Login</Link>
+                        <Link href="/register" className={`px-5 py-2 rounded-full font-sans tracking-wider font-semibold transition-all duration-200 ${getLinkActiveClass('/register')}`}>Registrar</Link>
                     </div>
                 </div>
                 ) : (
                     <div className="flex space-x-6 items-center">
-                        <Link 
-                            href="/categories" 
-                            className={`text-2xl hover:text-white transition-colors ${getActiveClass('/categories')}`}
-                        >
+                        <Link href="/categories" className={`text-2xl hover:text-white transition-colors ${getActiveClass('/categories')}`}>
                             <FaBoxOpen />
                         </Link>
-                        <Link 
-                            href="/categories-stores" 
-                            className={`text-2xl hover:text-white transition-colors ${getActiveClass('/categories-stores')}`}
-                        >
+                        <Link href="/categories-stores" className={`text-2xl hover:text-white transition-colors ${getActiveClass('/categories-stores')}`}>
                             <FaStore />
                         </Link>
                         
                         <CartDropdown />
                         
-                        <Link 
-                            href={`/profile/${userId}`} 
-                            className={`text-2xl hover:text-laranja/80 transition-colors ${getActiveClass('/profile')}`}
-                        >
-                            <img 
-                                src={user?.profile_picture_url} 
-                                alt="Foto de perfil" 
-                                className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${pathname.startsWith('/profile') ? 'border-white' : 'border-transparent hover:border-laranja/50'}`}
-                            />
+                        <Link href={`/profile/${userId}`} className={`text-2xl hover:text-laranja/80 transition-colors ${getActiveClass('/profile')}`}>
+                            <img src={user?.profile_picture_url} alt="Foto de perfil" className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${pathname.startsWith('/profile') ? 'border-white' : 'border-transparent hover:border-laranja/50'}`} />
                         </Link>
-                        
                         <button onClick={handleLogout} className="text-laranja text-2xl hover:text-red-600 transition-colors cursor-pointer">
                             <FaSignOutAlt />
                         </button>
                     </div>
                 )}
-                <button 
-                    onClick={toggleTheme}
-                    className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition absolute left-[2%]"
-                    aria-label="Toggle Dark Mode"
-                >
+                <button onClick={toggleTheme} className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition absolute left-[2%]" aria-label="Toggle Dark Mode">
                     {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
                 </button>
             </div>
