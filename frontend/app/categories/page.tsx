@@ -6,6 +6,7 @@ import Carrossel from "@/components/Carrossel";
 import CardProdutos from "@/components/CardProdutos";
 import { useEffect, useState } from "react";
 import { getProductsByCategory, getAllParentCategories } from "@/api/api";
+import CardCategorias from "@/components/CardCategorias";
 
 type Produto = {
   id: number;
@@ -66,19 +67,17 @@ export default function CategoriesPage() {
 
         <div className="flex flex-col gap-6 bg-laranja w-full h-80 p-15">
           <div className="font-sans font-bold text-3xl text-white"> <h1> Categorias </h1> </div>
-          <div className="flex-1 w-full">
+          <div className="flex relative rounded-3xl py-5 font-sans gap-6 m-5">
             <Carrossel>
-              {Categories.map((c) => {
-
-                return (
-                  <div key={c.id}>
-                    <div className="flex flex-col aspect-square bg-background h-35 rounded-4xl hover:brightness-90 hover:cursor-pointer transition">
-                      <div className="flex-1"></div>
-                      <div className="font-sans font-bold text-1xl text-center h-10"> {c.name} </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {Categories.length > 0 ? (
+                Categories.map((cat: any) => (
+                  <Link key={cat.id} href={`/category/${cat.id}`}>
+                    <CardCategorias key={cat.id} name={cat.name} />
+                  </Link>
+                ))
+              ) : (
+                <p>Categorias não encontradas.</p>
+              )}
             </Carrossel>
           </div>
         </div>
