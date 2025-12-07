@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar"
 import { useParams, useRouter } from "next/navigation";
 import { getStoreById, getStoreRatingByStore } from "@/api/api";
 import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
-import CreateProductModal from "@/components/modals/CreateProductModal"; // 1. Restaurado
+import CreateProductModal from "@/components/modals/CreateProductModal";
 import { CreateStoreRatingModal } from "@/components/modals/RateModal/RateStore";
 
 export default function StoreRatingsPage() {
@@ -89,6 +89,27 @@ export default function StoreRatingsPage() {
 
       {/* --- BANNER --- */}
       <div className="relative bg-cinza overflow-hidden w-auto h-110">
+        
+        <div className="absolute top-25 left-6 md:left-10 z-30">
+          <button 
+            onClick={() => router.push(`/store/${id}`)}
+            className="group flex items-center justify-center cursor-pointer w-12 h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm transition-all duration-300 hover:scale-105 border border-white/10"
+            title="Voltar para a loja"
+          >
+            <svg 
+              width="28" 
+              height="28" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-white drop-shadow-md group-hover:-translate-x-1 transition-transform"
+            >
+              <path d="M19 12H5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
         {store?.banner_url ? (
           <img
             src={store.banner_url}
@@ -146,13 +167,33 @@ export default function StoreRatingsPage() {
           className="absolute top-0 w-46 h-46 rounded-full object-cover -translate-y-1/2"
         />
 
-        <p className="text-laranja text-center font-sans font-semibold text-3xl mt-30">
-          Todas as Reviews
+        <p className="text-text text-center font-sans font-normal text-3xl mt-28">
+          Todas as <strong className="text-laranja">Reviews</strong>
         </p>
 
-        <p className="text-center text-5xl font-sans font-semibold text-laranja mt-2 mb-10">
+        <p className="text-center text-5xl font-sans font-semibold text-laranja mt-3">
           {mediaRating.toFixed(1)}
         </p>
+
+        <div className="flex gap-2 align-center justify-center mt-3 mb-10">
+          {Array.from({ length: mediaRating }).map((_, i) => (
+            <svg key={i} width="30" height="30" viewBox="0 0 29 28" fill="none">
+              <path
+                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                fill="#FFEB3A"
+              />
+            </svg>
+          ))}
+
+          {Array.from({ length: 5 - mediaRating }).map((_, i) => (
+            <svg key={i} width="30" height="30" viewBox="0 0 29 28" fill="none">
+              <path
+                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                fill="#FFFFFF"
+              />
+            </svg>
+          ))}
+        </div>
 
         {!Dono && isLogged && !UserAvaliou &&(
           <button
@@ -170,7 +211,7 @@ export default function StoreRatingsPage() {
             ratings.map((r) => (
               <div
                 key={r.id}
-                className="bg-amber-50 font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px] shadow-sm"
+                className="bg-back font-sans rounded-3xl px-6 py-4 flex items-center gap-5 text-gray-800 min-w-[600px] max-w-[750px] shadow-sm"
               >
                 {/* imagem do usuário */}
                 <img
@@ -182,7 +223,7 @@ export default function StoreRatingsPage() {
                 {/* conteúdo do comentário */}
                 <div className="flex flex-col justify-between w-full">
                   <div className="flex justify-between items-center">
-                    <p className="font-semibold text-lg text-gray-900">{r.user.username}</p>
+                    <p className="font-semibold text-lg text-text">{r.user.username}</p>
                     {/* estrelas */}
                     <div className="flex gap-1">
                       {Array.from({ length: r.rating }).map((_, i) => (
@@ -205,16 +246,16 @@ export default function StoreRatingsPage() {
                     </div>
                   </div>
 
-                  <p className="text-gray-800 text-[15px] leading-snug mt-2">
+                  <p className="text-text text-[15px] leading-snug mt-2">
                     {r.comment}
                   </p>
 
                   <div className="flex justify-end">
                     <button 
-                      className="w-14 text-sm text-laranja font-medium mt-2 cursor-pointer"
+                      className="w-14 text-sm text-laranja hover:underline font-medium mt-2 cursor-pointer"
                       onClick={() => router.push(`/rating/store/${r.id}`)}
                     >
-                      ver mais
+                      Ver mais
                     </button>
                   </div>
                 </div>
