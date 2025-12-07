@@ -18,6 +18,7 @@ export default function CategoriesStoresPage() {
   const [search, setSearch] = useState("");
   const [openFilters, setOpenFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -35,6 +36,7 @@ export default function CategoriesStoresPage() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const [catsData, storesData] = await Promise.all([
           getAllParentCategories(),
           getStores()
@@ -43,6 +45,8 @@ export default function CategoriesStoresPage() {
         setStores(storesData);
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
@@ -62,6 +66,9 @@ export default function CategoriesStoresPage() {
     return matchesSearch && matchesCategory;
   });
 
+  if (loading) {
+    return <div className="min-h-screen bg-back flex items-center justify-center text-laranja font-bold">Carregando...</div>;
+  }
   return (
     <main className="min-h-screen flex flex-col bg-back">
       <Navbar />

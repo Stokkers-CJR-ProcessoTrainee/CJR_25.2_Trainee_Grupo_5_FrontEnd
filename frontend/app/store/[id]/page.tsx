@@ -25,6 +25,7 @@ export default function StorePage() {
   const ItemsPerPage = 15;
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
 
   async function fetchCategories() {
     try {
@@ -72,33 +73,48 @@ export default function StorePage() {
     }
   }
 
+  async function fetchRatings() {
+    try {
+      const res = await getStoreRatingByStore(id);
+      setRatings(res);
+     if (res.length > 0) {
+        const media = (res.reduce((acc: number, r: any) => acc + r.rating, 0)) / res.length;
+        setMediaRating(media);
+      } else {
+        setMediaRating(0);
+      }
+   } catch (err) {
+      console.error("Erro ao carregar avaliações:", err);
+    }
+  }
+
   useEffect(() => {
-    console.log("ID da loja:", id);
+    
+    async function loadAll() {
+      if (!id) return;
 
-    async function fetchRatings() {
+      setLoading(true);
+
       try {
-        const res = await getStoreRatingByStore(id);
-        setRatings(res);
-
-        if (res.length > 0) {
-          const media = (res.reduce((acc: number, r: any) => acc + r.rating, 0)) / res.length;
-          setMediaRating(media);
-        } else {
-          setMediaRating(0);
-        }
-
+        await Promise.all([
+          fetchStore(),
+          fetchProducts(),
+          fetchCategories(),
+          fetchRatings()
+        ]);
       } catch (err) {
-        console.error("Erro ao carregar avaliações:", err);
+        console.error("Erro geral:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
-    if (id) {
-      fetchProducts();
-      fetchStore();
-      fetchRatings();
-      fetchCategories();
-    }
+    loadAll();
   }, [id]);
+
+  if (loading) {
+    return <div className="min-h-screen bg-back flex items-center justify-center text-laranja font-bold">Carregando...</div>;
+  }
 
   if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
