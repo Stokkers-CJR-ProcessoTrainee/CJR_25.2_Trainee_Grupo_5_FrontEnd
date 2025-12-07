@@ -123,7 +123,7 @@ export default function CategoryPage() {
 
         <div className="container mx-auto px-6 -mt-8 relative z-10">
           
-          <div className="bg-white rounded-xl shadow-lg p-4 flex flex-col md:flex-row items-center gap-4 mb-8">
+          <div className="bg-card rounded-xl shadow-lg p-4 flex flex-col md:flex-row items-center gap-4 mb-8">
             
             <div className="relative w-full md:flex-1 group">
               <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-laranja transition-colors" />
@@ -132,7 +132,7 @@ export default function CategoryPage() {
                 placeholder="Buscar produtos nesta categoria..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-gray-50 border border-transparent rounded-full py-3 pl-12 pr-4 text-sm focus:bg-white focus:border-laranja focus:ring-2 focus:ring-laranja/20 outline-none transition-all text-text placeholder-gray-400"
+                className="w-full bg-cinzaclaro border border-transparent rounded-full py-3 pl-12 pr-4 text-sm focus:bg-cinzaclaro focus:border-laranja focus:ring-2 focus:ring-laranja/20 outline-none transition-all text-text placeholder-gray-400"
               />
               
               {search.length > 0 && (
@@ -160,7 +160,7 @@ export default function CategoryPage() {
               <div className="relative">
                 <button
                   onClick={() => setOpenFilters(!openFilters)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-sm border ${openFilters ? 'bg-laranja text-white border-laranja' : 'bg-white text-text border-gray-200 hover:border-laranja hover:text-laranja'}`}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg cursor-pointer border ${openFilters ? 'bg-laranja text-white border-laranja' : 'bg-card text-text border-cinzaclaro hover:border-laranja hover:text-laranja'}`}
                 >
                   Filtros <FaChevronDown size={10} className={`transition-transform ${openFilters ? 'rotate-180' : ''}`} />
                 </button>
@@ -192,7 +192,7 @@ export default function CategoryPage() {
               <div className="relative">
                 <button
                   onClick={() => setOpenOrder(!openOrder)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-sm border ${openOrder ? 'bg-laranja text-white border-laranja' : 'bg-white text-text border-gray-200 hover:border-laranja hover:text-laranja'}`}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all shadow-lg cursor-pointer border ${openOrder ? 'bg-laranja text-white border-laranja' : 'bg-card text-text border-cinzaclaro hover:border-laranja hover:text-laranja'}`}
                 >
                   Ordenar <FaChevronDown size={10} className={`transition-transform ${openOrder ? 'rotate-180' : ''}`} />
                 </button>
@@ -219,7 +219,6 @@ export default function CategoryPage() {
             </div>
           </div>
 
-          {/* ATALHOS RÁPIDOS (FILTROS) */}
           {childCategories.length > 0 && (
             <div className="flex flex-wrap gap-3 mb-10 justify-center md:justify-start">
               {childCategories.map((cat) => {
@@ -229,10 +228,10 @@ export default function CategoryPage() {
                     key={cat.id}
                     onClick={() => toggleFilter(cat.id)}
                     className={`
-                      px-4 py-2 rounded-full text-sm transition-all shadow-sm border
+                      px-4 py-2 rounded-full text-sm transition-all cursor-pointer shadow-sm border
                       ${isSelected 
                         ? 'bg-laranja text-white border-laranja' 
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-laranja hover:text-laranja'
+                        : 'bg-card text-text shadow-lg border border-transparent hover:border-laranja hover:text-laranja'
                       }
                     `}
                   >

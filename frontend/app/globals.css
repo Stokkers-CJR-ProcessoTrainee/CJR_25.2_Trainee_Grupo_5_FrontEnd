@@ -12,6 +12,7 @@
   --color-whiteText: white;
   
   --color-icons: #FF9933;
+  --color-cinzaclaro: #f9fafb;
 
   --color-cinzaplaceholder: #7F7F7F;
   --color-modalinfo: #ffffff;
@@ -35,6 +36,7 @@
   --color-whiteText: #ffffff;
   
   --color-icons: #ffffff;
+  --color-cinzaclaro: #242222;
 
   --color-cinzaplaceholder: #b7b7b7;
   --color-modalinfo: #333333;
@@ -53,6 +55,7 @@
   --color-whiteText: var(--color-whiteText);
 
   --color-icons: var(--color-icons);
+  --color-cinzaclaro: var(--color-cinzaclaro);  
 
   --color-cinzaplaceholder: var(--color-cinzaplaceholder);
   --color-modalinfo: var(--color-modalinfo);
