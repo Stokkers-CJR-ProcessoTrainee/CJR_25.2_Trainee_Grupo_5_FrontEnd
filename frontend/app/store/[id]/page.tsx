@@ -26,23 +26,23 @@ export default function StorePage() {
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [starWidth, setStarWidth] = useState(0);
 
   async function fetchCategories() {
     try {
       const data = await getCategories();
       setCategories(data);
     } catch (err) {
-      console.error("Erro ao carregar categorias:", err);
+      console.error(err);
     }
   }
-
 
   async function fetchProducts() {
     try {
       const res = await getProductsByStore(id);
       setProdutos(res);
     } catch (err) {
-      console.error("Erro ao carregar produtos:", err);
+      console.error(err);
     }
   }
 
@@ -50,11 +50,10 @@ export default function StorePage() {
     try {
       const res = await getStoreById(id);
       if (!res) {
-        setStore(null); // Loja não existe
+        setStore(null); 
         return;
       }
       setStore(res);
-
 
       const token = localStorage.getItem("token");
       if (token) {
@@ -62,13 +61,13 @@ export default function StorePage() {
           const payload = JSON.parse(atob(token.split('.')[1]));
           setDono(payload.sub == res.user_id);
         } catch (err) {
-          console.error("Token inválido", err);
+          console.error(err);
           setDono(false)
         }
       }
 
     } catch (err) {
-      console.error("Erro ao carregar loja:", err);
+      console.error(err);
       setStore(null);
     }
   }
@@ -84,12 +83,11 @@ export default function StorePage() {
         setMediaRating(0);
       }
    } catch (err) {
-      console.error("Erro ao carregar avaliações:", err);
+      console.error(err);
     }
   }
 
   useEffect(() => {
-    
     async function loadAll() {
       if (!id) return;
 
@@ -103,7 +101,7 @@ export default function StorePage() {
           fetchRatings()
         ]);
       } catch (err) {
-        console.error("Erro geral:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -111,6 +109,19 @@ export default function StorePage() {
 
     loadAll();
   }, [id]);
+
+  useEffect(() => {
+    setStarWidth(0);
+
+    const timer = setTimeout(() => {
+        if (mediaRating > 0) {
+            const percentage = (mediaRating / 5) * 100;
+            setStarWidth(percentage);
+        }
+    }, 800); 
+
+    return () => clearTimeout(timer);
+  }, [mediaRating]);
 
   if (loading) {
     return <div className="min-h-screen bg-back flex items-center justify-center text-laranja font-bold">Carregando...</div>;
@@ -187,8 +198,6 @@ export default function StorePage() {
 
       </div>
 
-
-
       <div className="relative bg-cinza flex flex-col">
         <img
           src={store.sticker_url}
@@ -204,24 +213,33 @@ export default function StorePage() {
           {mediaRating.toFixed(1)}
         </p>
 
-        <div className="flex gap-2 align-center justify-center mt-3">
-          {Array.from({ length: mediaRating }).map((_, i) => (
-            <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
-              <path
-                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-                fill="#FFEB3A"
-              />
-            </svg>
-          ))}
+        <div className="flex justify-center mt-3">
+            <div className="relative inline-block">
+                <div className="flex gap-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <svg key={`bg-${i}`} width="40" height="40" viewBox="0 0 29 28" fill="none">
+                            <path
+                                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                fill="#FFFFFF"
+                            />
+                        </svg>
+                    ))}
+                </div>
 
-          {Array.from({ length: 5 - mediaRating }).map((_, i) => (
-            <svg key={i} width="40" height="40" viewBox="0 0 29 28" fill="none">
-              <path
-                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
-                fill="#FFFFFF"
-              />
-            </svg>
-          ))}
+                <div 
+                    className="absolute top-0 left-0 h-full flex gap-2 overflow-hidden transition-[width] duration-[1500ms] ease-out"
+                    style={{ width: `${starWidth}%` }}
+                >
+                     {Array.from({ length: 5 }).map((_, i) => (
+                        <svg key={`fg-${i}`} width="40" height="40" viewBox="0 0 29 28" fill="none" className="shrink-0">
+                            <path
+                                d="M13.2104 0.729361C13.5205 -0.243083 14.8964 -0.243086 15.2065 0.729358L17.8047 8.87838C17.9439 9.31482 18.3505 9.61022 18.8086 9.6077L27.3616 9.56059C28.3823 9.55497 28.8075 10.8636 27.9785 11.459L21.0312 16.4483C20.6591 16.7155 20.5038 17.1934 20.6478 17.6283L23.3356 25.7482C23.6564 26.7172 22.5432 27.526 21.7207 26.9215L14.8288 21.856C14.4597 21.5847 13.9572 21.5847 13.5881 21.856L6.69615 26.9215C5.87372 27.526 4.76052 26.7172 5.08127 25.7482L7.76912 17.6283C7.91308 17.1934 7.75777 16.7155 7.3857 16.4483L0.438419 11.459C-0.390617 10.8636 0.0345829 9.55497 1.05524 9.56059L9.60833 9.6077C10.0664 9.61022 10.473 9.31482 10.6122 8.87838L13.2104 0.729361Z"
+                                fill="#FFEB3A"
+                            />
+                        </svg>
+                    ))}
+                </div>
+            </div>
         </div>
 
         <div className="px-40 mt-2 py-10">
@@ -303,7 +321,6 @@ export default function StorePage() {
 
       </div>
 
-      {/* Produtos */}
       <div className="w-full max-w-5xl text-text font-sans mx-auto mt-5 px-4">
         <div className="flex text-center gap-1 mb-4">
           <h2 className="text-text font-sans font-bold text-3xl md:text-4xl">

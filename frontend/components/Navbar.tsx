@@ -300,8 +300,31 @@ export default function Navbar() {
                             </button>
                         </div>
                     )}
-                    <button onClick={toggleTheme} className="p-2 rounded-full text-themeBut hover:text-white cursor-pointer transition absolute left-[2%]" aria-label="Toggle Dark Mode">
-                        {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
+                    <button 
+                        onClick={toggleTheme} 
+                        className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors absolute left-[2%] group" 
+                        aria-label="Toggle Dark Mode"
+                    >
+                        <div className="relative w-6 h-6 flex cursor-pointer items-center justify-center overflow-hidden">
+                            <FaSun 
+                                size={22} 
+                                className={`absolute inset-0 m-auto text-themeBut transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)]
+                                    ${theme === 'light' 
+                                        ? 'translate-y-0 rotate-0 opacity-100' 
+                                        : 'translate-y-10 rotate-180 opacity-0'
+                                    }
+                                `}
+                            />
+                            <FaMoon 
+                                size={22} 
+                                className={`absolute inset-0 m-auto text-themeBut transition-all duration-700 ease-[cubic-bezier(0.68,-0.55,0.27,1.55)]
+                                    ${theme === 'dark' 
+                                        ? 'translate-y-0 rotate-0 opacity-100'
+                                        : '-translate-y-10 -rotate-180 opacity-0'
+                                    }
+                                `}
+                            />
+                        </div>
                     </button>
                 </div>
             </nav>
