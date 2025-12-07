@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import { getAllParentCategories, getProductsByCategory, getStores } from "@/api/api";
+import { getAllParentCategories, getProductsByCategory, getStores, getChildCategories } from "@/api/api";
 import { useEffect, useState } from "react";
 
 import Carrossel from "@/components/Carrossel";
@@ -19,7 +19,8 @@ export default function Home() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [productsByCategory, setProductsByCategory] = useState<Record<number, Products[]>>({});
-  const [stores, setStores] = useState<Store[]>([]);
+  
+  const [stores, setStores] = useState<Store[] | null>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -44,21 +45,41 @@ export default function Home() {
       const allCategories = await fetchCategories();
       setCategories(allCategories);
 
-      const featuredCategories = allCategories.slice(0, 3);
-
       const productsArray = await Promise.all(
-        featuredCategories.map((cat: Category) => fetchProductsbyCategory(cat.id))
+        allCategories.map(async (cat: Category) => {
+          try {
+            const parentProducts = await fetchProductsbyCategory(cat.id);
+            const subCategories = await getChildCategories(cat.id);
+
+            let subCategoryProducts: Products[] = [];
+            if (subCategories && subCategories.length > 0) {
+              const subProductsPromises = subCategories.map((sub: Category) => 
+                fetchProductsbyCategory(sub.id)
+              );
+              const subProductsArrays = await Promise.all(subProductsPromises);
+              subCategoryProducts = subProductsArrays.flat();
+            }
+
+            const allProducts = [...(parentProducts || []), ...subCategoryProducts];
+            
+            const uniqueProducts = Array.from(new Map(allProducts.map(item => [item.id, item])).values());
+
+            return uniqueProducts;
+          } catch (error) {
+            return [];
+          }
+        })
       );
 
       const mapped: Record<number, Products[]> = {};
-      featuredCategories.forEach((cat: Category, i: number) => {
-        mapped[cat.id] = productsArray[i];
+      allCategories.forEach((cat: Category, i: number) => {
+        mapped[cat.id] = productsArray[i] || []; 
       });
 
       setProductsByCategory(mapped);
 
       const allStores = await fetchStores();
-      setStores(allStores);
+      setStores(allStores || []); 
     }
     loadData();
   }, []);
@@ -81,7 +102,7 @@ export default function Home() {
       .flat()
       .filter((p: any) => p.name.toLowerCase().includes(term));
 
-    const filteredStores = stores.filter((s) =>
+    const filteredStores = (stores || []).filter((s) =>
       s.name.toLowerCase().includes(term)
     );
 
@@ -220,12 +241,16 @@ export default function Home() {
 
               <div className="relative py-2">
                 <Carrossel>
-                  {productsByCategory[cat.id] && productsByCategory[cat.id].length > 0 ? (
-                    productsByCategory[cat.id]?.map((produto) => (
-                      <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full">
-                        <CardProdutos key={produto.id} produto={produto} />
-                      </Link>
-                    ))
+                  {productsByCategory[cat.id] ? (
+                    productsByCategory[cat.id].length > 0 ? (
+                      productsByCategory[cat.id].map((produto) => (
+                        <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full">
+                          <CardProdutos key={produto.id} produto={produto} />
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="text-gray-400 p-4">Não há produtos disponíveis nesta categoria.</p>
+                    )
                   ) : (
                     <p className="text-gray-400 p-4">Carregando produtos...</p>
                   )}
@@ -240,7 +265,9 @@ export default function Home() {
             </div>
             <div className="relative py-2">
               <Carrossel>
-                {stores.length > 0 ? (
+                {stores === null ? (
+                   <p className="text-gray-400 p-4">Carregando lojas...</p>
+                ) : stores.length > 0 ? (
                   stores.map((store: any) => (
                     <Link key={store.id} href={`/store/${store.id}`} className="transform hover:scale-105 transition-transform duration-300 block">
                       <CardLojas
@@ -251,7 +278,7 @@ export default function Home() {
                     </Link>
                   ))
                 ) : (
-                  <p className="text-gray-400 p-4">Carregando lojas...</p>
+                  <p className="text-gray-400 p-4">Nenhuma loja encontrada.</p>
                 )}
               </Carrossel>
             </div>
