@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { createStore, getAllParentCategories } from "@/api/api";
 import { toast } from "react-toastify";
 import { FaTimes } from "react-icons/fa";
+import { UploadArea } from "@/components/UploadArea"; 
 
 interface CreateStoreModalProps {
     abrir: boolean;
@@ -29,7 +30,6 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
     const [loading, setLoading] = useState(false);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
     const dropdownRef = useRef<HTMLDivElement>(null); 
 
     useEffect(() => {
@@ -75,7 +75,6 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
         });
 
         const data = await res.json();
-        console.log("Upload result:", data);
         return data.url;
     }
 
@@ -88,22 +87,10 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
         setLoading(true);
 
         try {
-            const stickerPromise = sticker_url 
-                ? UploadFile(sticker_url) 
-                : Promise.resolve(undefined);
-
-            const logoPromise = logo_url 
-                ? UploadFile(logo_url) 
-                : Promise.resolve(undefined);
-            
-            const bannerPromise = banner_url 
-                ? UploadFile(banner_url) 
-                : Promise.resolve(undefined);
-
             const [stickerUrl, logoUrl, bannerUrl] = await Promise.all([
-                stickerPromise,
-                logoPromise,
-                bannerPromise
+                sticker_url ? UploadFile(sticker_url) : Promise.resolve(undefined),
+                logo_url ? UploadFile(logo_url) : Promise.resolve(undefined),
+                banner_url ? UploadFile(banner_url) : Promise.resolve(undefined)
             ]);
 
             const payload: Record<string, any> = { 
@@ -115,8 +102,6 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
             if (stickerUrl) payload.sticker_url = stickerUrl;
             if (logoUrl) payload.logo_url = logoUrl;
             if (bannerUrl) payload.banner_url = bannerUrl;
-
-            console.log("Payload enviado:", payload);
 
             await createStore(payload);
 
@@ -211,9 +196,30 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
                             </div>
                         )}
                     </div>
+                    
+                    <UploadArea 
+                        file={sticker_url} 
+                        setFile={setSticker} 
+                        placeholder="Anexe a foto de perfil de sua loja" 
+                        className="mt-4" 
+                    />
 
+                    <UploadArea 
+                        file={logo_url} 
+                        setFile={setLogo} 
+                        placeholder="Anexe a logo em SVG de sua loja"
+                        accept=".svg" 
+                        className="mt-1" 
+                    />
 
-                    <div className="absolute flex justify-center mt-85 ml-28 font-sans text-text text-base hover:brightness-90">
+                    <UploadArea 
+                        file={banner_url} 
+                        setFile={setBanner} 
+                        placeholder="Anexe o banner da sua loja" 
+                        className="mt-1" 
+                    />
+
+                    <div className="flex justify-center w-full mt-6">
                         <button 
                             type="submit"
                             disabled={loading}
@@ -223,66 +229,6 @@ export default function CreateStoreModal({ abrir, fechar, onSuccess }: CreateSto
                         </button>
                     </div>
                 </form>
-
-                <div className="w-full mt-4 flex justify-center h-25">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30"/>
-                    </svg>
-
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path xmlns="http://www.w3.org/2000/svg" d="M32.75 0H9.75C8.22501 0 6.76247 0.605802 5.68414 1.68414C4.6058 2.76247 4 4.22501 4 5.75V51.75C4 53.275 4.6058 54.7375 5.68414 55.8159C6.76247 56.8942 8.22501 57.5 9.75 57.5H44.25C45.775 57.5 47.2375 56.8942 48.3159 55.8159C49.3942 54.7375 50 53.275 50 51.75V17.25L32.75 0ZM31.3125 40.25V48.875H22.6875V40.25H15.5L27 28.75L38.5 40.25H31.3125ZM29.875 20.125V4.3125L45.6875 20.125H29.875Z" fill="#FF6700"/>
-                    </svg>
-
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        {sticker_url ? sticker_url.name : 'Anexe a foto de perfil de sua loja'}
-                    </p>
-
-                    <input
-                        type="file"
-                        className="absolute w-100 h-21 opacity-0 mt-2 hover:cursor-pointer"
-                        onChange={(e) => setSticker(e.target.files?.[0] || null)}
-                    />
-                </div>
-
-                <div className="w-full mt-1 flex justify-center h-25">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30"/>
-                    </svg>
-
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path xmlns="http://www.w3.org/2000/svg" d="M32.75 0H9.75C8.22501 0 6.76247 0.605802 5.68414 1.68414C4.6058 2.76247 4 4.22501 4 5.75V51.75C4 53.275 4.6058 54.7375 5.68414 55.8159C6.76247 56.8942 8.22501 57.5 9.75 57.5H44.25C45.775 57.5 47.2375 56.8942 48.3159 55.8159C49.3942 54.7375 50 53.275 50 51.75V17.25L32.75 0ZM31.3125 40.25V48.875H22.6875V40.25H15.5L27 28.75L38.5 40.25H31.3125ZM29.875 20.125V4.3125L45.6875 20.125H29.875Z" fill="#FF6700"/>
-                    </svg>
-
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        {logo_url ? logo_url.name : 'Anexe a logo em SVG de sua loja'}
-                    </p>
-
-                    <input
-                        type="file"
-                        className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer"
-                        onChange={(e) => setLogo(e.target.files?.[0] || null)}
-                    />
-                </div>
-
-                <div className="w-full mt-1 flex justify-center h-25">
-                    <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30"/>
-                    </svg>
-
-                    <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path xmlns="http://www.w3.org/2000/svg" d="M32.75 0H9.75C8.22501 0 6.76247 0.605802 5.68414 1.68414C4.6058 2.76247 4 4.22501 4 5.75V51.75C4 53.275 4.6058 54.7375 5.68414 55.8159C6.76247 56.8942 8.22501 57.5 9.75 57.5H44.25C45.775 57.5 47.2375 56.8942 48.3159 55.8159C49.3942 54.7375 50 53.275 50 51.75V17.25L32.75 0ZM31.3125 40.25V48.875H22.6875V40.25H15.5L27 28.75L38.5 40.25H31.3125ZM29.875 20.125V4.3125L45.6875 20.125H29.875Z" fill="#FF6700"/>
-                    </svg>
-
-                    <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-                        {banner_url? banner_url.name : 'Anexe o banner da sua loja'}
-                    </p>
-
-                    <input
-                        type="file"
-                        className="absolute w-100 h-21 mt-2 opacity-0 hover:cursor-pointer"
-                        onChange={(e) => setBanner(e.target.files?.[0] || null)}
-                    />
-                </div>
             </div>    
         </div>
     )
