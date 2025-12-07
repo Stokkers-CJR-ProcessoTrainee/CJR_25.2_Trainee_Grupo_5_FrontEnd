@@ -8,6 +8,7 @@ import UpdateStoreModal from "@/components/modals/UpdateStoreModal";
 import CreateProductModal from "@/components/modals/CreateProductModal";
 import { CreateStoreRatingModal } from "@/components/modals/RateModal/RateStore";
 
+
 export default function StoreRatingsPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function StoreRatingsPage() {
   const [isLogged, setIsLogged] = useState(false);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const [currentUserId, SetCurrentId] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   async function fetchStore() {
       try {
@@ -70,15 +72,22 @@ export default function StoreRatingsPage() {
     }
 
   useEffect(() => {
-    if (id) {
-      fetchStore();
-      fetchRatings();
+    async function fetchData() {
+      setLoading(true);
+      await fetchStore();
+      await fetchRatings();
+      setLoading(false);
     }
+    fetchData();
   }, [id]);
 
   const UserAvaliou = ratings.some((r:any) => 
     r.user_id == currentUserId || r.user?.id == currentUserId
   );
+
+  if (loading) {
+    return <div className="min-h-screen bg-back flex items-center justify-center text-laranja font-bold">Carregando...</div>;
+  }
 
   if (!store) return <p className="text-center font-sans font-bold mt-20 text-laranja">Loja não encontrada.</p>;
 
