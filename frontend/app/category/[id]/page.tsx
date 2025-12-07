@@ -104,7 +104,7 @@ export default function CategoryPage() {
         <Navbar />
 
         <div className="bg-laranja w-full mt-16">
-          <div className="container mx-auto px-6 py-12 md:py-20 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+          <div className="container mx-auto px-6 py-8 md:py-10 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-white font-extrabold text-3xl md:text-5xl leading-tight tracking-wide max-w-2xl">
                 {hero.text}
@@ -115,7 +115,7 @@ export default function CategoryPage() {
               <img
                 src={hero.image}
                 alt={category.name}
-                className="w-64 md:w-[430px] h-auto object-contain drop-shadow-lg"
+                className="w-56 md:w-[380px] h-auto object-contain drop-shadow-lg"
               />
             </div>
           </div>
@@ -219,23 +219,35 @@ export default function CategoryPage() {
             </div>
           </div>
 
+          {/* ATALHOS RÁPIDOS (FILTROS) */}
           {childCategories.length > 0 && (
             <div className="flex flex-wrap gap-3 mb-10 justify-center md:justify-start">
-              {childCategories.map((cat) => (
-                <Link key={cat.id} href={`/category/${cat.id}`}>
-                  <span className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-600 hover:border-laranja hover:text-laranja hover:shadow-sm transition-all cursor-pointer block">
+              {childCategories.map((cat) => {
+                const isSelected = selectedFilters.includes(cat.id);
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => toggleFilter(cat.id)}
+                    className={`
+                      px-4 py-2 rounded-full text-sm transition-all shadow-sm border
+                      ${isSelected 
+                        ? 'bg-laranja text-white border-laranja' 
+                        : 'bg-white text-gray-600 border-gray-200 hover:border-laranja hover:text-laranja'
+                      }
+                    `}
+                  >
                     {cat.name}
-                  </span>
-                </Link>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
 
           <div className="min-h-[400px]">
             {ordered.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 justify-items-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8 justify-items-center">
                 {ordered.map((produto) => (
-                  <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full w-full max-w-[220px]">
+                  <Link key={produto.id} href={`/product/${produto.id}`}>
                     <CardProdutos produto={produto} />
                   </Link>
                 ))}
