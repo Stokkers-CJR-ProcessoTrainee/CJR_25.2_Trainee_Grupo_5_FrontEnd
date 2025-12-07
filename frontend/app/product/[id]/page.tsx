@@ -24,7 +24,8 @@ interface Products {
   category: { name: string },
   product_images: { order: number, image_url: string }[],
   product_ratings: { id: number, rating: number, comment?: string, user?: { username: string, profile_picture_url?: string } }[] // Adicionado user, comment e profile_picture_url
-// --- INTERFACES ---
+}
+
 interface User {
   username: string;
   profile_picture_url?: string;
