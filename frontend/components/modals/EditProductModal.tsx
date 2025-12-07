@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { deleteImage, deleteProduct, getChildCategories, getAllParentCategories, getCategories, updateProduct } from "@/api/api";
+import { deleteImage, deleteProduct, getChildCategories, getAllParentCategories, getCategories, updateProduct, createProductImage } from "@/api/api";
 import { toast } from "react-toastify";
 import Carrossel from "../Carrossel";
-import { FaTimes } from "react-icons/fa";
+import { FaPlus, FaTimes } from "react-icons/fa";
 
 interface EditProductModalProps {
   open: boolean;
@@ -83,6 +83,61 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+  const UploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    const res = await fetch("https://stokkers.onrender.com/upload", {
+      method: "POST",
+      body: formData,
+    });
+    
+    if (!res.ok) throw new Error("Erro no upload");
+    const data = await res.json();
+    return data.url;
+  }
+
+  const handleNewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !product) return;
+
+    setLoading(true);
+    const toastId = toast.loading("Enviando imagem...");
+
+    try {
+      const url = await UploadFile(file);
+
+      const currentOrders = Images.map(img => img.order);
+      const maxOrder = currentOrders.length > 0 ? Math.max(...currentOrders) : -1;
+      const nextOrder = maxOrder + 1;
+
+      const payload = {
+        image_url: url,
+        order: nextOrder
+      };
+      
+      const newImageResponse = await createProductImage(product.id, payload);
+
+      const newImageObj = {
+        id: newImageResponse.id || Date.now(), 
+        image_url: url,
+        order: nextOrder
+      };
+
+      setImages([...Images, newImageObj]);
+      
+      toast.update(toastId, { render: "Imagem adicionada!", type: "success", isLoading: false, autoClose: 3000 });
+      onUpdated?.();
+
+    } catch (error) {
+      console.error(error);
+      toast.update(toastId, { render: "Erro ao adicionar imagem", type: "error", isLoading: false, autoClose: 3000 });
+    } finally {
+      setLoading(false);
+      e.target.value = ""; 
+    }
+  };
 
   const handleSubmit = async () => {
     if (!name || !category || !price) {
@@ -168,7 +223,21 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
         <div className="flex flex-col w-full h-full items-center justify-start gap-4 mt-2">
 
           <div className="flex flex-row h-2/11 w-full gap-4">
-            <div className="aspect-square h-full border-2 border-dashed border-laranja rounded-3xl"></div>
+            <label className={`aspect-square h-full border-2 border-dashed border-laranja rounded-3xl flex items-center justify-center transition relative ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-laranja/10'}`}>
+                {loading ? (
+                    <span className="text-laranja text-xs animate-pulse">...</span>
+                ) : (
+                    <FaPlus className="text-laranja text-2xl" />
+                )}
+                
+                <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={handleNewImage}
+                    disabled={loading}
+                />
+            </label>
 
             <Carrossel>
               {Images.map(item => (
@@ -282,7 +351,7 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className={`w-48 h-12 border mb-3 border-laranja rounded-2xl text-laranja text-lg transition ${loading ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer hover:bg-laranja hover:text-white"
+            className={`w-48 h-12 border mb-3 border-laranja rounded-2xl text-laranja text-lg transition ${loading ? "cursor-not-allowed" : "hover:cursor-pointer hover:bg-laranja hover:text-white"
               }`}
           >
             {loading ? "Salvando..." : "Salvar"}
