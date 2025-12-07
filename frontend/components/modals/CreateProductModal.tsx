@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from "react";
-import { createProduct, getChildCategories } from "@/api/api";
+import { createProduct, createProductImage, getChildCategories } from "@/api/api";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { FaTimes } from "react-icons/fa";
@@ -103,7 +103,7 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
     setLoading(true);
 
     try {
-      let imageUrl = undefined;
+      let imageUrl = "";
       if (image) {
         imageUrl = await UploadFile(image);
       }
@@ -120,10 +120,18 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
         stock: quantity,
       };
 
-      if (imageUrl) payload.image_url = imageUrl;
+      const newProduct = await createProduct(storeId, payload);
 
-      console.log("Sending payload:", payload);
-      await createProduct(storeId, payload);
+      if (imageUrl && newProduct?.id) {
+        const imagePayload = { 
+          image_url: imageUrl,
+          order: 0
+        };
+        console.log("Sending payload:", payload);
+        await createProductImage(newProduct.id, imagePayload);
+      } 
+
+      
 
       toast.success("Produto criado com sucesso!");
       if (onUpdated) onUpdated();
