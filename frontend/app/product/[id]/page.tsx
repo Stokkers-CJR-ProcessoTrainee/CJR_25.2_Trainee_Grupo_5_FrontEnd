@@ -235,13 +235,16 @@ export default function ProductPage() {
                     <EditIcon />
                   </button>
                 )}
-                <button
-                  className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md hover:cursor-pointer"
-                  onClick={() => setIsRatingProductModalOpen(true)}
-                  title="Avaliar Produto"
-                >
-                  <StarIcon filled={true} size={22} color="white" />
-                </button>
+                
+                {!isOwner && (
+                  <button
+                    className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md hover:cursor-pointer"
+                    onClick={() => setIsRatingProductModalOpen(true)}
+                    title="Avaliar Produto"
+                  >
+                    <StarIcon filled={true} size={22} color="white" />
+                  </button>
+                )}
               </div>
             </div>
 
