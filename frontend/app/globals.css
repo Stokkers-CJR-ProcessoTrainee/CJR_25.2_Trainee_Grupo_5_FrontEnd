@@ -1,23 +1,87 @@
 @import "tailwindcss";
-
 @import "@fontsource/inter";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: #f5f5f5;
-  --color-card: #e0e0e0;
-  --color-laranja: #ff6700;
+:root {
+  --color-cinza: #e0e0e0;    
+  --color-laranja: #FF9933;  
+  --color-back: #F6F3E4;
+  --color-text: #000000;
+  --color-card: #ffffff;
+  --color-selectDrop: orange;
+  --color-whiteText: white;
+  
+  --color-icons: #FF9933;
+  --color-cinzaclaro: #f9fafb;
+
+  --color-cinzaplaceholder: #7F7F7F;
+  --color-modalinfo: #ffffff;
+  --color-bgmodal: #e0e0e0; 
+
+  --color-laranja2: #d85f00;
+  --color-balck: #131313;
+  --color-themeBut: #ffa500;
 
   --font-mono: var(--font-geist-mono);
   --font-sans: "Outfit", ui-sans-serif, system-ui;
 }
 
+.dark {
+  --color-cinza: #1E1E1E;  
+  --color-laranja: #FF9933; 
+  --color-back: #171918;
+  --color-text: #A0A0A0;
+  --color-card: #1E1E1E;
+  --color-selectDrop: orange;
+  --color-whiteText: #ffffff;
+  
+  --color-icons: #ffffff;
+  --color-cinzaclaro: #1d1c1c;
+
+  --color-cinzaplaceholder: #b7b7b7;
+  --color-modalinfo: #333333;
+  --color-bgmodal: #1E1E1E; 
+
+  --color-balck: #ffffff;
+  --color-themeBut: #6f5d9e;
+}
+
+@theme inline {
+  --color-cinza: var(--color-cinza);
+  --color-laranja: var(--color-laranja);
+  --color-back: var(--color-back);
+  --color-text: var(--color-text);
+  --color-selectDrop: var(--color-selcetDrop);
+  --color-whiteText: var(--color-whiteText);
+
+  --color-icons: var(--color-icons);
+  --color-cinzaclaro: var(--color-cinzaclaro);  
+
+  --color-cinzaplaceholder: var(--color-cinzaplaceholder);
+  --color-modalinfo: var(--color-modalinfo);
+  --color-bgmodal: var(--color-bgmodal); 
+
+  --color-card: var(--color-card);
+  --color-laranja2: var(--color-laranja2);
+  --color-balck: var(--color-balck);
+  --color-themeBut: var(--color-themeBut);
+  
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
