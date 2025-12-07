@@ -49,6 +49,7 @@ interface Store {
   name: string;
   sticker_url: string;
   user_id: number;
+  category_id: number;
 }
 
 interface Category {
@@ -115,7 +116,7 @@ export default function ProductPage() {
     try {
       const product = await getProductsById(Number(id));
       const allProds = await getProductsByStore(product?.store_id);
-      
+
       const filteredProducts = allProds.filter((item: any) => item.id !== product.id);
       const shuffledProducts = filteredProducts.sort(() => 0.5 - Math.random());
 
@@ -158,11 +159,11 @@ export default function ProductPage() {
       <Navbar />
 
       <div className="container mx-auto px-4 pt-24 max-w-7xl">
-        
+
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 bg-back text-text mb-16">
-          
+
           <div className="flex flex-row w-full lg:w-3/5 h-[500px] gap-4">
-            
+
             <div className="flex flex-col gap-4 h-full w-24 shrink-0">
               <CarrosselVertical className="h-full">
                 {products?.product_images?.map((item, index) => (
@@ -182,12 +183,12 @@ export default function ProductPage() {
             </div>
 
             <div className="relative flex-1 h-full bg-card rounded-3xl overflow-hidden shadow-sm">
-              <ZoomableImage 
-                src={products?.product_images?.[image_number]?.image_url} 
-                alt={products.name} 
-                className="w-full h-full object-contain" 
+              <ZoomableImage
+                src={products?.product_images?.[image_number]?.image_url}
+                alt={products.name}
+                className="w-full h-full object-contain"
               />
-              
+
               <div className="absolute bottom-4 right-4 z-10 transition-transform hover:scale-105">
                 <Link href={`/store/${products?.store_id}`} title="Ir para a loja">
                   <img
@@ -201,12 +202,12 @@ export default function ProductPage() {
           </div>
 
           <div className="flex flex-col gap-6 w-full lg:w-2/5 py-2">
-            
+
             <div className="flex justify-between items-start gap-4">
               <h1 className="font-sans font-bold capitalize text-4xl leading-tight text-text">
                 {products?.name}
               </h1>
-              
+
               <div className="flex gap-2 shrink-0">
                 {isOwner && (
                   <button
@@ -222,7 +223,7 @@ export default function ProductPage() {
                   onClick={() => setIsRatingProductModalOpen(true)}
                   title="Avaliar Produto"
                 >
-                  <StarIcon filled={true} size={22} color="white"/>
+                  <StarIcon filled={true} size={22} color="white" />
                 </button>
               </div>
             </div>
@@ -235,7 +236,7 @@ export default function ProductPage() {
               </div>
               <div className="w-px h-4 bg-gray-300"></div>
               <div className="font-bold text-laranja font-sans tracking-wide hover:underline">
-                  {products?.category?.name}
+                {products?.category?.name}
               </div>
               <div className="w-px h-4 bg-gray-300"></div>
               <div className="font-medium text-gray-500">
@@ -270,9 +271,9 @@ export default function ProductPage() {
               {products?.product_ratings && products.product_ratings.length > 0 ? (
                 products.product_ratings.map((r, index) => (
                   <div key={index} className="bg-card border border-transparent rounded-3xl p-6 flex gap-5 w-[90vw] md:w-[600px] shadow-sm hover:shadow-md transition-all h-full">
-                    
+
                     <img
-                      src={r.user?.profile_picture_url || "/default-avatar.png"} 
+                      src={r.user?.profile_picture_url || "/default-avatar.png"}
                       alt={r.user?.username || "Usuário"}
                       className="w-16 h-16 rounded-full object-cover shrink-0 border border-gray-100"
                     />
@@ -311,7 +312,7 @@ export default function ProductPage() {
           <h2 className="font-sans text-2xl font-bold mb-6 text-text">
             Mais desta loja
           </h2>
-          
+
           <div className="relative py-2">
             <Carrossel>
               {allProducts.length > 0 ? (

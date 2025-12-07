@@ -10,7 +10,7 @@ import CardProdutos from "@/components/CardProdutos";
 import CreateProductModal from "@/components/modals/CreateProductModal";
 import { useRouter } from "next/navigation";
 import { Category } from "@/app/Types";
-import Link from "next/link"; 
+import Link from "next/link";
 
 export default function StorePage() {
   const { id } = useParams();
@@ -294,7 +294,7 @@ export default function StorePage() {
             Produtos
             <span className="text-xl md:text-2xl font-normal text-gray-500 block md:inline md:ml-2">
               com avaliações <strong className="text-laranja">mais altas</strong>
-            </span> 
+            </span>
           </h2>
         </div>
 
@@ -303,7 +303,7 @@ export default function StorePage() {
             {TopProdutos.length > 0 ? (
               TopProdutos.map((produto) => (
                 <Link key={produto.id} href={`/product/${produto.id}`} className="block h-full">
-                   <CardProdutos produto={produto} />
+                  <CardProdutos produto={produto} />
                 </Link>
               ))
             ) : (
@@ -321,7 +321,7 @@ export default function StorePage() {
               Produtos
               <span className="text-xl md:text-2xl font-normal text-gray-500 block md:inline md:ml-2">
                 de <strong className="text-laranja">{store.name}</strong>
-              </span> 
+              </span>
             </h2>
           </div>
 
