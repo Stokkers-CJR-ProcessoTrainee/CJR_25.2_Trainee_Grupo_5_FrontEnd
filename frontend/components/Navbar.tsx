@@ -90,24 +90,37 @@ export default function Navbar() {
                         <span className="text-xs text-gray-500">{cartCount} itens</span>
                     </div>
 
-                    <div className="max-h-60 overflow-y-auto">
+                    <div className="max-h-60 overflow-y-auto custom-scrollbar">
                         {cartItems.length === 0 ? (
                             <p className="p-4 text-gray-500 text-center text-sm">O carrinho está vazio.</p>
                         ) : (
                             cartItems.map((item) => (
-                                <div key={item.id} className="flex justify-between items-center p-3 border-b border-cinzaclaro hover:brightness-90 transition cursor-pointer">
-                                    <div className="flex-1 pr-2">
-                                        <p className="text-sm font-medium text-text truncate">{item.name}</p>
+                                <div key={item.id} className="flex justify-between items-center p-3 border-b border-cinzaclaro hover:brightness-95 transition">
+                                    {/* Aqui fizemos a alteração: 
+                                      Envolvemos os dados em um Link para navegar para o produto 
+                                    */}
+                                    <Link 
+                                        href={`/product/${item.id}`}
+                                        onClick={() => setIsCartOpen(false)} // Fecha o carrinho ao clicar
+                                        className="flex-1 pr-2 cursor-pointer group"
+                                    >
+                                        <p className="text-sm font-medium text-text truncate group-hover:text-laranja transition-colors">
+                                            {item.name}
+                                        </p>
                                         <p className="text-xs text-gray-500">
                                             {item.quantity}x R$ {item.price}
                                         </p>
-                                    </div>
+                                    </Link>
+
                                     <div className="flex items-center gap-2">
                                         <span className="text-sm font-bold text-laranja">
                                             R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
                                         </span>
                                         <button 
-                                            onClick={() => removeFromCart(item.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Garante que o clique não ative nada além do delete
+                                                removeFromCart(item.id);
+                                            }}
                                             className="text-red-500 cursor-pointer hover:text-red-700 p-1"
                                             title="Remover item"
                                         >
@@ -127,9 +140,13 @@ export default function Navbar() {
                                     R$ {totalPrice.toFixed(2).replace('.', ',')}
                                 </span>
                             </div>
-                            <button className="w-full bg-laranja text-white py-2 rounded-md font-semibold hover:bg-opacity-90 transition-colors">
+                            <Link 
+                                href="/checkout" // Assumindo que terás uma rota de checkout
+                                onClick={() => setIsCartOpen(false)}
+                                className="block text-center w-full bg-laranja text-white py-2 rounded-md font-semibold hover:bg-opacity-90 transition-colors"
+                            >
                                 Finalizar Compra
-                            </button>
+                            </Link>
                         </div>
                     )}
                 </div>
