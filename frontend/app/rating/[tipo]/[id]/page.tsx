@@ -1,10 +1,10 @@
 'use client'
-import { addProductComment, addStoreComment, deleteProductComment, deleteStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating } from "@/api/api";
+import { addProductComment, addStoreComment, deleteProductComment, deleteStoreComment, getProductComment, getProductRating, getStoreComment, getStoreRating, getUserById } from "@/api/api"; 
 import { timeDiff } from "@/api/auxiliar/timeDiff";
 import UpdateCommentModal from "@/components/modals/UpdateCommentModal";
 import UpdateRatingStoreModal from "@/components/modals/RateModal/UpdateRatingStore";
 import Navbar from "@/components/Navbar";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { FaArrowLeft, FaGem, FaPaperPlane, FaPen, FaTrash,} from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
@@ -24,9 +24,11 @@ interface Rating {
     profile_picture_url?: string;
   };
   store?: {
+    id: number;
     user_id:number;
   }
   product?: {
+    id: number;
     store_id:number;
     store?: {
       user_id: number;
@@ -36,12 +38,13 @@ interface Rating {
 
 export default function RatingsPage() {
     const { tipo, id} = useParams();
+    const router = useRouter();
 
     const [userId, setUserId] = useState(0);
+    const [userData, setUserData] = useState<{username: string, profile_picture_url?: string} | null>(null);
     const [logado, setLogado] = useState(false);
     const [donoRating, setDonoRating] = useState(false);
-    const [donoLoja, setDonoLoja] = useState(false);
-
+    
     const [comentarios, setComentarios] = useState<any[]>([]);
     const [newComentario, setNewComentario] = useState('');
 
@@ -49,6 +52,10 @@ export default function RatingsPage() {
 
     const [comentarioEditar,setComentarioEditar] = useState<any | null>(null);
     const [ratingEditar,setRatingEditar] = useState<any | null>(null);
+
+    const storeOwnerId = tipo === 'store' 
+        ? rating?.store?.user_id 
+        : rating?.product?.store?.user_id;
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -58,18 +65,24 @@ export default function RatingsPage() {
 
         const payload = JSON.parse(atob(token.split('.')[1]));
         setUserId(payload.sub);
+        
+        async function fetchCurrentUser() {
+             try {
+                 const user = await getUserById(payload.sub);
+                 setUserData(user);
+             } catch (e) {
+                 console.error(e);
+             }
+        }
+        fetchCurrentUser();
+
     }, []);
 
     useEffect(() => {
         if (rating && userId) {
             setDonoRating(rating.user_id === userId);
-    
-            const donoLoja = tipo === 'store' 
-                ? rating.store?.user_id === userId
-                : rating.product?.store?.user_id === userId;
-            setDonoLoja(donoLoja);
         }
-    }, [rating, userId, tipo]);
+    }, [rating, userId]);
 
     useEffect(() => {
         async function fetchRating() {
@@ -81,7 +94,7 @@ export default function RatingsPage() {
                     : await getProductRating(Number(id));
                 setRating(rating);
             } catch (error) {
-            console.error("Erro ao acessar a avaliação:", error);
+            console.error(error);
             setComentarios([]); 
             }
         }
@@ -98,13 +111,28 @@ export default function RatingsPage() {
                     : await getProductComment(Number(id));
                 setComentarios(commentsData);
             } catch (error) {
-                console.error("Erro ao buscar comentários:", error);
+                console.error(error);
                 setComentarios([]); 
             }
         }
 
         fetchComments();
     }, [tipo, id]); 
+
+    const handleBack = () => {
+        if (!rating) {
+            router.back();
+            return;
+        }
+
+        if (tipo === 'store' && rating.store?.id) {
+            router.push(`/store/${rating.store.id}`);
+        } else if (tipo === 'product' && rating.product?.id) {
+            router.push(`/product/${rating.product.id}`);
+        } else {
+            router.back();
+        }
+    };
 
     const handleAddComment = async (e:FormEvent) => {
         e.preventDefault();
@@ -116,14 +144,24 @@ export default function RatingsPage() {
             const data = {
                 content: newComentario
             }
-            let newComment;
+            let newCommentResponse;
+            
             if (tipo === 'store') {
-                newComment = await addStoreComment(Number(id), data);
+                newCommentResponse = await addStoreComment(Number(id), data);
             } else {
-                newComment = await addProductComment(Number(id), data);
+                newCommentResponse = await addProductComment(Number(id), data);
             }
 
-            setComentarios((prev) => [...prev, newComment]); 
+            const commentWithUser = {
+                ...newCommentResponse,
+                user: newCommentResponse.user || { 
+                    id: userId,
+                    username: userData?.username || "Você",
+                    profile_picture_url: userData?.profile_picture_url || "/default-avatar.png"
+                }
+            };
+
+            setComentarios((prev) => [...prev, commentWithUser]); 
             setNewComentario('');
             toast.success('Comentário feito com sucesso!');
         } catch (err:any) {
@@ -133,7 +171,7 @@ export default function RatingsPage() {
     }
 
     const handleDelete = async (comentario:any) => {
-        const confirm = window.confirm("Tem certeza que deseja deletar a conta? Isso é permanente e vai apagar todos os dados do usuário!")
+        const confirm = window.confirm("Tem certeza que deseja deletar esse comentário?")
         if (!confirm) return;
 
         try {
@@ -168,12 +206,15 @@ export default function RatingsPage() {
 
                     <div className="flex items-center gap-4">
 
-                        <button className="hover:opacity-80 hover:text-red-600 transition hover:cursor-pointer">
+                        <button 
+                            onClick={handleBack}
+                            className="hover:opacity-80 hover:text-red-600 transition hover:cursor-pointer"
+                        >
                             <FaArrowLeft size={28} />
                         </button>
 
                         <img
-                        src={rating?.user.profile_picture_url}
+                        src={rating?.user.profile_picture_url || "/default-avatar.png"}
                         alt="Foto do usuário"
                         className="w-18 h-18 rounded-full border-2 border-laranja object-cover"
                         />
@@ -220,6 +261,8 @@ export default function RatingsPage() {
                         <AnimatePresence>
                         {comentarios.map((c) => {
                             const donoComment = c.user_id === userId;
+                            const isStoreOwnerComment = c.user_id === storeOwnerId;
+
                             return (
                             <motion.div 
                             key={c.id} 
@@ -249,12 +292,12 @@ export default function RatingsPage() {
                                     )}                                   
                                 <div className="flex gap-3 items-center">
                                     <img
-                                    src={c.user.profile_picture_url}
+                                    src={c.user?.profile_picture_url || "/default-avatar.png"}
                                     alt="Foto do usuário"
                                     className="w-10 h-10 rounded-full border-2 border-laranja object-cover"
                                     />
                                     <div className="flex gap-2 text-text items-center relative">
-                                        {(donoLoja == donoComment) && (
+                                        {isStoreOwnerComment && (
                                             <div className="relative group inline-block">
                                                 <span className="text-laranja">
                                                     <FaGem size={16} />
@@ -265,7 +308,7 @@ export default function RatingsPage() {
                                                 </div>
                                             </div>
                                         )}
-                                        <p className="text-xl  tracking-wider font-sans font-semibold">{c.user?.username}</p>
+                                        <p className="text-xl  tracking-wider font-sans font-semibold">{c.user?.username || "Usuário"}</p>
                                         {(c.createdAt == c.updatedAt) ?
                                             <p className="text-sm  font-sans  opacity-80 leading-tight">{timeDiff(c.createdAt)}</p>
                                         : 
