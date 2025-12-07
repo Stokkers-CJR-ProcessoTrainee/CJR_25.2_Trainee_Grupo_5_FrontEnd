@@ -53,6 +53,7 @@ export default function UpdateStoreRatingModal({ ratingId, open, onClose, onSucc
 
   // ---- DELETAR ----
   const handleDelete = async () => {
+    if (!confirm("Deletar avaliação?")) return;
     try {
       await deleteStoreRating(ratingId);
       toast.success("Avaliação removida!");
