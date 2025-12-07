@@ -11,6 +11,8 @@ import EditProductModal from "@/components/modals/EditProductModal";
 import CarrosselVertical from "@/components/CarrosselVertical";
 import ZoomableImage from "@/components/ZoomableImage";
 import { CreateProductRatingModal } from '@/components/modals/RateModal/RateProduct';
+import { useCart } from '@/context/Carrinho';
+
 
 interface Products {
   id: number,
@@ -23,7 +25,7 @@ interface Products {
   store: { category_id: number, sticker_url: string, user_id: number },
   category: { name: string },
   product_images: { order: number, image_url: string }[],
-  product_ratings: { id: number, rating: number, comment?: string, user?: { username: string, profile_picture_url?: string } }[] // Adicionado user, comment e profile_picture_url
+  product_ratings: { id: number, rating: number, comment?: string, user?: { username: string, profile_picture_url?: string } }[]
 }
 
 interface User {
@@ -70,7 +72,6 @@ interface Product {
   product_ratings: Rating[];
 }
 
-// --- ÍCONES ---
 const StarIcon = ({ filled, size = 20, color = "#FFEB3A" }: { filled: boolean, size?: number, color?: string }) => (
   <svg width={size} height={size} viewBox="0 0 29 28" fill="none">
     <path
@@ -89,6 +90,14 @@ const EditIcon = () => (
   </svg>
 );
 
+const CartIconPlus = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <path d="M16 10a4 4 0 0 1-8 0"></path>
+  </svg>
+);
+
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-1">
     {Array.from({ length: 5 }).map((_, i) => (
@@ -100,15 +109,13 @@ const StarRating = ({ rating }: { rating: number }) => (
 export default function ProductPage() {
   const { id } = useParams();
   const router = useRouter();
-
+  const { addToCart } = useCart();
   const [products, setProducts] = useState<Product | null>(null);
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [mean, setMean] = useState(0);
   const [reviews, setReviews] = useState(0);
   const [image_number, setImage] = useState(0);
   const [isOwner, setOwner] = useState(false);
-
-  // Modais
   const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
   const [isRatingProductModalOpen, setIsRatingProductModalOpen] = useState(false);
 
@@ -152,6 +159,17 @@ export default function ProductPage() {
     fetchProduct();
   }, [id]);
 
+  const handleAddToCart = () => {
+    if (!products) return;
+
+    addToCart({
+        id: products.id,
+        name: products.name,
+        price: products.price,
+        quantity: 1
+    });
+  };
+
   if (!products) return <div className="min-h-screen bg-back flex items-center justify-center"><p className="text-laranja font-bold">Carregando...</p></div>;
 
   return (
@@ -163,7 +181,6 @@ export default function ProductPage() {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 bg-back text-text mb-16">
 
           <div className="flex flex-row w-full lg:w-3/5 h-[500px] gap-4">
-
             <div className="flex flex-col gap-4 h-full w-24 shrink-0">
               <CarrosselVertical className="h-full">
                 {products?.product_images?.map((item, index) => (
@@ -218,13 +235,16 @@ export default function ProductPage() {
                     <EditIcon />
                   </button>
                 )}
-                <button
-                  className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md hover:cursor-pointer"
-                  onClick={() => setIsRatingProductModalOpen(true)}
-                  title="Avaliar Produto"
-                >
-                  <StarIcon filled={true} size={22} color="white" />
-                </button>
+                
+                {!isOwner && (
+                  <button
+                    className="w-10 h-10 flex items-center justify-center bg-laranja rounded-full text-white hover:brightness-90 transition shadow-md hover:cursor-pointer"
+                    onClick={() => setIsRatingProductModalOpen(true)}
+                    title="Avaliar Produto"
+                  >
+                    <StarIcon filled={true} size={22} color="white" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -248,6 +268,16 @@ export default function ProductPage() {
               <span className="font-sans font-bold text-5xl text-text">
                 R$ {products?.price}
               </span>
+            </div>
+
+            <div className="flex gap-4">
+                <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-laranja cursor-pointer text-white font-bold py-4 rounded-2xl hover:brightness-90 transition shadow-lg flex items-center justify-center gap-2 active:scale-95"
+                >
+                    <CartIconPlus />
+                    <span>Adicionar ao Carrinho</span>
+                </button>
             </div>
 
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
