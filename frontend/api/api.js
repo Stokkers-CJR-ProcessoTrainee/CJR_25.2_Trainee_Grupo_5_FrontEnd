@@ -101,6 +101,15 @@ export async function getProductImages(productId) {
   return res.data;
 }
 
+export async function createProductImage(productId, data) {
+  const token = localStorage.getItem('token');
+    const res = await api.post(`/products-images/product/${productId}`, data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  
+  return res.data;
+}
+
 export async function getCategoryById(categoryId) {
   const res = await api.get(`/categories/${Number(categoryId)}`);
   return res.data;
