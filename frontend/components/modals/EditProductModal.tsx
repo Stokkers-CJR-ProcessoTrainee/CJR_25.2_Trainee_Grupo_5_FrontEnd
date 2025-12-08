@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { deleteImage, deleteProduct, getChildCategories, getAllParentCategories, getCategories, updateProduct, createProductImage } from "@/api/api";
+import { deleteImage, deleteProduct, getChildCategories, updateProduct, createProductImage } from "@/api/api";
 import { toast } from "react-toastify";
 import Carrossel from "../Carrossel";
 import { FaPlus, FaTimes } from "react-icons/fa";
@@ -43,6 +43,8 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
   const [SubCategories, setSubCategories] = useState<Category[]>([]);
   const [Images, setImages] = useState(product?.product_images || []);
 
+  const [isDragging, setIsDragging] = useState(false);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +71,7 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
       setQuantity(product.stock);
       setImages(product.product_images || []);
       setIsDropdownOpen(false);
+      setIsDragging(false); 
     }
   }, [open, product]);
 
@@ -98,9 +101,8 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
     return data.url;
   }
 
-  const handleNewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !product) return;
+  const uploadAndAttachImage = async (file: File) => {
+    if (!product) return;
 
     setLoading(true);
     const toastId = toast.loading("Enviando imagem...");
@@ -135,9 +137,42 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
       toast.update(toastId, { render: "Erro ao adicionar imagem", type: "error", isLoading: false, autoClose: 3000 });
     } finally {
       setLoading(false);
-      e.target.value = ""; 
+      setIsDragging(false);
+    }
+  }
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        await uploadAndAttachImage(file);
+    }
+    e.target.value = "";
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault(); 
+    if (!loading) setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault(); 
+    setIsDragging(false);
+    
+    if (loading) return;
+
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+        await uploadAndAttachImage(file);
+    } else if (file) {
+        toast.warn("Por favor, solte apenas arquivos de imagem.");
     }
   };
+
 
   const handleSubmit = async () => {
     if (!name || !category || !price) {
@@ -223,7 +258,16 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
         <div className="flex flex-col w-full h-full items-center justify-start gap-4 mt-2">
 
           <div className="flex flex-row h-2/11 w-full gap-4">
-            <label className={`aspect-square h-full border-2 border-dashed border-laranja rounded-3xl flex items-center justify-center transition relative ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-laranja/10'}`}>
+            
+            <label 
+                className={`aspect-square h-full border-2 border-dashed border-laranja rounded-3xl flex items-center justify-center transition relative 
+                ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                ${isDragging ? 'bg-laranja/20 scale-105' : 'hover:bg-laranja/10'} 
+                `}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
                 {loading ? (
                     <span className="text-laranja text-xs animate-pulse">...</span>
                 ) : (
@@ -234,7 +278,7 @@ export default function EditProductModal({ open, close, product, onUpdated, stor
                     type="file" 
                     className="hidden" 
                     accept="image/*"
-                    onChange={handleNewImage}
+                    onChange={handleInputChange}
                     disabled={loading}
                 />
             </label>
