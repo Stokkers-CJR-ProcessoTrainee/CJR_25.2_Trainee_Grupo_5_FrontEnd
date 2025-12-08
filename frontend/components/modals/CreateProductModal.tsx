@@ -5,8 +5,8 @@ import { createProduct, createProductImage, getChildCategories } from "@/api/api
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { FaTimes } from "react-icons/fa";
+import { UploadArea } from "@/components/UploadArea";
 
-// Voltei para open/close/onUpdated para bater com o que seu botão já envia
 interface CreateProductModalProps {
   open: boolean;
   close: () => void;
@@ -21,29 +21,24 @@ type Category = {
 }
 
 export default function CreateProductModal({ open, close, onUpdated, storeCategoryId }: CreateProductModalProps) {
-  // Se não estiver "open", não renderiza nada
   if (!open) return null;
 
   const { id } = useParams();
 
-  // Estados do Formulário
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [image, setImage] = useState<File | null>(null);
 
-  // Estados de Categoria
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [SubCategories, setSubCategories] = useState<Category[]>([]);
 
-  // Estados de UI/Loading
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Lógica de click fora do dropdown e reset ao abrir
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -52,7 +47,6 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
     };
 
     if (open) {
-      // Resetar estados ao abrir
       setName('');
       setDescription('');
       setPrice('');
@@ -61,7 +55,6 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
       setSelectedCategoryId('');
       setIsDropdownOpen(false);
 
-      // Carregar dados
       async function fetchData() {
         const childCategories = await getChildCategories(storeCategoryId)
         setSubCategories(childCategories)
@@ -74,7 +67,7 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [open]);
+  }, [open, storeCategoryId]);
 
   const UploadFile = async (file: File) => {
     const formData = new FormData();
@@ -127,11 +120,8 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
           image_url: imageUrl,
           order: 0
         };
-        console.log("Sending payload:", payload);
         await createProductImage(newProduct.id, imagePayload);
       } 
-
-      
 
       toast.success("Produto criado com sucesso!");
       if (onUpdated) onUpdated();
@@ -154,7 +144,6 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
         className="bg-back relative rounded-2xl p-6 w-120 h-auto shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botão de Fechar */}
         <button
           className="ml-105 text-text hover:text-gray-800 text-xl transition -mt-2 absolute hover:cursor-pointer"
           onClick={close}
@@ -168,28 +157,12 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
 
         <form onSubmit={handleSubmit} className="relative font-sans text-sm flex flex-col gap-3">
 
-          {/* Input de Imagem */}
-          <div className="w-full flex justify-center h-25 relative">
-            <svg className="relative w-100 h-full" viewBox="0 0 828 179" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 11C1 5.47715 5.47715 1 11 1H817C822.523 1 827 5.47715 827 11V168C827 173.523 822.523 178 817 178H11C5.47715 178 1 173.523 1 168V11Z" stroke="#FF6700" strokeWidth="2" strokeDasharray="30 30" />
-            </svg>
+          <UploadArea 
+            file={image} 
+            setFile={setImage} 
+            placeholder="Anexe a foto do produto" 
+          />
 
-            <svg className="absolute h-8 w-8 mt-6" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path xmlns="http://www.w3.org/2000/svg" d="M32.75 0H9.75C8.22501 0 6.76247 0.605802 5.68414 1.68414C4.6058 2.76247 4 4.22501 4 5.75V51.75C4 53.275 4.6058 54.7375 5.68414 55.8159C6.76247 56.8942 8.22501 57.5 9.75 57.5H44.25C45.775 57.5 47.2375 56.8942 48.3159 55.8159C49.3942 54.7375 50 53.275 50 51.75V17.25L32.75 0ZM31.3125 40.25V48.875H22.6875V40.25H15.5L27 28.75L38.5 40.25H31.3125ZM29.875 20.125V4.3125L45.6875 20.125H29.875Z" fill="#FF6700" />
-            </svg>
-
-            <p className="absolute font-bold font-sans text-laranja text-xs mt-15">
-              {image ? image.name : 'Anexe a foto do produto'}
-            </p>
-
-            <input
-              type="file"
-              className="absolute w-100 h-21 opacity-0 mt-2 hover:cursor-pointer"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
-            />
-          </div>
-
-          {/* Inputs de Texto */}
           <input
             type="text"
             placeholder="Nome do Produto"
@@ -198,7 +171,6 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
             onChange={(e) => setName(e.target.value)}
           />
 
-          {/* Dropdown Customizado */}
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
@@ -259,7 +231,6 @@ export default function CreateProductModal({ open, close, onUpdated, storeCatego
             onChange={(e) => setPrice(e.target.value)}
           />
 
-          {/* Controle de Quantidade */}
           <div className="flex flex-row items-center justify-center gap-4 py-2">
             <button
               type="button"
