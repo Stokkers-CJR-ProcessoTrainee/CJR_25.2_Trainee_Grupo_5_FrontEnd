@@ -273,7 +273,7 @@ export default function Home() {
                       <CardLojas
                         name={store.name}
                         category={store.categoryName}
-                        logoUrl={store.logo_url}
+                        logoUrl={store.sticker_url}
                       />
                     </Link>
                   ))
